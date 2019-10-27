@@ -1,0 +1,15 @@
+name: proton
+version: 0.1.0
+
+authors:
+  - Chris Watson <cawatson1993@gmail.com>
+
+dependencies:
+  habitat:
+    github: luckyframework/habitat
+  promise:
+    github: spider-gazelle/promise
+
+crystal: 0.31.1
+
+license: MIT
