@@ -9,6 +9,7 @@ dependencies:
     github: luckyframework/habitat
   promise:
     github: spider-gazelle/promise
+    branch: master
 
 crystal: 0.31.1
 

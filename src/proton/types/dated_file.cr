@@ -1,0 +1,18 @@
+# This is an auto generated file. If something isn't working
+# correctly, see 'typegen.cr' in the project root
+
+require "./base"
+
+module Proton::Types
+  # File with the date it was uploaded.
+  # file [Proton::Types::File] The file.
+  # date [::Int32] Point in time (Unix timestamp) when the file was uploaded.
+  class DatedFile < Types::Base
+    property file : Proton::Types::File
+    property date : ::Int32
+
+    def initialize(@file : Proton::Types::File, @date : ::Int32)
+    end
+  end
+end
+

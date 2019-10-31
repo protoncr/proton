@@ -1,48 +1,61 @@
 module Proton
   class UpdateManager
+
     @td_client : Pointer(Void)
 
-    getter queue : Hash(String, Proc(Update, Nil))
+    @handlers : Array(UpdateHandler)
 
-    getter? running : Bool
+    @mutex : Mutex
 
     property timeout : Int32
 
     def initialize(@td_client, @timeout)
-      @queue = {} of String => Proc(Update, Nil)
-      @completed = {} of String => Update
-      @running = false
+      @handlers = [] of UpdateHandler
+      @mutex = Mutex.new
     end
 
-    def add(key, &event : Update -> Nil)
-      add(key, event)
+    def add_handler(handler : UpdateHandler)
+      @mutex.synchronize { @handlers << handler }
     end
 
-    def add(key, event : Update -> Nil)
-      @queue[key] = event
+    def <<(handler : UpdateHandler)
+      add_handler(handler)
     end
 
-    def delete(key)
-      @queue.delete(key)
-    end
-
-    def stop
-      @running = false
-    end
-
-    def stopped?
-      !running?
-    end
-
-    def start_event_loop
-      @running = true
-      while running?
-        if update = API.client_receive(@td_client, @timeout)
-          puts "Incoming: " + update.to_pretty_json
-          @queue.each do |key, event|
-            event.call(update)
-          end
+    def run(callback : Proc(Types::Base, Nil)? = nil)
+      spawn do
+        loop do
+          handle_update(callback)
         end
+      end
+
+      Fiber.yield
+      @mutex.synchronize { @handlers = [] of UpdateHandler }
+    end
+
+    def run(&block : Proc(Types::Base, Nil))
+      run(block)
+    end
+
+    def handle_update(callback : Proc(Types::Base, Nil)?)
+      update = API.client_receive(@td_client, @timeout)
+
+      if update
+        update = update.as_h
+        extra = update.delete("@extra")
+
+        update = Types.wrap(update)
+        callback.try &.call(update)
+
+        match_handlers!(update, extra).each { |h| h.run(update) }
+      end
+    end
+
+    def match_handlers!(update, extra)
+      @mutex.synchronize do
+        matched_handlers = handlers.select { |h| h.match?(update, extra) }
+        matched_handlers.each { |h| handlers.delete(h) if h.disposable? }
+        matched_handlers
       end
     end
   end

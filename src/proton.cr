@@ -27,73 +27,28 @@ module Proton
   end
 end
 
-Proton::Client.configure do |config|
-  config.encryption_key = ""
+# Proton::Client.configure do |config|
+#   config.encryption_key = "tIXiGBupL3VCFOwyEpG5JjMuAIGRLKlL"
 
-  config.api_id = ""
-  config.api_hash = ""
-end
+#   config.api_id = "65534"
+#   config.api_hash = "e3e522e32853d0767df7b2113d5e2497"
+# end
 
-client = Proton::Client.new(encryption_key: "test encryption key")
-client.set_log_file_path("./tdlib.log")
+# client = Proton::Client.new
+# client.set_log_file_path("./tdlib.log")
 
-client.on("updateAuthorizationState") do |update|
-  next unless update.dig("authorization_state", "@type") == "authorizationStateWaitPhoneNumber"
-  print "Please enter your phone number: "
-  phone = gets.to_s.strip
-  payload = {
-    "@type" => "setAuthenticationPhoneNumber",
-    "phone_number" => phone
+# # pp client.send_and_receive({"@type" => "getAuthorizationState"})
+
+# client.connect
+
+json = <<-JSON
+{
+  "@type": "updateAuthorizationState",
+  "authorization_state": {
+    "@type": "authorizationStateWaitTdlibParameters"
   }
+}
+JSON
 
-  client.broadcast(payload) { }
-end
-
-client.on("updateAuthorizationState") do |update|
-  next unless update.dig("authorization_state", "@type") == "authorizationStateWaitCode"
-  print "Please enter the code you received from Telegram: "
-  code = gets.to_s.strip
-  payload = {
-    "@type" => "checkAuthenticationCode",
-    "code" => code
-  }
-
-  client.broadcast(payload) { }
-end
-
-client.on("updateAuthorizationState") do |update|
-  next unless update.dig("authorization_state", "@type") == "authorizationStateWaitRegistration"
-  puts update["authorization_state"]["terms_of_service"]["text"]["text"].as_s
-  print "Please enter your first name: "
-  first_name = gets.to_s.strip
-  print "Please enter your last name: "
-  last_name = gets.to_s.strip
-  payload = {
-    "@type" => "registerUser",
-    "first_name" => first_name,
-    "last_name" => last_name,
-
-  }
-
-  client.broadcast(payload) { }
-end
-
-client.on("updateAuthorizationState") do |update|
-  next unless update.dig("authorization_state", "@type") == "authorizationStateWaitPassword"
-  print "Please enter your password: "
-  password = gets.to_s.strip
-  payload = {
-    "@type" => "checkAuthenticationPassword",
-    "password" => password
-  }
-end
-
-client.on("updateAuthorizationState") do |update|
-  next unless update.dig("authorization_state", "@type") == "authorizationStateReady"
-  me = client.broadcast({"@type" => "getMe"}) do |me|
-    pp me
-    client.close
-  end
-end
-
-client.run_until_finished
+type = JSON.parse(json)
+pp Proton::Types::Base.unwrap(type)

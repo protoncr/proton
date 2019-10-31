@@ -19,7 +19,7 @@ module Proton
       update = TDLib.td_json_client_receive(client, timeout.to_f)
       if update
         update = String.new(update)
-        Update.from_json(update) if update
+        JSON::Any.from_json(update) if update
       end
     end
 

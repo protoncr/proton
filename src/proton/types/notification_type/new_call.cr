@@ -1,0 +1,16 @@
+# This is an auto generated file. If something isn't working
+# correctly, see 'typegen.cr' in the project root
+
+
+
+module Proton::Types
+  # New call was received.
+  # call_id [::Int32] Call identifier.
+  class NotificationType::NewCall < Types::NotificationType
+    property call_id : ::Int32
+
+    def initialize(@call_id : ::Int32)
+    end
+  end
+end
+
