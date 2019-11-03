@@ -13,4 +13,4 @@ module Proton::Types
 end
 
 require "./input_background/local"
-  require "./input_background/remote"
+require "./input_background/remote"

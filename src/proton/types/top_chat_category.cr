@@ -13,8 +13,8 @@ module Proton::Types
 end
 
 require "./top_chat_category/users"
-  require "./top_chat_category/bots"
-  require "./top_chat_category/groups"
-  require "./top_chat_category/channels"
-  require "./top_chat_category/inline_bots"
-  require "./top_chat_category/calls"
+require "./top_chat_category/bots"
+require "./top_chat_category/groups"
+require "./top_chat_category/channels"
+require "./top_chat_category/inline_bots"
+require "./top_chat_category/calls"

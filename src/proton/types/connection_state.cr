@@ -13,7 +13,7 @@ module Proton::Types
 end
 
 require "./connection_state/waiting_for_network"
-  require "./connection_state/connecting_to_proxy"
-  require "./connection_state/connecting"
-  require "./connection_state/updating"
-  require "./connection_state/ready"
+require "./connection_state/connecting_to_proxy"
+require "./connection_state/connecting"
+require "./connection_state/updating"
+require "./connection_state/ready"

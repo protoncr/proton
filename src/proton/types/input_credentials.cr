@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./input_credentials/saved"
-  require "./input_credentials/new"
-  require "./input_credentials/android_pay"
-  require "./input_credentials/apple_pay"
+require "./input_credentials/new"
+require "./input_credentials/android_pay"
+require "./input_credentials/apple_pay"

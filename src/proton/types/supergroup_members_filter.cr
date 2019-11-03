@@ -13,9 +13,9 @@ module Proton::Types
 end
 
 require "./supergroup_members_filter/recent"
-  require "./supergroup_members_filter/contacts"
-  require "./supergroup_members_filter/administrators"
-  require "./supergroup_members_filter/search"
-  require "./supergroup_members_filter/restricted"
-  require "./supergroup_members_filter/banned"
-  require "./supergroup_members_filter/bots"
+require "./supergroup_members_filter/contacts"
+require "./supergroup_members_filter/administrators"
+require "./supergroup_members_filter/search"
+require "./supergroup_members_filter/restricted"
+require "./supergroup_members_filter/banned"
+require "./supergroup_members_filter/bots"

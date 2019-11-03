@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./language_pack_string_value/ordinary"
-  require "./language_pack_string_value/pluralized"
-  require "./language_pack_string_value/deleted"
+require "./language_pack_string_value/pluralized"
+require "./language_pack_string_value/deleted"

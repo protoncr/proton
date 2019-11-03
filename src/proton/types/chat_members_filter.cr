@@ -13,8 +13,8 @@ module Proton::Types
 end
 
 require "./chat_members_filter/contacts"
-  require "./chat_members_filter/administrators"
-  require "./chat_members_filter/members"
-  require "./chat_members_filter/restricted"
-  require "./chat_members_filter/banned"
-  require "./chat_members_filter/bots"
+require "./chat_members_filter/administrators"
+require "./chat_members_filter/members"
+require "./chat_members_filter/restricted"
+require "./chat_members_filter/banned"
+require "./chat_members_filter/bots"

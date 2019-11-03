@@ -1,6 +1,7 @@
 require "habitat"
 
 require "./tdlib/tdlib"
+require "./core_extensions/*"
 require "./proton/*"
 
 module Proton
@@ -41,6 +42,7 @@ end
 
 # client.connect
 
+
 json = <<-JSON
 {
   "@type": "updateAuthorizationState",
@@ -50,5 +52,5 @@ json = <<-JSON
 }
 JSON
 
-type = JSON.parse(json)
-pp Proton::Types::Base.unwrap(type)
+parsed = Proton::Types::Base.from_json(json)
+pp parsed

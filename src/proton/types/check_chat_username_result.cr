@@ -13,7 +13,7 @@ module Proton::Types
 end
 
 require "./check_chat_username_result/ok"
-  require "./check_chat_username_result/username_invalid"
-  require "./check_chat_username_result/username_occupied"
-  require "./check_chat_username_result/public_chats_too_much"
-  require "./check_chat_username_result/public_groups_unavailable"
+require "./check_chat_username_result/username_invalid"
+require "./check_chat_username_result/username_occupied"
+require "./check_chat_username_result/public_chats_too_much"
+require "./check_chat_username_result/public_groups_unavailable"

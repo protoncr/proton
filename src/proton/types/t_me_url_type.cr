@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./t_me_url_type/user"
-  require "./t_me_url_type/supergroup"
-  require "./t_me_url_type/chat_invite"
-  require "./t_me_url_type/sticker_set"
+require "./t_me_url_type/supergroup"
+require "./t_me_url_type/chat_invite"
+require "./t_me_url_type/sticker_set"

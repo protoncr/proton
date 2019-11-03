@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./authentication_code_type/telegram_message"
-  require "./authentication_code_type/sms"
-  require "./authentication_code_type/call"
-  require "./authentication_code_type/flash_call"
+require "./authentication_code_type/sms"
+require "./authentication_code_type/call"
+require "./authentication_code_type/flash_call"

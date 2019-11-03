@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./input_file/id"
-  require "./input_file/remote"
-  require "./input_file/local"
-  require "./input_file/generated"
+require "./input_file/remote"
+require "./input_file/local"
+require "./input_file/generated"

@@ -13,7 +13,7 @@ module Proton::Types
 end
 
 require "./call_discard_reason/empty"
-  require "./call_discard_reason/missed"
-  require "./call_discard_reason/declined"
-  require "./call_discard_reason/disconnected"
-  require "./call_discard_reason/hung_up"
+require "./call_discard_reason/missed"
+require "./call_discard_reason/declined"
+require "./call_discard_reason/disconnected"
+require "./call_discard_reason/hung_up"

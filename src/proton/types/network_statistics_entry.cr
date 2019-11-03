@@ -13,4 +13,4 @@ module Proton::Types
 end
 
 require "./network_statistics_entry/file"
-  require "./network_statistics_entry/call"
+require "./network_statistics_entry/call"

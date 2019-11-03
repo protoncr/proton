@@ -13,4 +13,4 @@ module Proton::Types
 end
 
 require "./message_sending_state/pending"
-  require "./message_sending_state/failed"
+require "./message_sending_state/failed"

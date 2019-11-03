@@ -13,8 +13,8 @@ module Proton::Types
 end
 
 require "./user_privacy_setting_rule/allow_all"
-  require "./user_privacy_setting_rule/allow_contacts"
-  require "./user_privacy_setting_rule/allow_users"
-  require "./user_privacy_setting_rule/restrict_all"
-  require "./user_privacy_setting_rule/restrict_contacts"
-  require "./user_privacy_setting_rule/restrict_users"
+require "./user_privacy_setting_rule/allow_contacts"
+require "./user_privacy_setting_rule/allow_users"
+require "./user_privacy_setting_rule/restrict_all"
+require "./user_privacy_setting_rule/restrict_contacts"
+require "./user_privacy_setting_rule/restrict_users"

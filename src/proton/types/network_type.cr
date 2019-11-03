@@ -13,7 +13,7 @@ module Proton::Types
 end
 
 require "./network_type/none"
-  require "./network_type/mobile"
-  require "./network_type/mobile_roaming"
-  require "./network_type/wi_fi"
-  require "./network_type/other"
+require "./network_type/mobile"
+require "./network_type/mobile_roaming"
+require "./network_type/wi_fi"
+require "./network_type/other"

@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./page_block_horizontal_alignment/left"
-  require "./page_block_horizontal_alignment/center"
-  require "./page_block_horizontal_alignment/right"
+require "./page_block_horizontal_alignment/center"
+require "./page_block_horizontal_alignment/right"

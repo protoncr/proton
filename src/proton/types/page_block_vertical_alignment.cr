@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./page_block_vertical_alignment/top"
-  require "./page_block_vertical_alignment/middle"
-  require "./page_block_vertical_alignment/bottom"
+require "./page_block_vertical_alignment/middle"
+require "./page_block_vertical_alignment/bottom"

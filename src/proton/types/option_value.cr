@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./option_value/boolean"
-  require "./option_value/empty"
-  require "./option_value/integer"
-  require "./option_value/string"
+require "./option_value/empty"
+require "./option_value/integer"
+require "./option_value/string"

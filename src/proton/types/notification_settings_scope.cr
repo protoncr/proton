@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./notification_settings_scope/private_chats"
-  require "./notification_settings_scope/group_chats"
-  require "./notification_settings_scope/channel_chats"
+require "./notification_settings_scope/group_chats"
+require "./notification_settings_scope/channel_chats"

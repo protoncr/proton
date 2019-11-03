@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./background_type/wallpaper"
-  require "./background_type/pattern"
-  require "./background_type/solid"
+require "./background_type/pattern"
+require "./background_type/solid"

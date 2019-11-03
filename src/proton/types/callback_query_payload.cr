@@ -13,4 +13,4 @@ module Proton::Types
 end
 
 require "./callback_query_payload/data"
-  require "./callback_query_payload/game"
+require "./callback_query_payload/game"

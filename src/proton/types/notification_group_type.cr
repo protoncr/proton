@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./notification_group_type/messages"
-  require "./notification_group_type/mentions"
-  require "./notification_group_type/secret_chat"
-  require "./notification_group_type/calls"
+require "./notification_group_type/mentions"
+require "./notification_group_type/secret_chat"
+require "./notification_group_type/calls"

@@ -14,5 +14,5 @@ module Proton::Types
 end
 
 require "./link_state/none"
-  require "./link_state/knows_phone_number"
-  require "./link_state/is_contact"
+require "./link_state/knows_phone_number"
+require "./link_state/is_contact"

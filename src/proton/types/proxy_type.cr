@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./proxy_type/socks5"
-  require "./proxy_type/http"
-  require "./proxy_type/mtproto"
+require "./proxy_type/http"
+require "./proxy_type/mtproto"

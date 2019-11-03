@@ -13,8 +13,8 @@ module Proton::Types
 end
 
 require "./user_status/empty"
-  require "./user_status/online"
-  require "./user_status/offline"
-  require "./user_status/recently"
-  require "./user_status/last_week"
-  require "./user_status/last_month"
+require "./user_status/online"
+require "./user_status/offline"
+require "./user_status/recently"
+require "./user_status/last_week"
+require "./user_status/last_month"

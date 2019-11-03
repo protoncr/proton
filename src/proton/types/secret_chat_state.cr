@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./secret_chat_state/pending"
-  require "./secret_chat_state/ready"
-  require "./secret_chat_state/closed"
+require "./secret_chat_state/ready"
+require "./secret_chat_state/closed"

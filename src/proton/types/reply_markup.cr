@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./reply_markup/remove_keyboard"
-  require "./reply_markup/force_reply"
-  require "./reply_markup/show_keyboard"
-  require "./reply_markup/inline_keyboard"
+require "./reply_markup/force_reply"
+require "./reply_markup/show_keyboard"
+require "./reply_markup/inline_keyboard"

@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./mask_point/forehead"
-  require "./mask_point/eyes"
-  require "./mask_point/mouth"
-  require "./mask_point/chin"
+require "./mask_point/eyes"
+require "./mask_point/mouth"
+require "./mask_point/chin"

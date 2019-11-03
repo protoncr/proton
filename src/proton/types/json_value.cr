@@ -13,8 +13,8 @@ module Proton::Types
 end
 
 require "./json_value/null"
-  require "./json_value/boolean"
-  require "./json_value/number"
-  require "./json_value/string"
-  require "./json_value/array"
-  require "./json_value/object"
+require "./json_value/boolean"
+require "./json_value/number"
+require "./json_value/string"
+require "./json_value/array"
+require "./json_value/object"

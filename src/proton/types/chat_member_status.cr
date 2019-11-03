@@ -13,8 +13,8 @@ module Proton::Types
 end
 
 require "./chat_member_status/creator"
-  require "./chat_member_status/administrator"
-  require "./chat_member_status/member"
-  require "./chat_member_status/restricted"
-  require "./chat_member_status/left"
-  require "./chat_member_status/banned"
+require "./chat_member_status/administrator"
+require "./chat_member_status/member"
+require "./chat_member_status/restricted"
+require "./chat_member_status/left"
+require "./chat_member_status/banned"

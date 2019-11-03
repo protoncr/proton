@@ -40,6 +40,7 @@ module Proton
 
     def connect
       on Types::Update::AuthorizationState do |update|
+        pp update
         case update.authorization_state
         when Types::AuthorizationState::WaitTdlibParameters
           puts "WaitTdlibParameters"
@@ -54,13 +55,13 @@ module Proton
 
       loop do
         update = API.client_receive(@td_client, @timeout)
-        puts "Incoming: " + update.to_pretty_json
         handle_update(update) if update
       end
     end
 
     def handle_update(update)
-      update = Types.wrap(update)
+      update = Types::Base.from_json(update)
+      puts "Incoming: " + update.to_pretty_json
       if handlers = @event_handlers[update.class]?
         handlers.each do |handler|
           handler.call(update)

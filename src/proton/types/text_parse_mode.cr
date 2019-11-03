@@ -13,4 +13,4 @@ module Proton::Types
 end
 
 require "./text_parse_mode/markdown"
-  require "./text_parse_mode/html"
+require "./text_parse_mode/html"

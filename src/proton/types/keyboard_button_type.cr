@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./keyboard_button_type/text"
-  require "./keyboard_button_type/request_phone_number"
-  require "./keyboard_button_type/request_location"
+require "./keyboard_button_type/request_phone_number"
+require "./keyboard_button_type/request_location"

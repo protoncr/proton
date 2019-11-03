@@ -14,6 +14,6 @@ module Proton::Types
 end
 
 require "./user_type/regular"
-  require "./user_type/deleted"
-  require "./user_type/bot"
-  require "./user_type/unknown"
+require "./user_type/deleted"
+require "./user_type/bot"
+require "./user_type/unknown"

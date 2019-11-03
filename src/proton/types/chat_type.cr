@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./chat_type/private"
-  require "./chat_type/basic_group"
-  require "./chat_type/supergroup"
-  require "./chat_type/secret"
+require "./chat_type/basic_group"
+require "./chat_type/supergroup"
+require "./chat_type/secret"

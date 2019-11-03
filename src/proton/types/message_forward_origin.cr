@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./message_forward_origin/user"
-  require "./message_forward_origin/hidden_user"
-  require "./message_forward_origin/channel"
+require "./message_forward_origin/hidden_user"
+require "./message_forward_origin/channel"

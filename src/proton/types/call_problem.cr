@@ -13,9 +13,9 @@ module Proton::Types
 end
 
 require "./call_problem/echo"
-  require "./call_problem/noise"
-  require "./call_problem/interruptions"
-  require "./call_problem/distorted_speech"
-  require "./call_problem/silent_local"
-  require "./call_problem/silent_remote"
-  require "./call_problem/dropped"
+require "./call_problem/noise"
+require "./call_problem/interruptions"
+require "./call_problem/distorted_speech"
+require "./call_problem/silent_local"
+require "./call_problem/silent_remote"
+require "./call_problem/dropped"

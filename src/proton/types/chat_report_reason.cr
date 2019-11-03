@@ -13,8 +13,8 @@ module Proton::Types
 end
 
 require "./chat_report_reason/spam"
-  require "./chat_report_reason/violence"
-  require "./chat_report_reason/pornography"
-  require "./chat_report_reason/child_abuse"
-  require "./chat_report_reason/copyright"
-  require "./chat_report_reason/custom"
+require "./chat_report_reason/violence"
+require "./chat_report_reason/pornography"
+require "./chat_report_reason/child_abuse"
+require "./chat_report_reason/copyright"
+require "./chat_report_reason/custom"

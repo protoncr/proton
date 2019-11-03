@@ -13,5 +13,5 @@ module Proton::Types
 end
 
 require "./log_stream/default"
-  require "./log_stream/file"
-  require "./log_stream/empty"
+require "./log_stream/file"
+require "./log_stream/empty"

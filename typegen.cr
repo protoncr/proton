@@ -131,12 +131,10 @@ def build_lookup_table(classes)
     super_class_name = c.parent_class_name.camelcase
 
     unless super_class_name == "Base"
-      class_name = "#{super_class_name}::#{class_name.sub(super_class_name, "").camelcase}"
+      class_name = "Types::#{super_class_name}::#{class_name.sub(super_class_name, "").camelcase}"
+      key_name = c.class_name.camelcase(lower: true)
+      lookup_table[key_name] = class_name
     end
-
-    class_name = "Types::#{class_name}"
-    key_name = c.class_name.camelcase(lower: true)
-    lookup_table[key_name] = class_name
   end
 
   lookup_table
@@ -238,9 +236,11 @@ def run
         .map { |c| c.sub(class_name, "").underscore }
         .map { |type|
           "require \"./#{class_name.underscore}/#{type}\""
-        }.join("\n  ")
+        }.join("\n")
+      is_abstract = true
     else
       require_statements = ""
+      is_abstract = false
     end
 
     if super_class_name == "Base"
@@ -308,12 +308,12 @@ def run
 
   module Proton::Types
 
-    class Base
+    abstract class Base
       include JSON::Serializable
 
-      LOOKUP_TABLE = {
-        #{lookup_table.map { |k, v| "#{k}: #{v}" }.join(",\n      ")}
-      }
+      @[JSON::Discriminator(key: "@type", mapping: {#{lookup_table.map { |k, v| "#{k}: #{v}" }.join(",\n      ")}})]
+      @[JSON::Field(key: "@type")]
+      property tdtype : String
     end
   end
   CRYSTAL
@@ -362,7 +362,7 @@ def run
     <<-CRYSTAL
     #{description}
     ##{params_doc}
-    def #{method_name}#{method_params} : #{return_class}
+    def #{method_name}#{method_params} # : #{return_class}
       broadcast({"@type"#{" " * (param_max_length - 4)}=> "#{func.class_name}"#{func_params}})
     end
     CRYSTAL

@@ -13,6 +13,6 @@ module Proton::Types
 end
 
 require "./notification_type/new_message"
-  require "./notification_type/new_secret_chat"
-  require "./notification_type/new_call"
-  require "./notification_type/new_push_message"
+require "./notification_type/new_secret_chat"
+require "./notification_type/new_call"
+require "./notification_type/new_push_message"
