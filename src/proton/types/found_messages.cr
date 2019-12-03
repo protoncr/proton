@@ -12,9 +12,9 @@ module Proton::Types
     property messages : ::Array(Proton::Types::Message)
 
     # Value to pass as from_search_id to get more results
-    property next_from_search_id : ::Int64
+    property next_from_search_id : ::String
 
-    def initialize(@messages : ::Array(Proton::Types::Message), @next_from_search_id : ::Int64)
+    def initialize(@messages : ::Array(Proton::Types::Message), @next_from_search_id : ::String)
     end
   end
 end

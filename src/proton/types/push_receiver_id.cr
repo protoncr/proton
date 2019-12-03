@@ -10,9 +10,9 @@ module Proton::Types
     include JSON::Serializable
 
     # The globally unique identifier of push notification subscription
-    property id : ::Int64
+    property id : ::String
 
-    def initialize(@id : ::Int64)
+    def initialize(@id : ::String)
     end
   end
 end

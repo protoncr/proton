@@ -10,7 +10,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Unique identifier of the inline query
-    property inline_query_id : ::Int64
+    property inline_query_id : ::String
 
     # The offset for the next request. If empty, there are no more results
     property next_offset : ::String
@@ -24,7 +24,7 @@ module Proton::Types
     # Parameter for the bot start message
     property switch_pm_parameter : ::String
 
-    def initialize(@inline_query_id : ::Int64, @next_offset : ::String, @results : ::Array(Proton::Types::InlineQueryResult), @switch_pm_text : ::String, @switch_pm_parameter : ::String)
+    def initialize(@inline_query_id : ::String, @next_offset : ::String, @results : ::Array(Proton::Types::InlineQueryResult), @switch_pm_text : ::String, @switch_pm_parameter : ::String)
     end
   end
 end

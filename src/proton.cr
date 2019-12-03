@@ -9,7 +9,7 @@ module Proton
       setting encryption_key : String
 
       # Client
-      setting api_id : String
+      setting api_id : Int32
       setting api_hash : String
       setting use_test_dc : Bool = false
       setting database_directory : String = File.join(Path.home.to_s, ".protoncr/db")

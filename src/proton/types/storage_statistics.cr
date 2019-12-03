@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Total size of files
-    property size : ::Int64
+    property size : ::Int32
 
     # Total number of files
     property count : ::Int32
@@ -17,7 +17,7 @@ module Proton::Types
     # Statistics split by chats
     property by_chat : ::Array(Proton::Types::StorageStatisticsByChat)
 
-    def initialize(@size : ::Int64, @count : ::Int32, @by_chat : ::Array(Proton::Types::StorageStatisticsByChat))
+    def initialize(@size : ::Int32, @count : ::Int32, @by_chat : ::Array(Proton::Types::StorageStatisticsByChat))
     end
   end
 end

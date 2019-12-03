@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Reflector identifier
-    property id : ::Int64
+    property id : ::String
 
     # IPv4 reflector address
     property ip : ::String
@@ -23,7 +23,7 @@ module Proton::Types
     # Connection peer tag
     property peer_tag : ::String
 
-    def initialize(@id : ::Int64, @ip : ::String, @ipv6 : ::String, @port : ::Int32, @peer_tag : ::String)
+    def initialize(@id : ::String, @ip : ::String, @ipv6 : ::String, @port : ::Int32, @peer_tag : ::String)
     end
   end
 end

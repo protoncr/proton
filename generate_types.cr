@@ -19,8 +19,13 @@ def parse_tl_type(type)
     "::Array(#{parse_tl_type(vector[0][1])})"
   elsif (int = type.scan(/[iI]nt(\d+)/)).size > 0
     size = int[0][1].to_i
-    size = size <= 32 ? 32 : 64
-    "::Int#{size}"
+    if size == 64
+      "::String"
+    elsif size == 54
+      "::Int64"
+    else
+      "::Int32"
+    end
   elsif type =~ /[dD]ouble/
     "::Float64"
   elsif type =~ /[bB]ytes/ || type =~ /[sS]tring/

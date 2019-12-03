@@ -10,7 +10,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Session identifier
-    property id : ::Int64
+    property id : ::String
 
     # True, if this session is the current session
     property is_current : ::Bool
@@ -54,7 +54,7 @@ module Proton::Types
     # Region code from which the session was created, based on the IP address
     property region : ::String
 
-    def initialize(@id : ::Int64, @is_current : ::Bool, @is_password_pending : ::Bool, @api_id : ::Int32, @application_name : ::String, @application_version : ::String, @is_official_application : ::Bool, @device_model : ::String, @platform : ::String, @system_version : ::String, @log_in_date : ::Int32, @last_active_date : ::Int32, @ip : ::String, @country : ::String, @region : ::String)
+    def initialize(@id : ::String, @is_current : ::Bool, @is_password_pending : ::Bool, @api_id : ::Int32, @application_name : ::String, @application_version : ::String, @is_official_application : ::Bool, @device_model : ::String, @platform : ::String, @system_version : ::String, @log_in_date : ::Int32, @last_active_date : ::Int32, @ip : ::String, @country : ::String, @region : ::String)
     end
   end
 end

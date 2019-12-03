@@ -8,15 +8,15 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Message identifier
-    property message_id : ::Int64
+    property message_id : ::Int32
 
     # New value of the view count
     property views : ::Int32
 
-    def initialize(@chat_id : ::Int64, @message_id : ::Int64, @views : ::Int32)
+    def initialize(@chat_id : ::Int32, @message_id : ::Int32, @views : ::Int32)
     end
   end
 end

@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # The background identifier
-    property background_id : ::Int64
+    property background_id : ::String
 
-    def initialize(@background_id : ::Int64)
+    def initialize(@background_id : ::String)
     end
   end
 end

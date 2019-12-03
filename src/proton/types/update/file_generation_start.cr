@@ -8,7 +8,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Unique identifier for the generation process
-    property generation_id : ::Int64
+    property generation_id : ::String
 
     # The path to a file that should be created and where the new file should be generated
     property destination_path : ::String
@@ -19,7 +19,7 @@ module Proton::Types
     # The path to a file from which a new file is generated; may be empty
     property original_path : ::String? = nil
 
-    def initialize(@generation_id : ::Int64, @destination_path : ::String, @conversion : ::String, @original_path : ::String? = nil)
+    def initialize(@generation_id : ::String, @destination_path : ::String, @conversion : ::String, @original_path : ::String? = nil)
     end
   end
 end

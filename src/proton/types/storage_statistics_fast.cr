@@ -9,21 +9,21 @@ module Proton::Types
     include JSON::Serializable
 
     # Approximate total size of files
-    property files_size : ::Int64
+    property files_size : ::Int32
 
     # Approximate number of files
     property file_count : ::Int32
 
     # Size of the database
-    property database_size : ::Int64
+    property database_size : ::Int32
 
     # Size of the language pack database
-    property language_pack_database_size : ::Int64
+    property language_pack_database_size : ::Int32
 
     # Size of the TDLib internal log
-    property log_size : ::Int64
+    property log_size : ::Int32
 
-    def initialize(@files_size : ::Int64, @file_count : ::Int32, @database_size : ::Int64, @language_pack_database_size : ::Int64, @log_size : ::Int64)
+    def initialize(@files_size : ::Int32, @file_count : ::Int32, @database_size : ::Int32, @language_pack_database_size : ::Int32, @log_size : ::Int32)
     end
   end
 end

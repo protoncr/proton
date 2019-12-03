@@ -12,7 +12,7 @@ module Proton::Types
     property is_public : ::Bool
 
     # If found, identifier of the chat to which the message belongs, 0 otherwise
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # True, if the whole media album to which the message belongs is linked
     property for_album : ::Bool
@@ -20,7 +20,7 @@ module Proton::Types
     # If found, the linked message; may be null
     property message : Proton::Types::Message? = nil
 
-    def initialize(@is_public : ::Bool, @chat_id : ::Int64, @for_album : ::Bool, @message : Proton::Types::Message? = nil)
+    def initialize(@is_public : ::Bool, @chat_id : ::Int32, @for_album : ::Bool, @message : Proton::Types::Message? = nil)
     end
   end
 end

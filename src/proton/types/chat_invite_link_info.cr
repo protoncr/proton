@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier of the invite link; 0 if the user is not a member of this chat
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Contains information about the type of the chat
     property type : Proton::Types::ChatType
@@ -29,7 +29,7 @@ module Proton::Types
     # Chat photo; may be null
     property photo : Proton::Types::ChatPhoto? = nil
 
-    def initialize(@chat_id : ::Int64, @type : Proton::Types::ChatType, @title : ::String, @member_count : ::Int32, @member_user_ids : ::Array(::Int32), @is_public : ::Bool, @photo : Proton::Types::ChatPhoto? = nil)
+    def initialize(@chat_id : ::Int32, @type : Proton::Types::ChatType, @title : ::String, @member_count : ::Int32, @member_user_ids : ::Array(::Int32), @is_public : ::Bool, @photo : Proton::Types::ChatPhoto? = nil)
     end
   end
 end

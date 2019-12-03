@@ -9,12 +9,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Identifier of the message to reply to; 0 if none
-    property reply_to_message_id : ::Int64
+    property reply_to_message_id : ::Int32
 
     # Content of the message draft; this should always be of type inputMessageText
     property input_message_text : Proton::Types::InputMessageContent
 
-    def initialize(@reply_to_message_id : ::Int64, @input_message_text : Proton::Types::InputMessageContent)
+    def initialize(@reply_to_message_id : ::Int32, @input_message_text : Proton::Types::InputMessageContent)
     end
   end
 end

@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Unique query identifier
-    property id : ::Int64
+    property id : ::String
 
     # Identifier of the user who sent the query
     property sender_user_id : ::Int32
@@ -20,7 +20,7 @@ module Proton::Types
     # User shipping address
     property shipping_address : Proton::Types::Address
 
-    def initialize(@id : ::Int64, @sender_user_id : ::Int32, @invoice_payload : ::String, @shipping_address : Proton::Types::Address)
+    def initialize(@id : ::String, @sender_user_id : ::Int32, @invoice_payload : ::String, @shipping_address : Proton::Types::Address)
     end
   end
 end

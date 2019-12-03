@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # Unique identifier for the generation process
-    property generation_id : ::Int64
+    property generation_id : ::String
 
-    def initialize(@generation_id : ::Int64)
+    def initialize(@generation_id : ::String)
     end
   end
 end

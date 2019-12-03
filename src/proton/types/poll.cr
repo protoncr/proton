@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Unique poll identifier
-    property id : ::Int64
+    property id : ::String
 
     # Poll question, 1-255 characters
     property question : ::String
@@ -23,7 +23,7 @@ module Proton::Types
     # True, if the poll is closed
     property is_closed : ::Bool
 
-    def initialize(@id : ::Int64, @question : ::String, @options : ::Array(Proton::Types::PollOption), @total_voter_count : ::Int32, @is_closed : ::Bool)
+    def initialize(@id : ::String, @question : ::String, @options : ::Array(Proton::Types::PollOption), @total_voter_count : ::Int32, @is_closed : ::Bool)
     end
   end
 end

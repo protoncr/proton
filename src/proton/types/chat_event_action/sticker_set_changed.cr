@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Previous identifier of the chat sticker set; 0 if none
-    property old_sticker_set_id : ::Int64
+    property old_sticker_set_id : ::String
 
     # New identifier of the chat sticker set; 0 if none
-    property new_sticker_set_id : ::Int64
+    property new_sticker_set_id : ::String
 
-    def initialize(@old_sticker_set_id : ::Int64, @new_sticker_set_id : ::Int64)
+    def initialize(@old_sticker_set_id : ::String, @new_sticker_set_id : ::String)
     end
   end
 end

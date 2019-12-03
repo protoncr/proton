@@ -10,12 +10,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
-    property reply_markup_message_id : ::Int64
+    property reply_markup_message_id : ::Int32
 
-    def initialize(@chat_id : ::Int64, @reply_markup_message_id : ::Int64)
+    def initialize(@chat_id : ::Int32, @reply_markup_message_id : ::Int32)
     end
   end
 end

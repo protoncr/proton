@@ -8,7 +8,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Unique query identifier
-    property id : ::Int64
+    property id : ::String
 
     # Identifier of the user who sent the query
     property sender_user_id : ::Int32
@@ -22,7 +22,7 @@ module Proton::Types
     # User location, provided by the client; may be null
     property user_location : Proton::Types::Location? = nil
 
-    def initialize(@id : ::Int64, @sender_user_id : ::Int32, @query : ::String, @offset : ::String, @user_location : Proton::Types::Location? = nil)
+    def initialize(@id : ::String, @sender_user_id : ::Int32, @query : ::String, @offset : ::String, @user_location : Proton::Types::Location? = nil)
     end
   end
 end

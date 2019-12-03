@@ -15,12 +15,12 @@ module Proton::Types
     property date : ::Int32
 
     # For messages forwarded to the chat with the current user (saved messages) or to the channel discussion supergroup, the identifier of the chat from which the message was forwarded last time; 0 if unknown
-    property from_chat_id : ::Int64
+    property from_chat_id : ::Int32
 
     # For messages forwarded to the chat with the current user (saved messages) or to the channel discussion supergroup, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
-    property from_message_id : ::Int64
+    property from_message_id : ::Int32
 
-    def initialize(@origin : Proton::Types::MessageForwardOrigin, @date : ::Int32, @from_chat_id : ::Int64, @from_message_id : ::Int64)
+    def initialize(@origin : Proton::Types::MessageForwardOrigin, @date : ::Int32, @from_chat_id : ::Int32, @from_message_id : ::Int32)
     end
   end
 end

@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # The identifier of the sticker set to which the sticker belongs; 0 if none
-    property set_id : ::Int64
+    property set_id : ::String
 
     # Sticker width; as defined by the sender
     property width : ::Int32
@@ -35,7 +35,7 @@ module Proton::Types
     # Sticker thumbnail in WEBP or JPEG format; may be null
     property thumbnail : Proton::Types::PhotoSize? = nil
 
-    def initialize(@set_id : ::Int64, @width : ::Int32, @height : ::Int32, @emoji : ::String, @is_animated : ::Bool, @is_mask : ::Bool, @sticker : Proton::Types::File, @mask_position : Proton::Types::MaskPosition? = nil, @thumbnail : Proton::Types::PhotoSize? = nil)
+    def initialize(@set_id : ::String, @width : ::Int32, @height : ::Int32, @emoji : ::String, @is_animated : ::Bool, @is_mask : ::Bool, @sticker : Proton::Types::File, @mask_position : Proton::Types::MaskPosition? = nil, @thumbnail : Proton::Types::PhotoSize? = nil)
     end
   end
 end

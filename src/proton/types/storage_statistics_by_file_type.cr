@@ -12,12 +12,12 @@ module Proton::Types
     property file_type : Proton::Types::FileType
 
     # Total size of the files
-    property size : ::Int64
+    property size : ::Int32
 
     # Total number of files
     property count : ::Int32
 
-    def initialize(@file_type : Proton::Types::FileType, @size : ::Int64, @count : ::Int32)
+    def initialize(@file_type : Proton::Types::FileType, @size : ::Int32, @count : ::Int32)
     end
   end
 end

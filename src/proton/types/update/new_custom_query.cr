@@ -8,7 +8,7 @@ module Proton::Types
     include JSON::Serializable
 
     # The query identifier
-    property id : ::Int64
+    property id : ::String
 
     # JSON-serialized query data
     property data : ::String
@@ -16,7 +16,7 @@ module Proton::Types
     # Query timeout
     property timeout : ::Int32
 
-    def initialize(@id : ::Int64, @data : ::String, @timeout : ::Int32)
+    def initialize(@id : ::String, @data : ::String, @timeout : ::Int32)
     end
   end
 end

@@ -8,7 +8,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Identifier of a user performing an action
     property user_id : ::Int32
@@ -16,7 +16,7 @@ module Proton::Types
     # The action description
     property action : Proton::Types::ChatAction
 
-    def initialize(@chat_id : ::Int64, @user_id : ::Int32, @action : Proton::Types::ChatAction)
+    def initialize(@chat_id : ::Int32, @user_id : ::Int32, @action : Proton::Types::ChatAction)
     end
   end
 end

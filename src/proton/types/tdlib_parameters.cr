@@ -21,7 +21,7 @@ module Proton::Types
     property use_secret_chats : ::Bool
 
     # Application identifier for Telegram API access, which can be obtained at https://my.telegram.org
-    property api_id : ::String
+    property api_id : ::Int32
 
     # Application identifier hash for Telegram API access, which can be obtained at https://my.telegram.org
     property api_hash : ::String
@@ -53,7 +53,7 @@ module Proton::Types
     # If set to true, information about downloaded and uploaded files will be saved between application restarts; may be null
     property use_file_database : ::Bool? = nil
 
-    def initialize(@use_test_dc : ::Bool, @use_chat_info_database : ::Bool, @use_message_database : ::Bool, @use_secret_chats : ::Bool, @api_id : ::String, @api_hash : ::String, @system_language_code : ::String, @device_model : ::String, @system_version : ::String, @application_version : ::String, @enable_storage_optimizer : ::Bool, @ignore_file_names : ::Bool, @database_directory : ::String? = nil, @files_directory : ::String? = nil, @use_file_database : ::Bool? = nil)
+    def initialize(@use_test_dc : ::Bool, @use_chat_info_database : ::Bool, @use_message_database : ::Bool, @use_secret_chats : ::Bool, @api_id : ::Int32, @api_hash : ::String, @system_language_code : ::String, @device_model : ::String, @system_version : ::String, @application_version : ::String, @enable_storage_optimizer : ::Bool, @ignore_file_names : ::Bool, @database_directory : ::String? = nil, @files_directory : ::String? = nil, @use_file_database : ::Bool? = nil)
     end
   end
 end

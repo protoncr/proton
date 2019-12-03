@@ -24,11 +24,11 @@ module Proton::ClientMethods
   # Members can't be added to private or secret chats.
   # Members will not be added until the chat state has been synchronized with the server.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # user_id [::Int32] Identifier of the user.
   # forward_limit [::Int32] The number of earlier messages from the chat to be forwarded to the new member; up to 100.
   #   Ignored for supergroups and channels.
-  def add_chat_member(chat_id : ::Int64, user_id : ::Int32, forward_limit : ::Int32) # : Proton::Types::Ok
+  def add_chat_member(chat_id : ::Int32, user_id : ::Int32, forward_limit : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"         => "addChatMember",
               "chat_id"       => chat_id,
               "user_id"       => user_id,
@@ -41,9 +41,9 @@ module Proton::ClientMethods
   # Members can't be added to a channel if it has more than 200 members.
   # Members will not be added until the chat state has been synchronized with the server.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # user_ids [::Array(::Int32)] Identifiers of the users to be added to the chat.
-  def add_chat_members(chat_id : ::Int64, user_ids : ::Array(::Int32)) # : Proton::Types::Ok
+  def add_chat_members(chat_id : ::Int32, user_ids : ::Array(::Int32)) # : Proton::Types::Ok
     broadcast({"@type"    => "addChatMembers",
               "chat_id"  => chat_id,
               "user_ids" => user_ids})
@@ -74,13 +74,13 @@ module Proton::ClientMethods
   # The message is persistent across application restarts only if the message database is used.
   # Returns the added message.
   #
-  # chat_id [::Int64] Target chat.
+  # chat_id [::Int32] Target chat.
   # sender_user_id [::Int32] Identifier of the user who will be shown as the sender of the message; may be 0 for
   #   channel posts.
-  # reply_to_message_id [::Int64] Identifier of the message to reply to or 0.
+  # reply_to_message_id [::Int32] Identifier of the message to reply to or 0.
   # disable_notification [::Bool] Pass true to disable notification for the message.
   # input_message_content [Proton::Types::InputMessageContent] The content of the message to be added.
-  def add_local_message(chat_id : ::Int64, sender_user_id : ::Int32, reply_to_message_id : ::Int64, disable_notification : ::Bool, input_message_content : Proton::Types::InputMessageContent) # : Proton::Types::Message
+  def add_local_message(chat_id : ::Int32, sender_user_id : ::Int32, reply_to_message_id : ::Int32, disable_notification : ::Bool, input_message_content : Proton::Types::InputMessageContent) # : Proton::Types::Message
     broadcast({"@type"                 => "addLocalMessage",
               "chat_id"               => chat_id,
               "sender_user_id"        => sender_user_id,
@@ -144,8 +144,8 @@ module Proton::ClientMethods
   # The chat is added to the beginning of the list.
   # If the chat is already in the list, it will be removed from the list first.
   #
-  # chat_id [::Int64] Identifier of the chat to add.
-  def add_recently_found_chat(chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Identifier of the chat to add.
+  def add_recently_found_chat(chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "addRecentlyFoundChat",
               "chat_id" => chat_id})
   end  
@@ -178,12 +178,12 @@ module Proton::ClientMethods
 
   # Sets the result of a callback query; for bots only.
   #
-  # callback_query_id [::Int64] Identifier of the callback query.
+  # callback_query_id [::String] Identifier of the callback query.
   # text [::String] Text of the answer.
   # show_alert [::Bool] If true, an alert should be shown to the user instead of a toast notification.
   # url [::String] URL to be opened.
   # cache_time [::Int32] Time during which the result of the query can be cached, in seconds.
-  def answer_callback_query(callback_query_id : ::Int64, text : ::String, show_alert : ::Bool, url : ::String, cache_time : ::Int32) # : Proton::Types::Ok
+  def answer_callback_query(callback_query_id : ::String, text : ::String, show_alert : ::Bool, url : ::String, cache_time : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"             => "answerCallbackQuery",
               "callback_query_id" => callback_query_id,
               "text"              => text,
@@ -194,9 +194,9 @@ module Proton::ClientMethods
 
   # Answers a custom query; for bots only.
   #
-  # custom_query_id [::Int64] Identifier of a custom query.
+  # custom_query_id [::String] Identifier of a custom query.
   # data [::String] JSON-serialized answer to the query.
-  def answer_custom_query(custom_query_id : ::Int64, data : ::String) # : Proton::Types::Ok
+  def answer_custom_query(custom_query_id : ::String, data : ::String) # : Proton::Types::Ok
     broadcast({"@type"           => "answerCustomQuery",
               "custom_query_id" => custom_query_id,
               "data"            => data})
@@ -204,7 +204,7 @@ module Proton::ClientMethods
 
   # Sets the result of an inline query; for bots only.
   #
-  # inline_query_id [::Int64] Identifier of the inline query.
+  # inline_query_id [::String] Identifier of the inline query.
   # is_personal [::Bool] True, if the result of the query can be cached for the specified user.
   # results [::Array(Proton::Types::InputInlineQueryResult)] The results of the query.
   # cache_time [::Int32] Allowed time to cache the results of the query, in seconds.
@@ -212,7 +212,7 @@ module Proton::ClientMethods
   # switch_pm_text [::String] If non-empty, this text should be shown on the button that opens a private chat with the
   #   bot and sends a start message to the bot with the parameter switch_pm_parameter.
   # switch_pm_parameter [::String] The parameter for the bot start message.
-  def answer_inline_query(inline_query_id : ::Int64, is_personal : ::Bool, results : ::Array(Proton::Types::InputInlineQueryResult), cache_time : ::Int32, next_offset : ::String, switch_pm_text : ::String, switch_pm_parameter : ::String) # : Proton::Types::Ok
+  def answer_inline_query(inline_query_id : ::String, is_personal : ::Bool, results : ::Array(Proton::Types::InputInlineQueryResult), cache_time : ::Int32, next_offset : ::String, switch_pm_text : ::String, switch_pm_parameter : ::String) # : Proton::Types::Ok
     broadcast({"@type"               => "answerInlineQuery",
               "inline_query_id"     => inline_query_id,
               "is_personal"         => is_personal,
@@ -225,9 +225,9 @@ module Proton::ClientMethods
 
   # Sets the result of a pre-checkout query; for bots only.
   #
-  # pre_checkout_query_id [::Int64] Identifier of the pre-checkout query.
+  # pre_checkout_query_id [::String] Identifier of the pre-checkout query.
   # error_message [::String] An error message, empty on success.
-  def answer_pre_checkout_query(pre_checkout_query_id : ::Int64, error_message : ::String) # : Proton::Types::Ok
+  def answer_pre_checkout_query(pre_checkout_query_id : ::String, error_message : ::String) # : Proton::Types::Ok
     broadcast({"@type"                 => "answerPreCheckoutQuery",
               "pre_checkout_query_id" => pre_checkout_query_id,
               "error_message"         => error_message})
@@ -235,10 +235,10 @@ module Proton::ClientMethods
 
   # Sets the result of a shipping query; for bots only.
   #
-  # shipping_query_id [::Int64] Identifier of the shipping query.
+  # shipping_query_id [::String] Identifier of the shipping query.
   # shipping_options [::Array(Proton::Types::ShippingOption)] Available shipping options.
   # error_message [::String] An error message, empty on success.
-  def answer_shipping_query(shipping_query_id : ::Int64, shipping_options : ::Array(Proton::Types::ShippingOption), error_message : ::String) # : Proton::Types::Ok
+  def answer_shipping_query(shipping_query_id : ::String, shipping_options : ::Array(Proton::Types::ShippingOption), error_message : ::String) # : Proton::Types::Ok
     broadcast({"@type"             => "answerShippingQuery",
               "shipping_query_id" => shipping_query_id,
               "shipping_options"  => shipping_options,
@@ -279,9 +279,9 @@ module Proton::ClientMethods
   # Can be used only if ChatReportSpamState.can_report_spam is true.
   # After this request, ChatReportSpamState.can_report_spam becomes false forever.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # is_spam_chat [::Bool] If true, the chat will be reported as spam; otherwise it will be marked as not spam.
-  def change_chat_report_spam_state(chat_id : ::Int64, is_spam_chat : ::Bool) # : Proton::Types::Ok
+  def change_chat_report_spam_state(chat_id : ::Int32, is_spam_chat : ::Bool) # : Proton::Types::Ok
     broadcast({"@type"        => "changeChatReportSpamState",
               "chat_id"      => chat_id,
               "is_spam_chat" => is_spam_chat})
@@ -312,11 +312,11 @@ module Proton::ClientMethods
 
   # Installs/uninstalls or activates/archives a sticker set.
   #
-  # set_id [::Int64] Identifier of the sticker set.
+  # set_id [::String] Identifier of the sticker set.
   # is_installed [::Bool] The new value of is_installed.
   # is_archived [::Bool] The new value of is_archived.
   #   A sticker set can't be installed and archived simultaneously.
-  def change_sticker_set(set_id : ::Int64, is_installed : ::Bool, is_archived : ::Bool) # : Proton::Types::Ok
+  def change_sticker_set(set_id : ::String, is_installed : ::Bool, is_archived : ::Bool) # : Proton::Types::Ok
     broadcast({"@type"        => "changeStickerSet",
               "set_id"       => set_id,
               "is_installed" => is_installed,
@@ -370,10 +370,10 @@ module Proton::ClientMethods
 
   # Checks whether a username can be set for a chat.
   #
-  # chat_id [::Int64] Chat identifier; should be identifier of a supergroup chat, or a channel chat, or a private chat
+  # chat_id [::Int32] Chat identifier; should be identifier of a supergroup chat, or a channel chat, or a private chat
   #   with self, or zero if chat is being created.
   # username [::String] Username to be checked.
-  def check_chat_username(chat_id : ::Int64, username : ::String) # : Proton::Types::CheckChatUsernameResult
+  def check_chat_username(chat_id : ::Int32, username : ::String) # : Proton::Types::CheckChatUsernameResult
     broadcast({"@type"    => "checkChatUsername",
               "chat_id"  => chat_id,
               "username" => username})
@@ -473,8 +473,8 @@ module Proton::ClientMethods
   # Informs TDLib that the chat is closed by the user.
   # Many useful activities depend on the chat being opened or closed.
   #
-  # chat_id [::Int64] Chat identifier.
-  def close_chat(chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Chat identifier.
+  def close_chat(chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "closeChat",
               "chat_id" => chat_id})
   end  
@@ -615,10 +615,10 @@ module Proton::ClientMethods
   # Use Chat.can_be_deleted_only_for_self and Chat.can_be_deleted_for_all_users fields to find whether and how the
   #   method can be applied to the chat.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # remove_from_chat_list [::Bool] Pass true if the chat should be removed from the chat list.
   # revoke [::Bool] Pass true to try to delete chat history for all users.
-  def delete_chat_history(chat_id : ::Int64, remove_from_chat_list : ::Bool, revoke : ::Bool) # : Proton::Types::Ok
+  def delete_chat_history(chat_id : ::Int32, remove_from_chat_list : ::Bool, revoke : ::Bool) # : Proton::Types::Ok
     broadcast({"@type"                 => "deleteChatHistory",
               "chat_id"               => chat_id,
               "remove_from_chat_list" => remove_from_chat_list,
@@ -628,9 +628,9 @@ module Proton::ClientMethods
   # Deletes all messages sent by the specified user to a chat.
   # Supported only in supergroups; requires can_delete_messages administrator privileges.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # user_id [::Int32] User identifier.
-  def delete_chat_messages_from_user(chat_id : ::Int64, user_id : ::Int32) # : Proton::Types::Ok
+  def delete_chat_messages_from_user(chat_id : ::Int32, user_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "deleteChatMessagesFromUser",
               "chat_id" => chat_id,
               "user_id" => user_id})
@@ -640,9 +640,9 @@ module Proton::ClientMethods
   # Must be called after a one-time keyboard or a ForceReply reply markup has been used.
   # UpdateChatReplyMarkup will be sent if the reply markup will be changed.
   #
-  # chat_id [::Int64] Chat identifier.
-  # message_id [::Int64] The message identifier of the used keyboard.
-  def delete_chat_reply_markup(chat_id : ::Int64, message_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Chat identifier.
+  # message_id [::Int32] The message identifier of the used keyboard.
+  def delete_chat_reply_markup(chat_id : ::Int32, message_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"      => "deleteChatReplyMarkup",
               "chat_id"    => chat_id,
               "message_id" => message_id})
@@ -669,11 +669,11 @@ module Proton::ClientMethods
 
   # Deletes messages.
   #
-  # chat_id [::Int64] Chat identifier.
-  # message_ids [::Array(::Int64)] Identifiers of the messages to be deleted.
+  # chat_id [::Int32] Chat identifier.
+  # message_ids [::Array(::Int32)] Identifiers of the messages to be deleted.
   # revoke [::Bool] Pass true to try to delete messages for all chat members.
   #   Always true for supergroups, channels and secret chats.
-  def delete_messages(chat_id : ::Int64, message_ids : ::Array(::Int64), revoke : ::Bool) # : Proton::Types::Ok
+  def delete_messages(chat_id : ::Int32, message_ids : ::Array(::Int32), revoke : ::Bool) # : Proton::Types::Ok
     broadcast({"@type"       => "deleteMessages",
               "chat_id"     => chat_id,
               "message_ids" => message_ids,
@@ -691,8 +691,8 @@ module Proton::ClientMethods
   # Deletes a profile photo.
   # If something changes, updateUser will be sent.
   #
-  # profile_photo_id [::Int64] Identifier of the profile photo to delete.
-  def delete_profile_photo(profile_photo_id : ::Int64) # : Proton::Types::Ok
+  # profile_photo_id [::String] Identifier of the profile photo to delete.
+  def delete_profile_photo(profile_photo_id : ::String) # : Proton::Types::Ok
     broadcast({"@type"            => "deleteProfilePhoto",
               "profile_photo_id" => profile_photo_id})
   end  
@@ -741,8 +741,8 @@ module Proton::ClientMethods
   # call_id [::Int32] Call identifier.
   # is_disconnected [::Bool] True, if the user was disconnected.
   # duration [::Int32] The call duration, in seconds.
-  # connection_id [::Int64] Identifier of the connection used during the call.
-  def discard_call(call_id : ::Int32, is_disconnected : ::Bool, duration : ::Int32, connection_id : ::Int64) # : Proton::Types::Ok
+  # connection_id [::String] Identifier of the connection used during the call.
+  def discard_call(call_id : ::Int32, is_disconnected : ::Bool, duration : ::Int32, connection_id : ::String) # : Proton::Types::Ok
     broadcast({"@type"           => "discardCall",
               "call_id"         => call_id,
               "is_disconnected" => is_disconnected,
@@ -758,8 +758,8 @@ module Proton::ClientMethods
 
   # Disconnects website from the current user's Telegram account.
   #
-  # website_id [::Int64] Website identifier.
-  def disconnect_website(website_id : ::Int64) # : Proton::Types::Ok
+  # website_id [::String] Website identifier.
+  def disconnect_website(website_id : ::String) # : Proton::Types::Ok
     broadcast({"@type"      => "disconnectWebsite",
               "website_id" => website_id})
   end  
@@ -863,12 +863,12 @@ module Proton::ClientMethods
   # Edits the message content caption.
   # Returns the edited message after the edit is completed on the server side.
   #
-  # chat_id [::Int64] The chat the message belongs to.
-  # message_id [::Int64] Identifier of the message.
+  # chat_id [::Int32] The chat the message belongs to.
+  # message_id [::Int32] Identifier of the message.
   # reply_markup [Proton::Types::ReplyMarkup] The new message reply markup; for bots only.
   # caption [Proton::Types::FormattedText] New message content caption; 0-GetOption("message_caption_length_max")
   #   characters.
-  def edit_message_caption(chat_id : ::Int64, message_id : ::Int64, reply_markup : Proton::Types::ReplyMarkup, caption : Proton::Types::FormattedText) # : Proton::Types::Message
+  def edit_message_caption(chat_id : ::Int32, message_id : ::Int32, reply_markup : Proton::Types::ReplyMarkup, caption : Proton::Types::FormattedText) # : Proton::Types::Message
     broadcast({"@type"        => "editMessageCaption",
               "chat_id"      => chat_id,
               "message_id"   => message_id,
@@ -880,12 +880,12 @@ module Proton::ClientMethods
   # Messages can be edited for a limited period of time specified in the live location.
   # Returns the edited message after the edit is completed on the server side.
   #
-  # chat_id [::Int64] The chat the message belongs to.
-  # message_id [::Int64] Identifier of the message.
+  # chat_id [::Int32] The chat the message belongs to.
+  # message_id [::Int32] Identifier of the message.
   # reply_markup [Proton::Types::ReplyMarkup] The new message reply markup; for bots only.
   # location [Proton::Types::Location, nil] New location content of the message; may be null.
   #   Pass null to stop sharing the live location.
-  def edit_message_live_location(chat_id : ::Int64, message_id : ::Int64, reply_markup : Proton::Types::ReplyMarkup, location : Proton::Types::Location? = nil) # : Proton::Types::Message
+  def edit_message_live_location(chat_id : ::Int32, message_id : ::Int32, reply_markup : Proton::Types::ReplyMarkup, location : Proton::Types::Location? = nil) # : Proton::Types::Message
     broadcast({"@type"        => "editMessageLiveLocation",
               "chat_id"      => chat_id,
               "message_id"   => message_id,
@@ -899,13 +899,13 @@ module Proton::ClientMethods
   # Media in an album can be edited only to contain a photo or a video.
   # Returns the edited message after the edit is completed on the server side.
   #
-  # chat_id [::Int64] The chat the message belongs to.
-  # message_id [::Int64] Identifier of the message.
+  # chat_id [::Int32] The chat the message belongs to.
+  # message_id [::Int32] Identifier of the message.
   # reply_markup [Proton::Types::ReplyMarkup] The new message reply markup; for bots only.
   # input_message_content [Proton::Types::InputMessageContent] New content of the message.
   #   Must be one of the following types: InputMessageAnimation, InputMessageAudio, InputMessageDocument,
   #   InputMessagePhoto or InputMessageVideo.
-  def edit_message_media(chat_id : ::Int64, message_id : ::Int64, reply_markup : Proton::Types::ReplyMarkup, input_message_content : Proton::Types::InputMessageContent) # : Proton::Types::Message
+  def edit_message_media(chat_id : ::Int32, message_id : ::Int32, reply_markup : Proton::Types::ReplyMarkup, input_message_content : Proton::Types::InputMessageContent) # : Proton::Types::Message
     broadcast({"@type"                 => "editMessageMedia",
               "chat_id"               => chat_id,
               "message_id"            => message_id,
@@ -916,10 +916,10 @@ module Proton::ClientMethods
   # Edits the message reply markup; for bots only.
   # Returns the edited message after the edit is completed on the server side.
   #
-  # chat_id [::Int64] The chat the message belongs to.
-  # message_id [::Int64] Identifier of the message.
+  # chat_id [::Int32] The chat the message belongs to.
+  # message_id [::Int32] Identifier of the message.
   # reply_markup [Proton::Types::ReplyMarkup] The new message reply markup.
-  def edit_message_reply_markup(chat_id : ::Int64, message_id : ::Int64, reply_markup : Proton::Types::ReplyMarkup) # : Proton::Types::Message
+  def edit_message_reply_markup(chat_id : ::Int32, message_id : ::Int32, reply_markup : Proton::Types::ReplyMarkup) # : Proton::Types::Message
     broadcast({"@type"        => "editMessageReplyMarkup",
               "chat_id"      => chat_id,
               "message_id"   => message_id,
@@ -929,12 +929,12 @@ module Proton::ClientMethods
   # Edits the text of a message (or a text of a game message).
   # Returns the edited message after the edit is completed on the server side.
   #
-  # chat_id [::Int64] The chat the message belongs to.
-  # message_id [::Int64] Identifier of the message.
+  # chat_id [::Int32] The chat the message belongs to.
+  # message_id [::Int32] Identifier of the message.
   # reply_markup [Proton::Types::ReplyMarkup] The new message reply markup; for bots only.
   # input_message_content [Proton::Types::InputMessageContent] New text content of the message.
   #   Should be of type InputMessageText.
-  def edit_message_text(chat_id : ::Int64, message_id : ::Int64, reply_markup : Proton::Types::ReplyMarkup, input_message_content : Proton::Types::InputMessageContent) # : Proton::Types::Message
+  def edit_message_text(chat_id : ::Int32, message_id : ::Int32, reply_markup : Proton::Types::ReplyMarkup, input_message_content : Proton::Types::InputMessageContent) # : Proton::Types::Message
     broadcast({"@type"                 => "editMessageText",
               "chat_id"               => chat_id,
               "message_id"            => message_id,
@@ -971,9 +971,9 @@ module Proton::ClientMethods
 
   # Finishes the file generation.
   #
-  # generation_id [::Int64] The identifier of the generation process.
+  # generation_id [::String] The identifier of the generation process.
   # error [Proton::Types::Error] If set, means that file generation has failed and should be terminated.
-  def finish_file_generation(generation_id : ::Int64, error : Proton::Types::Error) # : Proton::Types::Ok
+  def finish_file_generation(generation_id : ::String, error : Proton::Types::Error) # : Proton::Types::Ok
     broadcast({"@type"         => "finishFileGeneration",
               "generation_id" => generation_id,
               "error"         => error})
@@ -983,9 +983,9 @@ module Proton::ClientMethods
   # Returns the forwarded messages in the same order as the message identifiers passed in message_ids.
   # If a message can't be forwarded, null will be returned instead of the message.
   #
-  # chat_id [::Int64] Identifier of the chat to which to forward messages.
-  # from_chat_id [::Int64] Identifier of the chat from which to forward messages.
-  # message_ids [::Array(::Int64)] Identifiers of the messages to forward.
+  # chat_id [::Int32] Identifier of the chat to which to forward messages.
+  # from_chat_id [::Int32] Identifier of the chat from which to forward messages.
+  # message_ids [::Array(::Int32)] Identifiers of the messages to forward.
   # disable_notification [::Bool] Pass true to disable notification for the message, doesn't work if messages are
   #   forwarded to a secret chat.
   # from_background [::Bool] Pass true if the messages are sent from the background.
@@ -995,7 +995,7 @@ module Proton::ClientMethods
   #   Always true if the messages are forwarded to a secret chat.
   # remove_caption [::Bool] True, if media captions of message copies needs to be removed.
   #   Ignored if send_copy is false.
-  def forward_messages(chat_id : ::Int64, from_chat_id : ::Int64, message_ids : ::Array(::Int64), disable_notification : ::Bool, from_background : ::Bool, as_album : ::Bool, send_copy : ::Bool, remove_caption : ::Bool) # : Proton::Types::Messages
+  def forward_messages(chat_id : ::Int32, from_chat_id : ::Int32, message_ids : ::Array(::Int32), disable_notification : ::Bool, from_background : ::Bool, as_album : ::Bool, send_copy : ::Bool, remove_caption : ::Bool) # : Proton::Types::Messages
     broadcast({"@type"                => "forwardMessages",
               "chat_id"              => chat_id,
               "from_chat_id"         => from_chat_id,
@@ -1011,8 +1011,8 @@ module Proton::ClientMethods
   # Available for basic groups, supergroups, and channels.
   # Requires administrator privileges and can_invite_users right.
   #
-  # chat_id [::Int64] Chat identifier.
-  def generate_chat_invite_link(chat_id : ::Int64) # : Proton::Types::ChatInviteLink
+  # chat_id [::Int32] Chat identifier.
+  def generate_chat_invite_link(chat_id : ::Int32) # : Proton::Types::ChatInviteLink
     broadcast({"@type"   => "generateChatInviteLink",
               "chat_id" => chat_id})
   end  
@@ -1054,9 +1054,9 @@ module Proton::ClientMethods
   # Returns a list of archived sticker sets.
   #
   # is_masks [::Bool] Pass true to return mask stickers sets; pass false to return ordinary sticker sets.
-  # offset_sticker_set_id [::Int64] Identifier of the sticker set from which to return the result.
+  # offset_sticker_set_id [::String] Identifier of the sticker set from which to return the result.
   # limit [::Int32] Maximum number of sticker sets to return.
-  def get_archived_sticker_sets(is_masks : ::Bool, offset_sticker_set_id : ::Int64, limit : ::Int32) # : Proton::Types::StickerSets
+  def get_archived_sticker_sets(is_masks : ::Bool, offset_sticker_set_id : ::String, limit : ::Int32) # : Proton::Types::StickerSets
     broadcast({"@type"                 => "getArchivedStickerSets",
               "is_masks"              => is_masks,
               "offset_sticker_set_id" => offset_sticker_set_id,
@@ -1134,10 +1134,10 @@ module Proton::ClientMethods
   # Sends a callback query to a bot and returns an answer.
   # Returns an error with code 502 if the bot fails to answer the query before the query timeout expires.
   #
-  # chat_id [::Int64] Identifier of the chat with the message.
-  # message_id [::Int64] Identifier of the message from which the query originated.
+  # chat_id [::Int32] Identifier of the chat with the message.
+  # message_id [::Int32] Identifier of the message from which the query originated.
   # payload [Proton::Types::CallbackQueryPayload] Query payload.
-  def get_callback_query_answer(chat_id : ::Int64, message_id : ::Int64, payload : Proton::Types::CallbackQueryPayload) # : Proton::Types::CallbackQueryAnswer
+  def get_callback_query_answer(chat_id : ::Int32, message_id : ::Int32, payload : Proton::Types::CallbackQueryPayload) # : Proton::Types::CallbackQueryAnswer
     broadcast({"@type"      => "getCallbackQueryAnswer",
               "chat_id"    => chat_id,
               "message_id" => message_id,
@@ -1146,16 +1146,16 @@ module Proton::ClientMethods
 
   # Returns information about a chat by its identifier, this is an offline request if the current user is not a bot.
   #
-  # chat_id [::Int64] Chat identifier.
-  def get_chat(chat_id : ::Int64) # : Proton::Types::Chat
+  # chat_id [::Int32] Chat identifier.
+  def get_chat(chat_id : ::Int32) # : Proton::Types::Chat
     broadcast({"@type"   => "getChat",
               "chat_id" => chat_id})
   end  
 
   # Returns a list of users who are administrators of the chat.
   #
-  # chat_id [::Int64] Chat identifier.
-  def get_chat_administrators(chat_id : ::Int64) # : Proton::Types::Users
+  # chat_id [::Int32] Chat identifier.
+  def get_chat_administrators(chat_id : ::Int32) # : Proton::Types::Users
     broadcast({"@type"   => "getChatAdministrators",
               "chat_id" => chat_id})
   end  
@@ -1166,16 +1166,16 @@ module Proton::ClientMethods
   # Returns results in reverse chronological order (i.
   # e., in order of decreasing event_id).
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # query [::String] Search query by which to filter events.
-  # from_event_id [::Int64] Identifier of an event from which to return results.
+  # from_event_id [::String] Identifier of an event from which to return results.
   #   Use 0 to get results from the latest events.
   # limit [::Int32] Maximum number of events to return; up to 100.
   # filters [Proton::Types::ChatEventLogFilters] The types of events to return.
   #   By default, all types will be returned.
   # user_ids [::Array(::Int32)] User identifiers by which to filter events.
   #   By default, events relating to all users will be returned.
-  def get_chat_event_log(chat_id : ::Int64, query : ::String, from_event_id : ::Int64, limit : ::Int32, filters : Proton::Types::ChatEventLogFilters, user_ids : ::Array(::Int32)) # : Proton::Types::ChatEvents
+  def get_chat_event_log(chat_id : ::Int32, query : ::String, from_event_id : ::String, limit : ::Int32, filters : Proton::Types::ChatEventLogFilters, user_ids : ::Array(::Int32)) # : Proton::Types::ChatEvents
     broadcast({"@type"         => "getChatEventLog",
               "chat_id"       => chat_id,
               "query"         => query,
@@ -1190,8 +1190,8 @@ module Proton::ClientMethods
   # For optimal performance the number of returned messages is chosen by the library.
   # This is an offline request if only_local is true.
   #
-  # chat_id [::Int64] Chat identifier.
-  # from_message_id [::Int64] Identifier of the message starting from which history must be fetched; use 0 to get
+  # chat_id [::Int32] Chat identifier.
+  # from_message_id [::Int32] Identifier of the message starting from which history must be fetched; use 0 to get
   #   results from the last message.
   # offset [::Int32] Specify 0 to get results from exactly the from_message_id or a negative offset up to 99 to get
   #   additionally some newer messages.
@@ -1200,7 +1200,7 @@ module Proton::ClientMethods
   #   Fewer messages may be returned than specified by the limit, even if the end of the message history has not been
   #   reached.
   # only_local [::Bool] If true, returns only messages that are available locally without sending network requests.
-  def get_chat_history(chat_id : ::Int64, from_message_id : ::Int64, offset : ::Int32, limit : ::Int32, only_local : ::Bool) # : Proton::Types::Messages
+  def get_chat_history(chat_id : ::Int32, from_message_id : ::Int32, offset : ::Int32, limit : ::Int32, only_local : ::Bool) # : Proton::Types::Messages
     broadcast({"@type"           => "getChatHistory",
               "chat_id"         => chat_id,
               "from_message_id" => from_message_id,
@@ -1211,9 +1211,9 @@ module Proton::ClientMethods
 
   # Returns information about a single member of a chat.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # user_id [::Int32] User identifier.
-  def get_chat_member(chat_id : ::Int64, user_id : ::Int32) # : Proton::Types::ChatMember
+  def get_chat_member(chat_id : ::Int32, user_id : ::Int32) # : Proton::Types::ChatMember
     broadcast({"@type"   => "getChatMember",
               "chat_id" => chat_id,
               "user_id" => user_id})
@@ -1221,9 +1221,9 @@ module Proton::ClientMethods
 
   # Returns the last message sent in a chat no later than the specified date.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # date [::Int32] Point in time (Unix timestamp) relative to which to search for messages.
-  def get_chat_message_by_date(chat_id : ::Int64, date : ::Int32) # : Proton::Types::Message
+  def get_chat_message_by_date(chat_id : ::Int32, date : ::Int32) # : Proton::Types::Message
     broadcast({"@type"   => "getChatMessageByDate",
               "chat_id" => chat_id,
               "date"    => date})
@@ -1231,12 +1231,12 @@ module Proton::ClientMethods
 
   # Returns approximate number of messages of the specified type in the chat.
   #
-  # chat_id [::Int64] Identifier of the chat in which to count messages.
+  # chat_id [::Int32] Identifier of the chat in which to count messages.
   # filter [Proton::Types::SearchMessagesFilter] Filter for message content; searchMessagesFilterEmpty is unsupported
   #   in this function.
   # return_local [::Bool] If true, returns count that is available locally without sending network requests, returning
   #   -1 if the number of messages is unknown.
-  def get_chat_message_count(chat_id : ::Int64, filter : Proton::Types::SearchMessagesFilter, return_local : ::Bool) # : Proton::Types::Count
+  def get_chat_message_count(chat_id : ::Int32, filter : Proton::Types::SearchMessagesFilter, return_local : ::Bool) # : Proton::Types::Count
     broadcast({"@type"        => "getChatMessageCount",
               "chat_id"      => chat_id,
               "filter"       => filter,
@@ -1256,16 +1256,16 @@ module Proton::ClientMethods
 
   # Returns information about a pinned chat message.
   #
-  # chat_id [::Int64] Identifier of the chat the message belongs to.
-  def get_chat_pinned_message(chat_id : ::Int64) # : Proton::Types::Message
+  # chat_id [::Int32] Identifier of the chat the message belongs to.
+  def get_chat_pinned_message(chat_id : ::Int32) # : Proton::Types::Message
     broadcast({"@type"   => "getChatPinnedMessage",
               "chat_id" => chat_id})
   end  
 
   # Returns information on whether the current chat can be reported as spam.
   #
-  # chat_id [::Int64] Chat identifier.
-  def get_chat_report_spam_state(chat_id : ::Int64) # : Proton::Types::ChatReportSpamState
+  # chat_id [::Int32] Chat identifier.
+  def get_chat_report_spam_state(chat_id : ::Int32) # : Proton::Types::ChatReportSpamState
     broadcast({"@type"   => "getChatReportSpamState",
               "chat_id" => chat_id})
   end  
@@ -1273,10 +1273,10 @@ module Proton::ClientMethods
   # Returns an HTTP URL with the chat statistics.
   # Currently this method can be used only for channels.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # parameters [::String] Parameters from "tg://statsrefresh?params=******" link.
   # is_dark [::Bool] Pass true if a URL with the dark theme must be returned.
-  def get_chat_statistics_url(chat_id : ::Int64, parameters : ::String, is_dark : ::Bool) # : Proton::Types::HttpUrl
+  def get_chat_statistics_url(chat_id : ::Int32, parameters : ::String, is_dark : ::Bool) # : Proton::Types::HttpUrl
     broadcast({"@type"      => "getChatStatisticsUrl",
               "chat_id"    => chat_id,
               "parameters" => parameters,
@@ -1289,11 +1289,11 @@ module Proton::ClientMethods
   #   64-bit number 9223372036854775807 == 2^63 - 1).
   # For optimal performance the number of returned chats is chosen by the library.
   #
-  # offset_order [::Int64] Chat order to return chats from.
-  # offset_chat_id [::Int64] Chat identifier to return chats from.
+  # offset_order [::String] Chat order to return chats from.
+  # offset_chat_id [::Int32] Chat identifier to return chats from.
   # limit [::Int32] The maximum number of chats to be returned.
   #   It is possible that fewer chats than the limit are returned even if the end of the list is not reached.
-  def get_chats(offset_order : ::Int64, offset_chat_id : ::Int64, limit : ::Int32) # : Proton::Types::Chats
+  def get_chats(offset_order : ::String, offset_chat_id : ::Int32, limit : ::Int32) # : Proton::Types::Chats
     broadcast({"@type"          => "getChats",
               "offset_order"   => offset_order,
               "offset_chat_id" => offset_chat_id,
@@ -1414,10 +1414,10 @@ module Proton::ClientMethods
   # Returns the high scores for a game and some part of the high score table in the range of the specified user; for
   #   bots only.
   #
-  # chat_id [::Int64] The chat that contains the message with the game.
-  # message_id [::Int64] Identifier of the message.
+  # chat_id [::Int32] The chat that contains the message with the game.
+  # message_id [::Int32] Identifier of the message.
   # user_id [::Int32] User identifier.
-  def get_game_high_scores(chat_id : ::Int64, message_id : ::Int64, user_id : ::Int32) # : Proton::Types::GameHighScores
+  def get_game_high_scores(chat_id : ::Int32, message_id : ::Int32, user_id : ::Int32) # : Proton::Types::GameHighScores
     broadcast({"@type"      => "getGameHighScores",
               "chat_id"    => chat_id,
               "message_id" => message_id,
@@ -1428,9 +1428,9 @@ module Proton::ClientMethods
   # Chats are sorted by their type and creation date.
   #
   # user_id [::Int32] User identifier.
-  # offset_chat_id [::Int64] Chat identifier starting from which to return chats; use 0 for the first request.
+  # offset_chat_id [::Int32] Chat identifier starting from which to return chats; use 0 for the first request.
   # limit [::Int32] Maximum number of chats to be returned; up to 100.
-  def get_groups_in_common(user_id : ::Int32, offset_chat_id : ::Int64, limit : ::Int32) # : Proton::Types::Chats
+  def get_groups_in_common(user_id : ::Int32, offset_chat_id : ::Int32, limit : ::Int32) # : Proton::Types::Chats
     broadcast({"@type"          => "getGroupsInCommon",
               "user_id"        => user_id,
               "offset_chat_id" => offset_chat_id,
@@ -1457,11 +1457,11 @@ module Proton::ClientMethods
   # Returns an error with code 502 if the bot fails to answer the query before the query timeout expires.
   #
   # bot_user_id [::Int32] The identifier of the target bot.
-  # chat_id [::Int64] Identifier of the chat, where the query was sent.
+  # chat_id [::Int32] Identifier of the chat, where the query was sent.
   # user_location [Proton::Types::Location] Location of the user, only if needed.
   # query [::String] Text of the query.
   # offset [::String] Offset of the first entry to return.
-  def get_inline_query_results(bot_user_id : ::Int32, chat_id : ::Int64, user_location : Proton::Types::Location, query : ::String, offset : ::String) # : Proton::Types::InlineQueryResults
+  def get_inline_query_results(bot_user_id : ::Int32, chat_id : ::Int32, user_location : Proton::Types::Location, query : ::String, offset : ::String) # : Proton::Types::InlineQueryResults
     broadcast({"@type"         => "getInlineQueryResults",
               "bot_user_id"   => bot_user_id,
               "chat_id"       => chat_id,
@@ -1604,9 +1604,9 @@ module Proton::ClientMethods
   # width [::Int32] Map width in pixels before applying scale; 16-1024.
   # height [::Int32] Map height in pixels before applying scale; 16-1024.
   # scale [::Int32] Map scale; 1-3.
-  # chat_id [::Int64] Identifier of a chat, in which the thumbnail will be shown.
+  # chat_id [::Int32] Identifier of a chat, in which the thumbnail will be shown.
   #   Use 0 if unknown.
-  def get_map_thumbnail_file(location : Proton::Types::Location, zoom : ::Int32, width : ::Int32, height : ::Int32, scale : ::Int32, chat_id : ::Int64) # : Proton::Types::File
+  def get_map_thumbnail_file(location : Proton::Types::Location, zoom : ::Int32, width : ::Int32, height : ::Int32, scale : ::Int32, chat_id : ::Int32) # : Proton::Types::File
     broadcast({"@type"    => "getMapThumbnailFile",
               "location" => location,
               "zoom"     => zoom,
@@ -1624,9 +1624,9 @@ module Proton::ClientMethods
 
   # Returns information about a message.
   #
-  # chat_id [::Int64] Identifier of the chat the message belongs to.
-  # message_id [::Int64] Identifier of the message to get.
-  def get_message(chat_id : ::Int64, message_id : ::Int64) # : Proton::Types::Message
+  # chat_id [::Int32] Identifier of the chat the message belongs to.
+  # message_id [::Int32] Identifier of the message to get.
+  def get_message(chat_id : ::Int32, message_id : ::Int32) # : Proton::Types::Message
     broadcast({"@type"      => "getMessage",
               "chat_id"    => chat_id,
               "message_id" => message_id})
@@ -1636,9 +1636,9 @@ module Proton::ClientMethods
   # Available only for already sent messages in supergroups and channels.
   # The link will work only for members of the chat.
   #
-  # chat_id [::Int64] Identifier of the chat to which the message belongs.
-  # message_id [::Int64] Identifier of the message.
-  def get_message_link(chat_id : ::Int64, message_id : ::Int64) # : Proton::Types::HttpUrl
+  # chat_id [::Int32] Identifier of the chat to which the message belongs.
+  # message_id [::Int32] Identifier of the message.
+  def get_message_link(chat_id : ::Int32, message_id : ::Int32) # : Proton::Types::HttpUrl
     broadcast({"@type"      => "getMessageLink",
               "chat_id"    => chat_id,
               "message_id" => message_id})
@@ -1656,9 +1656,9 @@ module Proton::ClientMethods
   # Returns information about a message, if it is available locally without sending network request.
   # This is an offline request.
   #
-  # chat_id [::Int64] Identifier of the chat the message belongs to.
-  # message_id [::Int64] Identifier of the message to get.
-  def get_message_locally(chat_id : ::Int64, message_id : ::Int64) # : Proton::Types::Message
+  # chat_id [::Int32] Identifier of the chat the message belongs to.
+  # message_id [::Int32] Identifier of the message to get.
+  def get_message_locally(chat_id : ::Int32, message_id : ::Int32) # : Proton::Types::Message
     broadcast({"@type"      => "getMessageLocally",
               "chat_id"    => chat_id,
               "message_id" => message_id})
@@ -1667,9 +1667,9 @@ module Proton::ClientMethods
   # Returns information about messages.
   # If a message is not found, returns null on the corresponding position of the result.
   #
-  # chat_id [::Int64] Identifier of the chat the messages belong to.
-  # message_ids [::Array(::Int64)] Identifiers of the messages to get.
-  def get_messages(chat_id : ::Int64, message_ids : ::Array(::Int64)) # : Proton::Types::Messages
+  # chat_id [::Int32] Identifier of the chat the messages belong to.
+  # message_ids [::Array(::Int32)] Identifiers of the messages to get.
+  def get_messages(chat_id : ::Int32, message_ids : ::Array(::Int32)) # : Proton::Types::Messages
     broadcast({"@type"       => "getMessages",
               "chat_id"     => chat_id,
               "message_ids" => message_ids})
@@ -1739,9 +1739,9 @@ module Proton::ClientMethods
   # Returns an invoice payment form.
   # This method should be called when the user presses inlineKeyboardButtonBuy.
   #
-  # chat_id [::Int64] Chat identifier of the Invoice message.
-  # message_id [::Int64] Message identifier.
-  def get_payment_form(chat_id : ::Int64, message_id : ::Int64) # : Proton::Types::PaymentForm
+  # chat_id [::Int32] Chat identifier of the Invoice message.
+  # message_id [::Int32] Message identifier.
+  def get_payment_form(chat_id : ::Int32, message_id : ::Int32) # : Proton::Types::PaymentForm
     broadcast({"@type"      => "getPaymentForm",
               "chat_id"    => chat_id,
               "message_id" => message_id})
@@ -1749,9 +1749,9 @@ module Proton::ClientMethods
 
   # Returns information about a successful payment.
   #
-  # chat_id [::Int64] Chat identifier of the PaymentSuccessful message.
-  # message_id [::Int64] Message identifier.
-  def get_payment_receipt(chat_id : ::Int64, message_id : ::Int64) # : Proton::Types::PaymentReceipt
+  # chat_id [::Int32] Chat identifier of the PaymentSuccessful message.
+  # message_id [::Int32] Message identifier.
+  def get_payment_receipt(chat_id : ::Int32, message_id : ::Int32) # : Proton::Types::PaymentReceipt
     broadcast({"@type"      => "getPaymentReceipt",
               "chat_id"    => chat_id,
               "message_id" => message_id})
@@ -1787,10 +1787,10 @@ module Proton::ClientMethods
   # Returns a public HTTPS link to a message.
   # Available only for messages in supergroups and channels with username.
   #
-  # chat_id [::Int64] Identifier of the chat to which the message belongs.
-  # message_id [::Int64] Identifier of the message.
+  # chat_id [::Int32] Identifier of the chat to which the message belongs.
+  # message_id [::Int32] Identifier of the message.
   # for_album [::Bool] Pass true if a link for a whole media album should be returned.
-  def get_public_message_link(chat_id : ::Int64, message_id : ::Int64, for_album : ::Bool) # : Proton::Types::PublicMessageLink
+  def get_public_message_link(chat_id : ::Int32, message_id : ::Int32, for_album : ::Bool) # : Proton::Types::PublicMessageLink
     broadcast({"@type"      => "getPublicMessageLink",
               "chat_id"    => chat_id,
               "message_id" => message_id,
@@ -1854,9 +1854,9 @@ module Proton::ClientMethods
 
   # Returns information about a message that is replied by given message.
   #
-  # chat_id [::Int64] Identifier of the chat the message belongs to.
-  # message_id [::Int64] Identifier of the message reply to which get.
-  def get_replied_message(chat_id : ::Int64, message_id : ::Int64) # : Proton::Types::Message
+  # chat_id [::Int32] Identifier of the chat the message belongs to.
+  # message_id [::Int32] Identifier of the message reply to which get.
+  def get_replied_message(chat_id : ::Int32, message_id : ::Int32) # : Proton::Types::Message
     broadcast({"@type"      => "getRepliedMessage",
               "chat_id"    => chat_id,
               "message_id" => message_id})
@@ -1904,8 +1904,8 @@ module Proton::ClientMethods
 
   # Returns information about a sticker set by its identifier.
   #
-  # set_id [::Int64] Identifier of the sticker set.
-  def get_sticker_set(set_id : ::Int64) # : Proton::Types::StickerSet
+  # set_id [::String] Identifier of the sticker set.
+  def get_sticker_set(set_id : ::String) # : Proton::Types::StickerSet
     broadcast({"@type"  => "getStickerSet",
               "set_id" => set_id})
   end  
@@ -2086,8 +2086,8 @@ module Proton::ClientMethods
   # Adds current user as a new member to a chat.
   # Private and secret chats can't be joined using this method.
   #
-  # chat_id [::Int64] Chat identifier.
-  def join_chat(chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Chat identifier.
+  def join_chat(chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "joinChat",
               "chat_id" => chat_id})
   end  
@@ -2105,8 +2105,8 @@ module Proton::ClientMethods
   # Removes current user from chat members.
   # Private and secret chats can't be left using this method.
   #
-  # chat_id [::Int64] Chat identifier.
-  def leave_chat(chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Chat identifier.
+  def leave_chat(chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "leaveChat",
               "chat_id" => chat_id})
   end  
@@ -2124,8 +2124,8 @@ module Proton::ClientMethods
   # Many useful activities depend on the chat being opened or closed (e.g., in supergroups and channels all updates are
   #   received only for opened chats).
   #
-  # chat_id [::Int64] Chat identifier.
-  def open_chat(chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Chat identifier.
+  def open_chat(chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "openChat",
               "chat_id" => chat_id})
   end  
@@ -2134,9 +2134,9 @@ module Proton::ClientMethods
   #   location or venue, or has listened to an audio file or voice note message).
   # An updateMessageContentOpened update will be generated if something has changed.
   #
-  # chat_id [::Int64] Chat identifier of the message.
-  # message_id [::Int64] Identifier of the message with the opened content.
-  def open_message_content(chat_id : ::Int64, message_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Chat identifier of the message.
+  # message_id [::Int32] Identifier of the message with the opened content.
+  def open_message_content(chat_id : ::Int32, message_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"      => "openMessageContent",
               "chat_id"    => chat_id,
               "message_id" => message_id})
@@ -2146,7 +2146,7 @@ module Proton::ClientMethods
   # deletes some files and returns new storage usage statistics.
   # Secret thumbnails can't be deleted.
   #
-  # size [::Int64] Limit on the total size of files after deletion.
+  # size [::Int32] Limit on the total size of files after deletion.
   #   Pass -1 to use the default limit.
   # ttl [::Int32] Limit on the time that has passed since the last time a file was accessed (or creation time for some
   #   filesystems).
@@ -2158,13 +2158,13 @@ module Proton::ClientMethods
   #   Pass -1 to use the default value.
   # file_types [::Array(Proton::Types::FileType)] If not empty, only files with the given type(s) are considered.
   #   By default, all types except thumbnails, profile photos, stickers and wallpapers are deleted.
-  # chat_ids [::Array(::Int64)] If not empty, only files from the given chats are considered.
+  # chat_ids [::Array(::Int32)] If not empty, only files from the given chats are considered.
   #   Use 0 as chat identifier to delete files not belonging to any chat (e.g., profile photos).
-  # exclude_chat_ids [::Array(::Int64)] If not empty, files from the given chats are excluded.
+  # exclude_chat_ids [::Array(::Int32)] If not empty, files from the given chats are excluded.
   #   Use 0 as chat identifier to exclude all files not belonging to any chat (e.g., profile photos).
   # chat_limit [::Int32] Same as in getStorageStatistics.
   #   Affects only returned statistics.
-  def optimize_storage(size : ::Int64, ttl : ::Int32, count : ::Int32, immunity_delay : ::Int32, file_types : ::Array(Proton::Types::FileType), chat_ids : ::Array(::Int64), exclude_chat_ids : ::Array(::Int64), chat_limit : ::Int32) # : Proton::Types::StorageStatistics
+  def optimize_storage(size : ::Int32, ttl : ::Int32, count : ::Int32, immunity_delay : ::Int32, file_types : ::Array(Proton::Types::FileType), chat_ids : ::Array(::Int32), exclude_chat_ids : ::Array(::Int32), chat_limit : ::Int32) # : Proton::Types::StorageStatistics
     broadcast({"@type"            => "optimizeStorage",
               "size"             => size,
               "ttl"              => ttl,
@@ -2191,10 +2191,10 @@ module Proton::ClientMethods
 
   # Pins a message in a chat; requires can_pin_messages rights.
   #
-  # chat_id [::Int64] Identifier of the chat.
-  # message_id [::Int64] Identifier of the new pinned message.
+  # chat_id [::Int32] Identifier of the chat.
+  # message_id [::Int32] Identifier of the new pinned message.
   # disable_notification [::Bool] True, if there should be no notification about the pinned message.
-  def pin_chat_message(chat_id : ::Int64, message_id : ::Int64, disable_notification : ::Bool) # : Proton::Types::Ok
+  def pin_chat_message(chat_id : ::Int32, message_id : ::Int32, disable_notification : ::Bool) # : Proton::Types::Ok
     broadcast({"@type"                => "pinChatMessage",
               "chat_id"              => chat_id,
               "message_id"           => message_id,
@@ -2225,8 +2225,8 @@ module Proton::ClientMethods
 
   # Marks all mentions in a chat as read.
   #
-  # chat_id [::Int64] Chat identifier.
-  def read_all_chat_mentions(chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Chat identifier.
+  def read_all_chat_mentions(chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "readAllChatMentions",
               "chat_id" => chat_id})
   end  
@@ -2289,8 +2289,8 @@ module Proton::ClientMethods
 
   # Removes background from the list of installed backgrounds.
   #
-  # background_id [::Int64] The background indentifier.
-  def remove_background(background_id : ::Int64) # : Proton::Types::Ok
+  # background_id [::String] The background indentifier.
+  def remove_background(background_id : ::String) # : Proton::Types::Ok
     broadcast({"@type"         => "removeBackground",
               "background_id" => background_id})
   end  
@@ -2363,8 +2363,8 @@ module Proton::ClientMethods
 
   # Removes a chat from the list of recently found chats.
   #
-  # chat_id [::Int64] Identifier of the chat to be removed.
-  def remove_recently_found_chat(chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Identifier of the chat to be removed.
+  def remove_recently_found_chat(chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "removeRecentlyFoundChat",
               "chat_id" => chat_id})
   end  
@@ -2390,8 +2390,8 @@ module Proton::ClientMethods
   # Supported only if the chat info database is enabled.
   #
   # category [Proton::Types::TopChatCategory] Category of frequently used chats.
-  # chat_id [::Int64] Chat identifier.
-  def remove_top_chat(category : Proton::Types::TopChatCategory, chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Chat identifier.
+  def remove_top_chat(category : Proton::Types::TopChatCategory, chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"    => "removeTopChat",
               "category" => category,
               "chat_id"  => chat_id})
@@ -2401,8 +2401,8 @@ module Proton::ClientMethods
   #
   # is_masks [::Bool] Pass true to change the order of mask sticker sets; pass false to change the order of ordinary
   #   sticker sets.
-  # sticker_set_ids [::Array(::Int64)] Identifiers of installed sticker sets in the new correct order.
-  def reorder_installed_sticker_sets(is_masks : ::Bool, sticker_set_ids : ::Array(::Int64)) # : Proton::Types::Ok
+  # sticker_set_ids [::Array(::String)] Identifiers of installed sticker sets in the new correct order.
+  def reorder_installed_sticker_sets(is_masks : ::Bool, sticker_set_ids : ::Array(::String)) # : Proton::Types::Ok
     broadcast({"@type"           => "reorderInstalledStickerSets",
               "is_masks"        => is_masks,
               "sticker_set_ids" => sticker_set_ids})
@@ -2412,10 +2412,10 @@ module Proton::ClientMethods
   # Supported only for supergroups, channels, or private chats with bots, since other chats can't be checked by
   #   moderators.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # reason [Proton::Types::ChatReportReason] The reason for reporting the chat.
-  # message_ids [::Array(::Int64)] Identifiers of reported messages, if any.
-  def report_chat(chat_id : ::Int64, reason : Proton::Types::ChatReportReason, message_ids : ::Array(::Int64)) # : Proton::Types::Ok
+  # message_ids [::Array(::Int32)] Identifiers of reported messages, if any.
+  def report_chat(chat_id : ::Int32, reason : Proton::Types::ChatReportReason, message_ids : ::Array(::Int32)) # : Proton::Types::Ok
     broadcast({"@type"       => "reportChat",
               "chat_id"     => chat_id,
               "reason"      => reason,
@@ -2426,9 +2426,9 @@ module Proton::ClientMethods
   #
   # supergroup_id [::Int32] Supergroup identifier.
   # user_id [::Int32] User identifier.
-  # message_ids [::Array(::Int64)] Identifiers of messages sent in the supergroup by the user.
+  # message_ids [::Array(::Int32)] Identifiers of messages sent in the supergroup by the user.
   #   This list must be non-empty.
-  def report_supergroup_spam(supergroup_id : ::Int32, user_id : ::Int32, message_ids : ::Array(::Int64)) # : Proton::Types::Ok
+  def report_supergroup_spam(supergroup_id : ::Int32, user_id : ::Int32, message_ids : ::Array(::Int32)) # : Proton::Types::Ok
     broadcast({"@type"         => "reportSupergroupSpam",
               "supergroup_id" => supergroup_id,
               "user_id"       => user_id,
@@ -2476,10 +2476,10 @@ module Proton::ClientMethods
   # Returns the sent messages in the same order as the message identifiers passed in message_ids.
   # If a message can't be re-sent, null will be returned instead of the message.
   #
-  # chat_id [::Int64] Identifier of the chat to send messages.
-  # message_ids [::Array(::Int64)] Identifiers of the messages to resend.
+  # chat_id [::Int32] Identifier of the chat to send messages.
+  # message_ids [::Array(::Int32)] Identifiers of the messages to resend.
   #   Message identifiers must be in a strictly increasing order.
-  def resend_messages(chat_id : ::Int64, message_ids : ::Array(::Int64)) # : Proton::Types::Messages
+  def resend_messages(chat_id : ::Int32, message_ids : ::Array(::Int32)) # : Proton::Types::Messages
     broadcast({"@type"       => "resendMessages",
               "chat_id"     => chat_id,
               "message_ids" => message_ids})
@@ -2527,9 +2527,9 @@ module Proton::ClientMethods
   # Can be called before authorization.
   #
   # type [::String] Event type.
-  # chat_id [::Int64] Optional chat identifier, associated with the event.
+  # chat_id [::Int32] Optional chat identifier, associated with the event.
   # data [Proton::Types::JsonValue] The log event data.
-  def save_application_log_event(type : ::String, chat_id : ::Int64, data : Proton::Types::JsonValue) # : Proton::Types::Ok
+  def save_application_log_event(type : ::String, chat_id : ::Int32, data : Proton::Types::JsonValue) # : Proton::Types::Ok
     broadcast({"@type"   => "saveApplicationLogEvent",
               "type"    => type,
               "chat_id" => chat_id,
@@ -2549,13 +2549,13 @@ module Proton::ClientMethods
   # e., in order of decreasing message_id).
   # For optimal performance the number of returned messages is chosen by the library.
   #
-  # from_message_id [::Int64] Identifier of the message from which to search; use 0 to get results from the last
+  # from_message_id [::Int32] Identifier of the message from which to search; use 0 to get results from the last
   #   message.
   # limit [::Int32] The maximum number of messages to be returned; up to 100.
   #   Fewer messages may be returned than specified by the limit, even if the end of the message history has not been
   #   reached.
   # only_missed [::Bool] If true, returns only messages with missed calls.
-  def search_call_messages(from_message_id : ::Int64, limit : ::Int32, only_missed : ::Bool) # : Proton::Types::Messages
+  def search_call_messages(from_message_id : ::Int32, limit : ::Int32, only_missed : ::Bool) # : Proton::Types::Messages
     broadcast({"@type"           => "searchCallMessages",
               "from_message_id" => from_message_id,
               "limit"           => limit,
@@ -2565,12 +2565,12 @@ module Proton::ClientMethods
   # Searches for a specified query in the first name, last name and username of the members of a specified chat.
   # Requires administrator rights in channels.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # query [::String] Query to search for.
   # limit [::Int32] The maximum number of users to be returned.
   # filter [Proton::Types::ChatMembersFilter] The type of users to return.
   #   By default, chatMembersFilterMembers.
-  def search_chat_members(chat_id : ::Int64, query : ::String, limit : ::Int32, filter : Proton::Types::ChatMembersFilter) # : Proton::Types::ChatMembers
+  def search_chat_members(chat_id : ::Int32, query : ::String, limit : ::Int32, filter : Proton::Types::ChatMembersFilter) # : Proton::Types::ChatMembers
     broadcast({"@type"   => "searchChatMembers",
               "chat_id" => chat_id,
               "query"   => query,
@@ -2585,11 +2585,11 @@ module Proton::ClientMethods
   #   enabled message database.
   # For optimal performance the number of returned messages is chosen by the library.
   #
-  # chat_id [::Int64] Identifier of the chat in which to search messages.
+  # chat_id [::Int32] Identifier of the chat in which to search messages.
   # query [::String] Query to search for.
   # sender_user_id [::Int32] If not 0, only messages sent by the specified user will be returned.
   #   Not supported in secret chats.
-  # from_message_id [::Int64] Identifier of the message starting from which history must be fetched; use 0 to get
+  # from_message_id [::Int32] Identifier of the message starting from which history must be fetched; use 0 to get
   #   results from the last message.
   # offset [::Int32] Specify 0 to get results from exactly the from_message_id or a negative offset to get the
   #   specified message and some newer messages.
@@ -2598,7 +2598,7 @@ module Proton::ClientMethods
   #   Fewer messages may be returned than specified by the limit, even if the end of the message history has not been
   #   reached.
   # filter [Proton::Types::SearchMessagesFilter] Filter for message content in the search results.
-  def search_chat_messages(chat_id : ::Int64, query : ::String, sender_user_id : ::Int32, from_message_id : ::Int64, offset : ::Int32, limit : ::Int32, filter : Proton::Types::SearchMessagesFilter) # : Proton::Types::Messages
+  def search_chat_messages(chat_id : ::Int32, query : ::String, sender_user_id : ::Int32, from_message_id : ::Int32, offset : ::Int32, limit : ::Int32, filter : Proton::Types::SearchMessagesFilter) # : Proton::Types::Messages
     broadcast({"@type"           => "searchChatMessages",
               "chat_id"         => chat_id,
               "query"           => query,
@@ -2612,9 +2612,9 @@ module Proton::ClientMethods
   # Returns information about the recent locations of chat members that were sent to the chat.
   # Returns up to 1 location message per user.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # limit [::Int32] Maximum number of messages to be returned.
-  def search_chat_recent_location_messages(chat_id : ::Int64, limit : ::Int32) # : Proton::Types::Messages
+  def search_chat_recent_location_messages(chat_id : ::Int32, limit : ::Int32) # : Proton::Types::Messages
     broadcast({"@type"   => "searchChatRecentLocationMessages",
               "chat_id" => chat_id,
               "limit"   => limit})
@@ -2693,12 +2693,12 @@ module Proton::ClientMethods
   # query [::String] Query to search for.
   # offset_date [::Int32] The date of the message starting from which the results should be fetched.
   #   Use 0 or any date in the future to get results from the last message.
-  # offset_chat_id [::Int64] The chat identifier of the last found message, or 0 for the first request.
-  # offset_message_id [::Int64] The message identifier of the last found message, or 0 for the first request.
+  # offset_chat_id [::Int32] The chat identifier of the last found message, or 0 for the first request.
+  # offset_message_id [::Int32] The message identifier of the last found message, or 0 for the first request.
   # limit [::Int32] The maximum number of messages to be returned, up to 100.
   #   Fewer messages may be returned than specified by the limit, even if the end of the message history has not been
   #   reached.
-  def search_messages(query : ::String, offset_date : ::Int32, offset_chat_id : ::Int64, offset_message_id : ::Int64, limit : ::Int32) # : Proton::Types::Messages
+  def search_messages(query : ::String, offset_date : ::Int32, offset_chat_id : ::Int32, offset_message_id : ::Int32, limit : ::Int32) # : Proton::Types::Messages
     broadcast({"@type"             => "searchMessages",
               "query"             => query,
               "offset_date"       => offset_date,
@@ -2733,17 +2733,17 @@ module Proton::ClientMethods
   # Returns the results in reverse chronological order.
   # For optimal performance the number of returned messages is chosen by the library.
   #
-  # chat_id [::Int64] Identifier of the chat in which to search.
+  # chat_id [::Int32] Identifier of the chat in which to search.
   #   Specify 0 to search in all secret chats.
   # query [::String] Query to search for.
   #   If empty, searchChatMessages should be used instead.
-  # from_search_id [::Int64] The identifier from the result of a previous request, use 0 to get results from the last
+  # from_search_id [::String] The identifier from the result of a previous request, use 0 to get results from the last
   #   message.
   # limit [::Int32] Maximum number of messages to be returned; up to 100.
   #   Fewer messages may be returned than specified by the limit, even if the end of the message history has not been
   #   reached.
   # filter [Proton::Types::SearchMessagesFilter] A filter for the content of messages in the search results.
-  def search_secret_messages(chat_id : ::Int64, query : ::String, from_search_id : ::Int64, limit : ::Int32, filter : Proton::Types::SearchMessagesFilter) # : Proton::Types::FoundMessages
+  def search_secret_messages(chat_id : ::Int32, query : ::String, from_search_id : ::String, limit : ::Int32, filter : Proton::Types::SearchMessagesFilter) # : Proton::Types::FoundMessages
     broadcast({"@type"          => "searchSecretMessages",
               "chat_id"        => chat_id,
               "query"          => query,
@@ -2785,10 +2785,10 @@ module Proton::ClientMethods
   # Returns the sent message.
   #
   # bot_user_id [::Int32] Identifier of the bot.
-  # chat_id [::Int64] Identifier of the target chat.
+  # chat_id [::Int32] Identifier of the target chat.
   # parameter [::String] A hidden parameter sent to the bot for deep linking purposes
   #   (https://core.telegram.org/bots#deep-linking).
-  def send_bot_start_message(bot_user_id : ::Int32, chat_id : ::Int64, parameter : ::String) # : Proton::Types::Message
+  def send_bot_start_message(bot_user_id : ::Int32, chat_id : ::Int32, parameter : ::String) # : Proton::Types::Message
     broadcast({"@type"       => "sendBotStartMessage",
               "bot_user_id" => bot_user_id,
               "chat_id"     => chat_id,
@@ -2822,9 +2822,9 @@ module Proton::ClientMethods
 
   # Sends a notification about user activity in a chat.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # action [Proton::Types::ChatAction] The action description.
-  def send_chat_action(chat_id : ::Int64, action : Proton::Types::ChatAction) # : Proton::Types::Ok
+  def send_chat_action(chat_id : ::Int32, action : Proton::Types::ChatAction) # : Proton::Types::Ok
     broadcast({"@type"   => "sendChatAction",
               "chat_id" => chat_id,
               "action"  => action})
@@ -2833,8 +2833,8 @@ module Proton::ClientMethods
   # Sends a notification about a screenshot taken in a chat.
   # Supported only in private and secret chats.
   #
-  # chat_id [::Int64] Chat identifier.
-  def send_chat_screenshot_taken_notification(chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Chat identifier.
+  def send_chat_screenshot_taken_notification(chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "sendChatScreenshotTakenNotification",
               "chat_id" => chat_id})
   end  
@@ -2842,9 +2842,9 @@ module Proton::ClientMethods
   # Changes the current TTL setting (sets a new self-destruct timer) in a secret chat and sends the corresponding
   #   message.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # ttl [::Int32] New TTL value, in seconds.
-  def send_chat_set_ttl_message(chat_id : ::Int64, ttl : ::Int32) # : Proton::Types::Message
+  def send_chat_set_ttl_message(chat_id : ::Int32, ttl : ::Int32) # : Proton::Types::Message
     broadcast({"@type"   => "sendChatSetTtlMessage",
               "chat_id" => chat_id,
               "ttl"     => ttl})
@@ -2872,17 +2872,17 @@ module Proton::ClientMethods
   # Returns the sent message.
   # Always clears a chat draft message.
   #
-  # chat_id [::Int64] Target chat.
-  # reply_to_message_id [::Int64] Identifier of a message to reply to or 0.
+  # chat_id [::Int32] Target chat.
+  # reply_to_message_id [::Int32] Identifier of a message to reply to or 0.
   # disable_notification [::Bool] Pass true to disable notification for the message.
   #   Not supported in secret chats.
   # from_background [::Bool] Pass true if the message is sent from background.
-  # query_id [::Int64] Identifier of the inline query.
+  # query_id [::String] Identifier of the inline query.
   # result_id [::String] Identifier of the inline result.
   # hide_via_bot [::Bool] If true, there will be no mention of a bot, via which the message is sent.
   #   Can be used only for bots GetOption("animation_search_bot_username"), GetOption("photo_search_bot_username") and
   #   GetOption("venue_search_bot_username").
-  def send_inline_query_result_message(chat_id : ::Int64, reply_to_message_id : ::Int64, disable_notification : ::Bool, from_background : ::Bool, query_id : ::Int64, result_id : ::String, hide_via_bot : ::Bool) # : Proton::Types::Message
+  def send_inline_query_result_message(chat_id : ::Int32, reply_to_message_id : ::Int32, disable_notification : ::Bool, from_background : ::Bool, query_id : ::String, result_id : ::String, hide_via_bot : ::Bool) # : Proton::Types::Message
     broadcast({"@type"                => "sendInlineQueryResultMessage",
               "chat_id"              => chat_id,
               "reply_to_message_id"  => reply_to_message_id,
@@ -2896,14 +2896,14 @@ module Proton::ClientMethods
   # Sends a message.
   # Returns the sent message.
   #
-  # chat_id [::Int64] Target chat.
-  # reply_to_message_id [::Int64] Identifier of the message to reply to or 0.
+  # chat_id [::Int32] Target chat.
+  # reply_to_message_id [::Int32] Identifier of the message to reply to or 0.
   # disable_notification [::Bool] Pass true to disable notification for the message.
   #   Not supported in secret chats.
   # from_background [::Bool] Pass true if the message is sent from the background.
   # reply_markup [Proton::Types::ReplyMarkup] Markup for replying to the message; for bots only.
   # input_message_content [Proton::Types::InputMessageContent] The content of the message to be sent.
-  def send_message(chat_id : ::Int64, reply_to_message_id : ::Int64, disable_notification : ::Bool, from_background : ::Bool, reply_markup : Proton::Types::ReplyMarkup, input_message_content : Proton::Types::InputMessageContent) # : Proton::Types::Message
+  def send_message(chat_id : ::Int32, reply_to_message_id : ::Int32, disable_notification : ::Bool, from_background : ::Bool, reply_markup : Proton::Types::ReplyMarkup, input_message_content : Proton::Types::InputMessageContent) # : Proton::Types::Message
     broadcast({"@type"                 => "sendMessage",
               "chat_id"               => chat_id,
               "reply_to_message_id"   => reply_to_message_id,
@@ -2917,13 +2917,13 @@ module Proton::ClientMethods
   # Currently only photo and video messages can be grouped into an album.
   # Returns sent messages.
   #
-  # chat_id [::Int64] Target chat.
-  # reply_to_message_id [::Int64] Identifier of a message to reply to or 0.
+  # chat_id [::Int32] Target chat.
+  # reply_to_message_id [::Int32] Identifier of a message to reply to or 0.
   # disable_notification [::Bool] Pass true to disable notification for the messages.
   #   Not supported in secret chats.
   # from_background [::Bool] Pass true if the messages are sent from the background.
   # input_message_contents [::Array(Proton::Types::InputMessageContent)] Contents of messages to be sent.
-  def send_message_album(chat_id : ::Int64, reply_to_message_id : ::Int64, disable_notification : ::Bool, from_background : ::Bool, input_message_contents : ::Array(Proton::Types::InputMessageContent)) # : Proton::Types::Messages
+  def send_message_album(chat_id : ::Int32, reply_to_message_id : ::Int32, disable_notification : ::Bool, from_background : ::Bool, input_message_contents : ::Array(Proton::Types::InputMessageContent)) # : Proton::Types::Messages
     broadcast({"@type"                  => "sendMessageAlbum",
               "chat_id"                => chat_id,
               "reply_to_message_id"    => reply_to_message_id,
@@ -2947,12 +2947,12 @@ module Proton::ClientMethods
 
   # Sends a filled-out payment form to the bot for final verification.
   #
-  # chat_id [::Int64] Chat identifier of the Invoice message.
-  # message_id [::Int64] Message identifier.
+  # chat_id [::Int32] Chat identifier of the Invoice message.
+  # message_id [::Int32] Message identifier.
   # order_info_id [::String] Identifier returned by ValidateOrderInfo, or an empty string.
   # shipping_option_id [::String] Identifier of a chosen shipping option, if applicable.
   # credentials [Proton::Types::InputCredentials] The credentials chosen by user for payment.
-  def send_payment_form(chat_id : ::Int64, message_id : ::Int64, order_info_id : ::String, shipping_option_id : ::String, credentials : Proton::Types::InputCredentials) # : Proton::Types::PaymentResult
+  def send_payment_form(chat_id : ::Int32, message_id : ::Int32, order_info_id : ::String, shipping_option_id : ::String, credentials : Proton::Types::InputCredentials) # : Proton::Types::PaymentResult
     broadcast({"@type"              => "sendPaymentForm",
               "chat_id"            => chat_id,
               "message_id"         => message_id,
@@ -3063,9 +3063,9 @@ module Proton::ClientMethods
 
   # Changes client data associated with a chat.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # client_data [::String] New value of client_data.
-  def set_chat_client_data(chat_id : ::Int64, client_data : ::String) # : Proton::Types::Ok
+  def set_chat_client_data(chat_id : ::Int32, client_data : ::String) # : Proton::Types::Ok
     broadcast({"@type"       => "setChatClientData",
               "chat_id"     => chat_id,
               "client_data" => client_data})
@@ -3075,9 +3075,9 @@ module Proton::ClientMethods
   # Available for basic groups, supergroups, and channels.
   # Requires can_change_info rights.
   #
-  # chat_id [::Int64] Identifier of the chat.
+  # chat_id [::Int32] Identifier of the chat.
   # description [::String] New chat description; 0-255 characters.
-  def set_chat_description(chat_id : ::Int64, description : ::String) # : Proton::Types::Ok
+  def set_chat_description(chat_id : ::Int32, description : ::String) # : Proton::Types::Ok
     broadcast({"@type"       => "setChatDescription",
               "chat_id"     => chat_id,
               "description" => description})
@@ -3085,9 +3085,9 @@ module Proton::ClientMethods
 
   # Changes the draft message in a chat.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # draft_message [Proton::Types::DraftMessage, nil] New draft message; may be null.
-  def set_chat_draft_message(chat_id : ::Int64, draft_message : Proton::Types::DraftMessage? = nil) # : Proton::Types::Ok
+  def set_chat_draft_message(chat_id : ::Int32, draft_message : Proton::Types::DraftMessage? = nil) # : Proton::Types::Ok
     broadcast({"@type"         => "setChatDraftMessage",
               "chat_id"       => chat_id,
               "draft_message" => draft_message})
@@ -3097,10 +3097,10 @@ module Proton::ClientMethods
   # This function is currently not suitable for adding new members to the chat; instead, use addChatMember.
   # The chat member status will not be changed until it has been synchronized with the server.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # user_id [::Int32] User identifier.
   # status [Proton::Types::ChatMemberStatus] The new status of the member in the chat.
-  def set_chat_member_status(chat_id : ::Int64, user_id : ::Int32, status : Proton::Types::ChatMemberStatus) # : Proton::Types::Ok
+  def set_chat_member_status(chat_id : ::Int32, user_id : ::Int32, status : Proton::Types::ChatMemberStatus) # : Proton::Types::Ok
     broadcast({"@type"   => "setChatMemberStatus",
               "chat_id" => chat_id,
               "user_id" => user_id,
@@ -3109,9 +3109,9 @@ module Proton::ClientMethods
 
   # Changes the notification settings of a chat.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # notification_settings [Proton::Types::ChatNotificationSettings] New notification settings for the chat.
-  def set_chat_notification_settings(chat_id : ::Int64, notification_settings : Proton::Types::ChatNotificationSettings) # : Proton::Types::Ok
+  def set_chat_notification_settings(chat_id : ::Int32, notification_settings : Proton::Types::ChatNotificationSettings) # : Proton::Types::Ok
     broadcast({"@type"                 => "setChatNotificationSettings",
               "chat_id"               => chat_id,
               "notification_settings" => notification_settings})
@@ -3121,9 +3121,9 @@ module Proton::ClientMethods
   # Supported only for basic groups and supergroups.
   # Requires can_restrict_members administrator right.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # permissions [Proton::Types::ChatPermissions] New non-administrator members permissions in the chat.
-  def set_chat_permissions(chat_id : ::Int64, permissions : Proton::Types::ChatPermissions) # : Proton::Types::Ok
+  def set_chat_permissions(chat_id : ::Int32, permissions : Proton::Types::ChatPermissions) # : Proton::Types::Ok
     broadcast({"@type"       => "setChatPermissions",
               "chat_id"     => chat_id,
               "permissions" => permissions})
@@ -3134,11 +3134,11 @@ module Proton::ClientMethods
   # Requires can_change_info rights.
   # The photo will not be changed before request to the server has been completed.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # photo [Proton::Types::InputFile] New chat photo.
   #   You can use a zero InputFileId to delete the chat photo.
   #   Files that are accessible only by HTTP URL are not acceptable.
-  def set_chat_photo(chat_id : ::Int64, photo : Proton::Types::InputFile) # : Proton::Types::Ok
+  def set_chat_photo(chat_id : ::Int32, photo : Proton::Types::InputFile) # : Proton::Types::Ok
     broadcast({"@type"   => "setChatPhoto",
               "chat_id" => chat_id,
               "photo"   => photo})
@@ -3149,9 +3149,9 @@ module Proton::ClientMethods
   # Requires can_change_info rights.
   # The title will not be changed until the request to the server has been completed.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # title [::String] New title of the chat; 1-128 characters.
-  def set_chat_title(chat_id : ::Int64, title : ::String) # : Proton::Types::Ok
+  def set_chat_title(chat_id : ::Int32, title : ::String) # : Proton::Types::Ok
     broadcast({"@type"   => "setChatTitle",
               "chat_id" => chat_id,
               "title"   => title})
@@ -3193,10 +3193,10 @@ module Proton::ClientMethods
 
   # Informs TDLib on a file generation prograss.
   #
-  # generation_id [::Int64] The identifier of the generation process.
+  # generation_id [::String] The identifier of the generation process.
   # expected_size [::Int32] Expected size of the generated file, in bytes; 0 if unknown.
   # local_prefix_size [::Int32] The number of bytes already generated.
-  def set_file_generation_progress(generation_id : ::Int64, expected_size : ::Int32, local_prefix_size : ::Int32) # : Proton::Types::Ok
+  def set_file_generation_progress(generation_id : ::String, expected_size : ::Int32, local_prefix_size : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"             => "setFileGenerationProgress",
               "generation_id"     => generation_id,
               "expected_size"     => expected_size,
@@ -3205,14 +3205,14 @@ module Proton::ClientMethods
 
   # Updates the game score of the specified user in the game; for bots only.
   #
-  # chat_id [::Int64] The chat to which the message with the game belongs.
-  # message_id [::Int64] Identifier of the message.
+  # chat_id [::Int32] The chat to which the message with the game belongs.
+  # message_id [::Int32] Identifier of the message.
   # edit_message [::Bool] True, if the message should be edited.
   # user_id [::Int32] User identifier.
   # score [::Int32] The new score.
   # force [::Bool] Pass true to update the score even if it decreases.
   #   If the score is 0, the user will be deleted from the high score table.
-  def set_game_score(chat_id : ::Int64, message_id : ::Int64, edit_message : ::Bool, user_id : ::Int32, score : ::Int32, force : ::Bool) # : Proton::Types::Message
+  def set_game_score(chat_id : ::Int32, message_id : ::Int32, edit_message : ::Bool, user_id : ::Int32, score : ::Int32, force : ::Bool) # : Proton::Types::Message
     broadcast({"@type"        => "setGameScore",
               "chat_id"      => chat_id,
               "message_id"   => message_id,
@@ -3357,19 +3357,19 @@ module Proton::ClientMethods
 
   # Changes the order of pinned chats.
   #
-  # chat_ids [::Array(::Int64)] The new list of pinned chats.
-  def set_pinned_chats(chat_ids : ::Array(::Int64)) # : Proton::Types::Ok
+  # chat_ids [::Array(::Int32)] The new list of pinned chats.
+  def set_pinned_chats(chat_ids : ::Array(::Int32)) # : Proton::Types::Ok
     broadcast({"@type"    => "setPinnedChats",
               "chat_ids" => chat_ids})
   end  
 
   # Changes user answer to a poll.
   #
-  # chat_id [::Int64] Identifier of the chat to which the poll belongs.
-  # message_id [::Int64] Identifier of the message containing the poll.
+  # chat_id [::Int32] Identifier of the chat to which the poll belongs.
+  # message_id [::Int32] Identifier of the message containing the poll.
   # option_ids [::Array(::Int32)] 0-based identifiers of options, chosen by the user.
   #   Currently user can't choose more than 1 option.
-  def set_poll_answer(chat_id : ::Int64, message_id : ::Int64, option_ids : ::Array(::Int32)) # : Proton::Types::Ok
+  def set_poll_answer(chat_id : ::Int32, message_id : ::Int32, option_ids : ::Array(::Int32)) # : Proton::Types::Ok
     broadcast({"@type"      => "setPollAnswer",
               "chat_id"    => chat_id,
               "message_id" => message_id,
@@ -3424,9 +3424,9 @@ module Proton::ClientMethods
   # Changes the sticker set of a supergroup; requires can_change_info rights.
   #
   # supergroup_id [::Int32] Identifier of the supergroup.
-  # sticker_set_id [::Int64] New value of the supergroup sticker set identifier.
+  # sticker_set_id [::String] New value of the supergroup sticker set identifier.
   #   Use 0 to remove the supergroup sticker set.
-  def set_supergroup_sticker_set(supergroup_id : ::Int32, sticker_set_id : ::Int64) # : Proton::Types::Ok
+  def set_supergroup_sticker_set(supergroup_id : ::Int32, sticker_set_id : ::String) # : Proton::Types::Ok
     broadcast({"@type"          => "setSupergroupStickerSet",
               "supergroup_id"  => supergroup_id,
               "sticker_set_id" => sticker_set_id})
@@ -3475,10 +3475,10 @@ module Proton::ClientMethods
   # Stops a poll.
   # A poll in a message can be stopped when the message has can_be_edited flag set.
   #
-  # chat_id [::Int64] Identifier of the chat to which the poll belongs.
-  # message_id [::Int64] Identifier of the message containing the poll.
+  # chat_id [::Int32] Identifier of the chat to which the poll belongs.
+  # message_id [::Int32] Identifier of the message containing the poll.
   # reply_markup [Proton::Types::ReplyMarkup] The new message reply markup; for bots only.
-  def stop_poll(chat_id : ::Int64, message_id : ::Int64, reply_markup : Proton::Types::ReplyMarkup) # : Proton::Types::Ok
+  def stop_poll(chat_id : ::Int32, message_id : ::Int32, reply_markup : Proton::Types::ReplyMarkup) # : Proton::Types::Ok
     broadcast({"@type"        => "stopPoll",
               "chat_id"      => chat_id,
               "message_id"   => message_id,
@@ -3503,17 +3503,17 @@ module Proton::ClientMethods
 
   # Terminates a session of the current user.
   #
-  # session_id [::Int64] Session identifier.
-  def terminate_session(session_id : ::Int64) # : Proton::Types::Ok
+  # session_id [::String] Session identifier.
+  def terminate_session(session_id : ::String) # : Proton::Types::Ok
     broadcast({"@type"      => "terminateSession",
               "session_id" => session_id})
   end  
 
   # Changes the value of the default disable_notification parameter, used when a message is sent to a chat.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # default_disable_notification [::Bool] New value of default_disable_notification.
-  def toggle_chat_default_disable_notification(chat_id : ::Int64, default_disable_notification : ::Bool) # : Proton::Types::Ok
+  def toggle_chat_default_disable_notification(chat_id : ::Int32, default_disable_notification : ::Bool) # : Proton::Types::Ok
     broadcast({"@type"                        => "toggleChatDefaultDisableNotification",
               "chat_id"                      => chat_id,
               "default_disable_notification" => default_disable_notification})
@@ -3521,9 +3521,9 @@ module Proton::ClientMethods
 
   # Changes the marked as unread state of a chat.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # is_marked_as_unread [::Bool] New value of is_marked_as_unread.
-  def toggle_chat_is_marked_as_unread(chat_id : ::Int64, is_marked_as_unread : ::Bool) # : Proton::Types::Ok
+  def toggle_chat_is_marked_as_unread(chat_id : ::Int32, is_marked_as_unread : ::Bool) # : Proton::Types::Ok
     broadcast({"@type"               => "toggleChatIsMarkedAsUnread",
               "chat_id"             => chat_id,
               "is_marked_as_unread" => is_marked_as_unread})
@@ -3532,9 +3532,9 @@ module Proton::ClientMethods
   # Changes the pinned state of a chat.
   # You can pin up to GetOption("pinned_chat_count_max") non-secret chats and the same number of secret chats.
   #
-  # chat_id [::Int64] Chat identifier.
+  # chat_id [::Int32] Chat identifier.
   # is_pinned [::Bool] New value of is_pinned.
-  def toggle_chat_is_pinned(chat_id : ::Int64, is_pinned : ::Bool) # : Proton::Types::Ok
+  def toggle_chat_is_pinned(chat_id : ::Int32, is_pinned : ::Bool) # : Proton::Types::Ok
     broadcast({"@type"     => "toggleChatIsPinned",
               "chat_id"   => chat_id,
               "is_pinned" => is_pinned})
@@ -3570,8 +3570,8 @@ module Proton::ClientMethods
 
   # Removes the pinned message from a chat; requires can_pin_messages rights in the group or channel.
   #
-  # chat_id [::Int64] Identifier of the chat.
-  def unpin_chat_message(chat_id : ::Int64) # : Proton::Types::Ok
+  # chat_id [::Int32] Identifier of the chat.
+  def unpin_chat_message(chat_id : ::Int32) # : Proton::Types::Ok
     broadcast({"@type"   => "unpinChatMessage",
               "chat_id" => chat_id})
   end  
@@ -3580,8 +3580,8 @@ module Proton::ClientMethods
   #   messageChatUpgradeFrom; requires creator privileges.
   # Deactivates the original basic group.
   #
-  # chat_id [::Int64] Identifier of the chat to upgrade.
-  def upgrade_basic_group_chat_to_supergroup_chat(chat_id : ::Int64) # : Proton::Types::Chat
+  # chat_id [::Int32] Identifier of the chat to upgrade.
+  def upgrade_basic_group_chat_to_supergroup_chat(chat_id : ::Int32) # : Proton::Types::Chat
     broadcast({"@type"   => "upgradeBasicGroupChatToSupergroupChat",
               "chat_id" => chat_id})
   end  
@@ -3617,11 +3617,11 @@ module Proton::ClientMethods
   # Validates the order information provided by a user and returns the available shipping options for a flexible
   #   invoice.
   #
-  # chat_id [::Int64] Chat identifier of the Invoice message.
-  # message_id [::Int64] Message identifier.
+  # chat_id [::Int32] Chat identifier of the Invoice message.
+  # message_id [::Int32] Message identifier.
   # order_info [Proton::Types::OrderInfo] The order information, provided by the user.
   # allow_save [::Bool] True, if the order information can be saved.
-  def validate_order_info(chat_id : ::Int64, message_id : ::Int64, order_info : Proton::Types::OrderInfo, allow_save : ::Bool) # : Proton::Types::ValidatedOrderInfo
+  def validate_order_info(chat_id : ::Int32, message_id : ::Int32, order_info : Proton::Types::OrderInfo, allow_save : ::Bool) # : Proton::Types::ValidatedOrderInfo
     broadcast({"@type"      => "validateOrderInfo",
               "chat_id"    => chat_id,
               "message_id" => message_id,
@@ -3633,10 +3633,10 @@ module Proton::ClientMethods
   # Many useful activities depend on whether the messages are currently being viewed or not (e.g., marking messages as
   #   read, incrementing a view counter, updating a view counter, removing deleted messages in supergroups and channels).
   #
-  # chat_id [::Int64] Chat identifier.
-  # message_ids [::Array(::Int64)] The identifiers of the messages being viewed.
+  # chat_id [::Int32] Chat identifier.
+  # message_ids [::Array(::Int32)] The identifiers of the messages being viewed.
   # force_read [::Bool] True, if messages in closed chats should be marked as read.
-  def view_messages(chat_id : ::Int64, message_ids : ::Array(::Int64), force_read : ::Bool) # : Proton::Types::Ok
+  def view_messages(chat_id : ::Int32, message_ids : ::Array(::Int32), force_read : ::Bool) # : Proton::Types::Ok
     broadcast({"@type"       => "viewMessages",
               "chat_id"     => chat_id,
               "message_ids" => message_ids,
@@ -3645,8 +3645,8 @@ module Proton::ClientMethods
 
   # Informs the server that some trending sticker sets have been viewed by the user.
   #
-  # sticker_set_ids [::Array(::Int64)] Identifiers of viewed trending sticker sets.
-  def view_trending_sticker_sets(sticker_set_ids : ::Array(::Int64)) # : Proton::Types::Ok
+  # sticker_set_ids [::Array(::String)] Identifiers of viewed trending sticker sets.
+  def view_trending_sticker_sets(sticker_set_ids : ::Array(::String)) # : Proton::Types::Ok
     broadcast({"@type"           => "viewTrendingStickerSets",
               "sticker_set_ids" => sticker_set_ids})
   end  
@@ -3655,10 +3655,10 @@ module Proton::ClientMethods
   # This method is intended to be used only if the client has no direct access to TDLib's file system, because it is
   #   usually slower than a direct write to the destination file.
   #
-  # generation_id [::Int64] The identifier of the generation process.
+  # generation_id [::String] The identifier of the generation process.
   # offset [::Int32] The offset from which to write the data to the file.
   # data [::String] The data to write.
-  def write_generated_file_part(generation_id : ::Int64, offset : ::Int32, data : ::String) # : Proton::Types::Ok
+  def write_generated_file_part(generation_id : ::String, offset : ::Int32, data : ::String) # : Proton::Types::Ok
     broadcast({"@type"         => "writeGeneratedFilePart",
               "generation_id" => generation_id,
               "offset"        => offset,

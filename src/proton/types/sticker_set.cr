@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Identifier of the sticker set
-    property id : ::Int64
+    property id : ::String
 
     # Title of the sticker set
     property title : ::String
@@ -44,7 +44,7 @@ module Proton::Types
     # Sticker set thumbnail in WEBP format with width and height 100; may be null. The file can be downloaded only before the thumbnail is changed
     property thumbnail : Proton::Types::PhotoSize? = nil
 
-    def initialize(@id : ::Int64, @title : ::String, @name : ::String, @is_installed : ::Bool, @is_archived : ::Bool, @is_official : ::Bool, @is_animated : ::Bool, @is_masks : ::Bool, @is_viewed : ::Bool, @stickers : ::Array(Proton::Types::Sticker), @emojis : ::Array(Proton::Types::Emojis), @thumbnail : Proton::Types::PhotoSize? = nil)
+    def initialize(@id : ::String, @title : ::String, @name : ::String, @is_installed : ::Bool, @is_archived : ::Bool, @is_official : ::Bool, @is_animated : ::Bool, @is_masks : ::Bool, @is_viewed : ::Bool, @stickers : ::Array(Proton::Types::Sticker), @emojis : ::Array(Proton::Types::Emojis), @thumbnail : Proton::Types::PhotoSize? = nil)
     end
   end
 end

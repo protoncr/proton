@@ -8,15 +8,15 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Message identifier
-    property message_id : ::Int64
+    property message_id : ::Int32
 
     # New message content
     property new_content : Proton::Types::MessageContent
 
-    def initialize(@chat_id : ::Int64, @message_id : ::Int64, @new_content : Proton::Types::MessageContent)
+    def initialize(@chat_id : ::Int32, @message_id : ::Int32, @new_content : Proton::Types::MessageContent)
     end
   end
 end

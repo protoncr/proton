@@ -11,9 +11,9 @@ module Proton::Types
     property is_masks : ::Bool
 
     # The new list of installed ordinary sticker sets
-    property sticker_set_ids : ::Array(::Int64)
+    property sticker_set_ids : ::Array(::String)
 
-    def initialize(@is_masks : ::Bool, @sticker_set_ids : ::Array(::Int64))
+    def initialize(@is_masks : ::Bool, @sticker_set_ids : ::Array(::String))
     end
   end
 end

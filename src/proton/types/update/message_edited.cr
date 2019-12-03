@@ -9,10 +9,10 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Message identifier
-    property message_id : ::Int64
+    property message_id : ::Int32
 
     # Point in time (Unix timestamp) when the message was edited
     property edit_date : ::Int32
@@ -20,7 +20,7 @@ module Proton::Types
     # New message reply markup; may be null
     property reply_markup : Proton::Types::ReplyMarkup? = nil
 
-    def initialize(@chat_id : ::Int64, @message_id : ::Int64, @edit_date : ::Int32, @reply_markup : Proton::Types::ReplyMarkup? = nil)
+    def initialize(@chat_id : ::Int32, @message_id : ::Int32, @edit_date : ::Int32, @reply_markup : Proton::Types::ReplyMarkup? = nil)
     end
   end
 end

@@ -9,10 +9,10 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier; 0 if none
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Total size of the files in the chat
-    property size : ::Int64
+    property size : ::Int32
 
     # Total number of files in the chat
     property count : ::Int32
@@ -20,7 +20,7 @@ module Proton::Types
     # Statistics split by file types
     property by_file_type : ::Array(Proton::Types::StorageStatisticsByFileType)
 
-    def initialize(@chat_id : ::Int64, @size : ::Int64, @count : ::Int32, @by_file_type : ::Array(Proton::Types::StorageStatisticsByFileType))
+    def initialize(@chat_id : ::Int32, @size : ::Int32, @count : ::Int32, @by_file_type : ::Array(Proton::Types::StorageStatisticsByFileType))
     end
   end
 end

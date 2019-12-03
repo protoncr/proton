@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # Identifier of the sticker set
-    property sticker_set_id : ::Int64
+    property sticker_set_id : ::String
 
-    def initialize(@sticker_set_id : ::Int64)
+    def initialize(@sticker_set_id : ::String)
     end
   end
 end

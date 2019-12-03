@@ -9,12 +9,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # New value of the order
-    property order : ::Int64
+    property order : ::String
 
-    def initialize(@chat_id : ::Int64, @order : ::Int64)
+    def initialize(@chat_id : ::Int32, @order : ::String)
     end
   end
 end

@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Identifier of last read outgoing message
-    property last_read_outbox_message_id : ::Int64
+    property last_read_outbox_message_id : ::Int32
 
-    def initialize(@chat_id : ::Int64, @last_read_outbox_message_id : ::Int64)
+    def initialize(@chat_id : ::Int32, @last_read_outbox_message_id : ::Int32)
     end
   end
 end

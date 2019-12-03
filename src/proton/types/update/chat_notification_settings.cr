@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # The new notification settings
     property notification_settings : Proton::Types::ChatNotificationSettings
 
-    def initialize(@chat_id : ::Int64, @notification_settings : Proton::Types::ChatNotificationSettings)
+    def initialize(@chat_id : ::Int32, @notification_settings : Proton::Types::ChatNotificationSettings)
     end
   end
 end

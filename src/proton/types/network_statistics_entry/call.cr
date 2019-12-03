@@ -11,15 +11,15 @@ module Proton::Types
     property network_type : Proton::Types::NetworkType
 
     # Total number of bytes sent
-    property sent_bytes : ::Int64
+    property sent_bytes : ::Int32
 
     # Total number of bytes received
-    property received_bytes : ::Int64
+    property received_bytes : ::Int32
 
     # Total call duration, in seconds
     property duration : ::Float64
 
-    def initialize(@network_type : Proton::Types::NetworkType, @sent_bytes : ::Int64, @received_bytes : ::Int64, @duration : ::Float64)
+    def initialize(@network_type : Proton::Types::NetworkType, @sent_bytes : ::Int32, @received_bytes : ::Int32, @duration : ::Float64)
     end
   end
 end

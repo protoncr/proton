@@ -72,6 +72,7 @@ module Proton
     end
 
     def handle_update(update)
+      puts "Incoming: " + update
       update = Types::Base.from_json(update)
       if handlers = @event_handlers[update.class]?
         handlers.each do |handler|

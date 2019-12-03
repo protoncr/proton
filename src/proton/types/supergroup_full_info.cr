@@ -39,7 +39,7 @@ module Proton::Types
     property is_all_history_available : ::Bool
 
     # Identifier of the supergroup sticker set; 0 if none
-    property sticker_set_id : ::Int64
+    property sticker_set_id : ::String
 
     # Invite link for this chat
     property invite_link : ::String
@@ -48,9 +48,9 @@ module Proton::Types
     property upgraded_from_basic_group_id : ::Int32
 
     # Identifier of the last message in the basic group from which supergroup was upgraded; 0 if none
-    property upgraded_from_max_message_id : ::Int64
+    property upgraded_from_max_message_id : ::Int32
 
-    def initialize(@description : ::String, @member_count : ::Int32, @administrator_count : ::Int32, @restricted_count : ::Int32, @banned_count : ::Int32, @can_get_members : ::Bool, @can_set_username : ::Bool, @can_set_sticker_set : ::Bool, @can_view_statistics : ::Bool, @is_all_history_available : ::Bool, @sticker_set_id : ::Int64, @invite_link : ::String, @upgraded_from_basic_group_id : ::Int32, @upgraded_from_max_message_id : ::Int64)
+    def initialize(@description : ::String, @member_count : ::Int32, @administrator_count : ::Int32, @restricted_count : ::Int32, @banned_count : ::Int32, @can_get_members : ::Bool, @can_set_username : ::Bool, @can_set_sticker_set : ::Bool, @can_view_statistics : ::Bool, @is_all_history_available : ::Bool, @sticker_set_id : ::String, @invite_link : ::String, @upgraded_from_basic_group_id : ::Int32, @upgraded_from_max_message_id : ::Int32)
     end
   end
 end

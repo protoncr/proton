@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Game ID
-    property id : ::Int64
+    property id : ::String
 
     # Game short name. To share a game use the URL https://t.me/{bot_username}?game={game_short_name}
     property short_name : ::String
@@ -29,7 +29,7 @@ module Proton::Types
     # Game animation; may be null
     property animation : Proton::Types::Animation? = nil
 
-    def initialize(@id : ::Int64, @short_name : ::String, @title : ::String, @text : Proton::Types::FormattedText, @description : ::String, @photo : Proton::Types::Photo, @animation : Proton::Types::Animation? = nil)
+    def initialize(@id : ::String, @short_name : ::String, @title : ::String, @text : Proton::Types::FormattedText, @description : ::String, @photo : Proton::Types::Photo, @animation : Proton::Types::Animation? = nil)
     end
   end
 end

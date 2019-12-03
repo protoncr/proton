@@ -12,9 +12,9 @@ module Proton::Types
     property label : ::String
 
     # Currency amount in minimal quantity of the currency
-    property amount : ::Int64
+    property amount : ::Int32
 
-    def initialize(@label : ::String, @amount : ::Int64)
+    def initialize(@label : ::String, @amount : ::Int32)
     end
   end
 end

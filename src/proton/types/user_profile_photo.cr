@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Unique user profile photo identifier
-    property id : ::Int64
+    property id : ::String
 
     # Point in time (Unix timestamp) when the photo has been added
     property added_date : ::Int32
@@ -17,7 +17,7 @@ module Proton::Types
     # Available variants of the user photo, in different sizes
     property sizes : ::Array(Proton::Types::PhotoSize)
 
-    def initialize(@id : ::Int64, @added_date : ::Int32, @sizes : ::Array(Proton::Types::PhotoSize))
+    def initialize(@id : ::String, @added_date : ::Int32, @sizes : ::Array(Proton::Types::PhotoSize))
     end
   end
 end

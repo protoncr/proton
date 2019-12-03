@@ -8,15 +8,15 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Message identifier
-    property message_id : ::Int64
+    property message_id : ::Int32
 
     # The new number of unread mention messages left in the chat
     property unread_mention_count : ::Int32
 
-    def initialize(@chat_id : ::Int64, @message_id : ::Int64, @unread_mention_count : ::Int32)
+    def initialize(@chat_id : ::Int32, @message_id : ::Int32, @unread_mention_count : ::Int32)
     end
   end
 end

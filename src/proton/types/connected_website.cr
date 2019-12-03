@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Website identifier
-    property id : ::Int64
+    property id : ::String
 
     # The domain name of the website
     property domain_name : ::String
@@ -35,7 +35,7 @@ module Proton::Types
     # Human-readable description of a country and a region, from which the user was logged in, based on the IP address
     property location : ::String
 
-    def initialize(@id : ::Int64, @domain_name : ::String, @bot_user_id : ::Int32, @browser : ::String, @platform : ::String, @log_in_date : ::Int32, @last_active_date : ::Int32, @ip : ::String, @location : ::String)
+    def initialize(@id : ::String, @domain_name : ::String, @bot_user_id : ::Int32, @browser : ::String, @platform : ::String, @log_in_date : ::Int32, @last_active_date : ::Int32, @ip : ::String, @location : ::String)
     end
   end
 end

@@ -14,10 +14,10 @@ module Proton::Types
     property type : Proton::Types::NotificationGroupType
 
     # Identifier of a chat to which all notifications in the group belong
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Chat identifier, which notification settings must be applied to the added notifications
-    property notification_settings_chat_id : ::Int64
+    property notification_settings_chat_id : ::Int32
 
     # True, if the notifications should be shown without sound
     property is_silent : ::Bool
@@ -31,7 +31,7 @@ module Proton::Types
     # Identifiers of removed group notifications, sorted by notification ID
     property removed_notification_ids : ::Array(::Int32)
 
-    def initialize(@notification_group_id : ::Int32, @type : Proton::Types::NotificationGroupType, @chat_id : ::Int64, @notification_settings_chat_id : ::Int64, @is_silent : ::Bool, @total_count : ::Int32, @added_notifications : ::Array(Proton::Types::Notification), @removed_notification_ids : ::Array(::Int32))
+    def initialize(@notification_group_id : ::Int32, @type : Proton::Types::NotificationGroupType, @chat_id : ::Int32, @notification_settings_chat_id : ::Int32, @is_silent : ::Bool, @total_count : ::Int32, @added_notifications : ::Array(Proton::Types::Notification), @removed_notification_ids : ::Array(::Int32))
     end
   end
 end

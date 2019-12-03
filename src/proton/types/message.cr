@@ -9,13 +9,13 @@ module Proton::Types
     include JSON::Serializable
 
     # Message identifier, unique for the chat to which the message belongs
-    property id : ::Int64
+    property id : ::Int32
 
     # Content of the message
     property content : Proton::Types::MessageContent
 
     # Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
-    property media_album_id : ::Int64
+    property media_album_id : ::String
 
     # Number of times this message was viewed
     property views : ::Int32
@@ -30,7 +30,7 @@ module Proton::Types
     property ttl : ::Int32
 
     # If non-zero, the identifier of the message this message is replying to; can be the identifier of a deleted message
-    property reply_to_message_id : ::Int64
+    property reply_to_message_id : ::Int32
 
     # Point in time (Unix timestamp) when the message was last edited
     property edit_date : ::Int32
@@ -60,7 +60,7 @@ module Proton::Types
     property is_outgoing : ::Bool
 
     # Chat identifier
-    property chat_id : ::Int64
+    property chat_id : ::Int32
 
     # Identifier of the user who sent the message; 0 if unknown. Currently, it is unknown for channel posts and for channel posts automatically forwarded to discussion group
     property sender_user_id : ::Int32
@@ -77,7 +77,7 @@ module Proton::Types
     # Reply markup for the message; may be null
     property reply_markup : Proton::Types::ReplyMarkup? = nil
 
-    def initialize(@id : ::Int64, @content : Proton::Types::MessageContent, @media_album_id : ::Int64, @views : ::Int32, @via_bot_user_id : ::Int32, @ttl_expires_in : ::Float64, @ttl : ::Int32, @reply_to_message_id : ::Int64, @edit_date : ::Int32, @date : ::Int32, @contains_unread_mention : ::Bool, @is_channel_post : ::Bool, @can_be_deleted_for_all_users : ::Bool, @can_be_deleted_only_for_self : ::Bool, @can_be_forwarded : ::Bool, @can_be_edited : ::Bool, @is_outgoing : ::Bool, @chat_id : ::Int64, @sender_user_id : ::Int32, @forward_info : Proton::Types::MessageForwardInfo? = nil, @author_signature : ::String? = nil, @sending_state : Proton::Types::MessageSendingState? = nil, @reply_markup : Proton::Types::ReplyMarkup? = nil)
+    def initialize(@id : ::Int32, @content : Proton::Types::MessageContent, @media_album_id : ::String, @views : ::Int32, @via_bot_user_id : ::Int32, @ttl_expires_in : ::Float64, @ttl : ::Int32, @reply_to_message_id : ::Int32, @edit_date : ::Int32, @date : ::Int32, @contains_unread_mention : ::Bool, @is_channel_post : ::Bool, @can_be_deleted_for_all_users : ::Bool, @can_be_deleted_only_for_self : ::Bool, @can_be_forwarded : ::Bool, @can_be_edited : ::Bool, @is_outgoing : ::Bool, @chat_id : ::Int32, @sender_user_id : ::Int32, @forward_info : Proton::Types::MessageForwardInfo? = nil, @author_signature : ::String? = nil, @sending_state : Proton::Types::MessageSendingState? = nil, @reply_markup : Proton::Types::ReplyMarkup? = nil)
     end
   end
 end

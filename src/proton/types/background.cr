@@ -9,7 +9,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Unique background identifier
-    property id : ::Int64
+    property id : ::String
 
     # True, if this is one of default backgrounds
     property is_default : ::Bool
@@ -26,7 +26,7 @@ module Proton::Types
     # Document with the background; may be null. Null only for solid backgrounds
     property document : Proton::Types::Document? = nil
 
-    def initialize(@id : ::Int64, @is_default : ::Bool, @is_dark : ::Bool, @name : ::String, @type : Proton::Types::BackgroundType, @document : Proton::Types::Document? = nil)
+    def initialize(@id : ::String, @is_default : ::Bool, @is_dark : ::Bool, @name : ::String, @type : Proton::Types::BackgroundType, @document : Proton::Types::Document? = nil)
     end
   end
 end

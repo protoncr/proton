@@ -11,9 +11,9 @@ module Proton::Types
     property message : Proton::Types::Message
 
     # The previous temporary message identifier
-    property old_message_id : ::Int64
+    property old_message_id : ::Int32
 
-    def initialize(@message : Proton::Types::Message, @old_message_id : ::Int64)
+    def initialize(@message : Proton::Types::Message, @old_message_id : ::Int32)
     end
   end
 end
