@@ -11,6 +11,8 @@ dependencies:
   promise:
     github: spider-gazelle/promise
     branch: master
+  timeout:
+    github: hugoabonizio/timeout.cr
 
 crystal: 0.31.1
 

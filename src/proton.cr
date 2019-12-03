@@ -12,8 +12,8 @@ module Proton
       setting api_id : Int32
       setting api_hash : String
       setting use_test_dc : Bool = false
-      setting database_directory : String = File.join(Path.home.to_s, ".protoncr/db")
-      setting files_directory : String = File.join(Path.home.to_s, ".protoncr/data")
+      setting database_directory : String = ".proton/db"
+      setting files_directory : String = ".proton/data"
       setting use_chat_info_database : Bool = true
       setting use_secret_chats : Bool = true
       setting use_message_database : Bool = true
@@ -26,3 +26,4 @@ module Proton
     end
   end
 end
+

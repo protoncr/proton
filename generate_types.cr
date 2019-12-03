@@ -25,7 +25,6 @@ def parse_tl_type(type)
       "::Int64"
     else
       "::Int32"
-    end
   elsif type =~ /[dD]ouble/
     "::Float64"
   elsif type =~ /[bB]ytes/ || type =~ /[sS]tring/

@@ -3,18 +3,17 @@ require "promise"
 
 require "./types/*"
 require "./client_methods"
+require "./update_handler"
 
 module Proton
   class Client
     include Proton::ClientMethods
 
-    alias Event = Proc(Types::Base, Nil)
-
     DEFAULT_TIMEOUT = 20
 
     @td_client : Pointer(Void)
 
-    @event_handlers : Hash(Types::Base.class, Array(Event))
+    @event_handlers : Hash(Types::Base.class, Array(UpdateHandler(Types::Base)))
 
     getter? running : Bool
 
@@ -22,19 +21,22 @@ module Proton
 
     def initialize(@timeout = DEFAULT_TIMEOUT)
       @td_client = API.client_create
-      @event_handlers = {} of Types::Base.class => Array(Event)
+      @event_handlers = {} of Types::Base.class => Array(UpdateHandler(Types::Base))
       @running = false
     end
 
     def on(klass : U.class, &block : U ->) forall U
-      @event_handlers[klass] ||= [] of Event
+      @event_handlers[klass] ||= [] of UpdateHandler(U)
 
-      @event_handlers[klass] << Event.new do |base|
-        block.call(base.as(U))
-      end
+      @event_handlers[klass] << UpdateHandler(U).new(action: block)
     end
 
-    def broadcast(query)
+    def broadcast(query, timeout = 10)
+      extra = Random.new.base64(32)
+      query = query.to_h
+        .transform_keys(&.to_s)
+        .merge({"@extra" => extra})
+
       API.client_send(@td_client, query)
     end
 
