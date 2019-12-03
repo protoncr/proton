@@ -1,0 +1,10 @@
+# This is an auto generated file. If something isn't working
+# correctly, see 'typegen.cr' in the project root
+
+
+module Proton::Types
+  # The log is written to stderr or an OS specific log.
+  class LogStream::Default < Types::LogStream
+    include JSON::Serializable
+  end
+end

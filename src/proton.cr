@@ -1,7 +1,6 @@
 require "habitat"
 
 require "./tdlib/tdlib"
-require "./core_extensions/*"
 require "./proton/*"
 
 module Proton
@@ -12,7 +11,7 @@ module Proton
       # Client
       setting api_id : String
       setting api_hash : String
-      setting use_test_dc : Bool = true
+      setting use_test_dc : Bool = false
       setting database_directory : String = File.join(Path.home.to_s, ".protoncr/db")
       setting files_directory : String = File.join(Path.home.to_s, ".protoncr/data")
       setting use_chat_info_database : Bool = true
@@ -27,30 +26,3 @@ module Proton
     end
   end
 end
-
-# Proton::Client.configure do |config|
-#   config.encryption_key = "tIXiGBupL3VCFOwyEpG5JjMuAIGRLKlL"
-
-#   config.api_id = "65534"
-#   config.api_hash = "e3e522e32853d0767df7b2113d5e2497"
-# end
-
-# client = Proton::Client.new
-# client.set_log_file_path("./tdlib.log")
-
-# # pp client.send_and_receive({"@type" => "getAuthorizationState"})
-
-# client.connect
-
-
-json = <<-JSON
-{
-  "@type": "updateAuthorizationState",
-  "authorization_state": {
-    "@type": "authorizationStateWaitTdlibParameters"
-  }
-}
-JSON
-
-parsed = Proton::Types::Base.from_json(json)
-pp parsed

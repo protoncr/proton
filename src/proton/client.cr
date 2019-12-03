@@ -40,7 +40,7 @@ module Proton
 
     def connect
       on Types::Update::AuthorizationState do |update|
-        pp update
+
         case update.authorization_state
         when Types::AuthorizationState::WaitTdlibParameters
           puts "WaitTdlibParameters"
@@ -48,8 +48,20 @@ module Proton
         when Types::AuthorizationState::WaitEncryptionKey
           puts "WaitEncryptionKey"
           check_database_encryption_key(Client.settings.encryption_key)
-        else
-          # Do nothing
+        when Types::AuthorizationState::WaitPhoneNumber
+          print "Enter your phone number (with +country code): "
+          phone = STDIN.gets
+          set_authentication_phone_number(phone.to_s)
+        when Types::AuthorizationState::WaitCode
+          print "Please enter the code sent by Telegram: "
+          code = STDIN.gets
+          check_authentication_code(code.to_s)
+        when Types::AuthorizationState::WaitPassword
+          print "Please enter your password: "
+          password = STDIN.gets
+          check_authentication_password(password.to_s)
+        when Types::AuthorizationState::Ready
+
         end
       end
 
@@ -61,7 +73,6 @@ module Proton
 
     def handle_update(update)
       update = Types::Base.from_json(update)
-      puts "Incoming: " + update.to_pretty_json
       if handlers = @event_handlers[update.class]?
         handlers.each do |handler|
           handler.call(update)

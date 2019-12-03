@@ -7,7 +7,6 @@ module Proton
     end
 
     def client_send(client, params)
-      puts "Outgoing: " + params.to_pretty_json
       TDLib.td_json_client_send(client, params.to_json)
     end
 
