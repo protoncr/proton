@@ -25,6 +25,7 @@ def parse_tl_type(type)
       "::Int64"
     else
       "::Int32"
+    end
   elsif type =~ /[dD]ouble/
     "::Float64"
   elsif type =~ /[bB]ytes/ || type =~ /[sS]tring/
@@ -412,7 +413,7 @@ def run
     <<-CRYSTAL
     #{description}
       ##{params_doc}
-      def #{method_name}#{method_params} # : #{return_class}
+      def #{method_name}#{method_params}
         broadcast({"@type"#{" " * (param_max_length - 4)}=> "#{func.class_name}"#{func_params}})
       end
     CRYSTAL

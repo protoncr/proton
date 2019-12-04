@@ -26,4 +26,3 @@ module Proton
     end
   end
 end
-

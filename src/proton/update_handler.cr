@@ -5,9 +5,7 @@ module Proton
 
     getter? disposable : Bool
 
-    getter action : Proc(T, Nil)
-
-    def initialize(*, @extra = nil, @disposable = false, action : T ->)
+    def initialize(*, @extra : String? = nil, @disposable = false, action : T ->)
       @action = action
     end
 
@@ -15,8 +13,8 @@ module Proton
       new(extra: extra, disposable: disposable, action: block)
     end
 
-    def run(update : T)
-      action.call(update)
+    def run(update)
+      @action.call(update.as(T))
     end
 
     def match?(update, extra = nil)

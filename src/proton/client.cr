@@ -1,9 +1,9 @@
 require "uuid"
-require "promise"
 
 require "./types/*"
 require "./client_methods"
 require "./update_handler"
+require "./update_manager"
 
 module Proton
   class Client
@@ -11,33 +11,37 @@ module Proton
 
     DEFAULT_TIMEOUT = 20
 
-    @td_client : Pointer(Void)
-
-    @event_handlers : Hash(Types::Base.class, Array(UpdateHandler(Types::Base)))
-
     getter? running : Bool
 
     property timeout : Int32
 
+    private getter td_client : Pointer(Void)
+
+    private getter update_manager : UpdateManager
+
     def initialize(@timeout = DEFAULT_TIMEOUT)
-      @td_client = API.client_create
-      @event_handlers = {} of Types::Base.class => Array(UpdateHandler(Types::Base))
+      @td_client = td_client = API.client_create
       @running = false
+      @update_manager = UpdateManager.new(td_client)
     end
 
     def on(klass : U.class, &block : U ->) forall U
-      @event_handlers[klass] ||= [] of UpdateHandler(U)
-
-      @event_handlers[klass] << UpdateHandler(U).new(action: block)
+      update_manager << UpdateHandler(U).new(&block)
     end
 
-    def broadcast(query, timeout = 10)
-      extra = Random.new.base64(32)
+    def broadcast(query, timeout = 10) forall U
+      channel = Channel(Types::Base).new
+      extra = Random.new.hex(16)
       query = query.to_h
         .transform_keys(&.to_s)
         .merge({"@extra" => extra})
 
+      @update_manager << UpdateHandler(Types::Base).new(extra: extra, disposable: true) do |update|
+        spawn channel.send(update)
+      end
+
       API.client_send(@td_client, query)
+      channel.receive
     end
 
     def connect
@@ -45,13 +49,11 @@ module Proton
 
         case update.authorization_state
         when Types::AuthorizationState::WaitTdlibParameters
-          puts "WaitTdlibParameters"
           set_tdlib_parameters(Types::TdlibParameters.from_json(Client.settings.to_h.to_json))
         when Types::AuthorizationState::WaitEncryptionKey
-          puts "WaitEncryptionKey"
           check_database_encryption_key(Client.settings.encryption_key)
         when Types::AuthorizationState::WaitPhoneNumber
-          print "Enter your phone number (with +country code): "
+          print "Enter your phone number: "
           phone = STDIN.gets
           set_authentication_phone_number(phone.to_s)
         when Types::AuthorizationState::WaitCode
@@ -62,25 +64,17 @@ module Proton
           print "Please enter your password: "
           password = STDIN.gets
           check_authentication_password(password.to_s)
-        when Types::AuthorizationState::Ready
-
         end
       end
 
-      loop do
-        update = API.client_receive(@td_client, @timeout)
-        handle_update(update) if update
-      end
+      update_manager.run(&->handle_update(Types::Base))
     end
 
-    def handle_update(update)
-      puts "Incoming: " + update
-      update = Types::Base.from_json(update)
-      if handlers = @event_handlers[update.class]?
-        handlers.each do |handler|
-          handler.call(update)
-        end
-      end
+    def handle_update(update : Types::Base)
+      return unless update.is_a?(Types::AuthorizationState::Closed)
+      @alive = false
+      @ready = false
+      API.client_destroy(@td_client)
     end
 
     def set_log_file_path(path)

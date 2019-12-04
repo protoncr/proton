@@ -8,8 +8,8 @@ dependencies:
   habitat:
     github: luckyframework/habitat
     branch: master
-  promise:
-    github: spider-gazelle/promise
+  await_async:
+    github: anykeyh/await_async
     branch: master
   timeout:
     github: hugoabonizio/timeout.cr
