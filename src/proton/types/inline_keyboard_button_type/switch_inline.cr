@@ -11,9 +11,9 @@ module Proton::Types
     property query : ::String
 
     # True, if the inline query should be sent from the current chat
-    property in_current_chat : ::Bool
+    property in_current_chat : ::Bool = false
 
-    def initialize(@query : ::String, @in_current_chat : ::Bool)
+    def initialize(@query : ::String, @in_current_chat : ::Bool = false)
     end
   end
 end

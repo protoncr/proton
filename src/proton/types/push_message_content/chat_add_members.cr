@@ -11,12 +11,12 @@ module Proton::Types
     property member_name : ::String
 
     # True, if the current user was added to the group
-    property is_current_user : ::Bool
+    property is_current_user : ::Bool = false
 
     # True, if the user has returned to the group himself
-    property is_returned : ::Bool
+    property is_returned : ::Bool = false
 
-    def initialize(@member_name : ::String, @is_current_user : ::Bool, @is_returned : ::Bool)
+    def initialize(@member_name : ::String, @is_current_user : ::Bool = false, @is_returned : ::Bool = false)
     end
   end
 end

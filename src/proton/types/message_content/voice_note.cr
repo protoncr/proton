@@ -14,9 +14,9 @@ module Proton::Types
     property caption : Proton::Types::FormattedText
 
     # True, if at least one of the recipients has listened to the voice note
-    property is_listened : ::Bool
+    property is_listened : ::Bool = false
 
-    def initialize(@voice_note : Proton::Types::VoiceNote, @caption : Proton::Types::FormattedText, @is_listened : ::Bool)
+    def initialize(@voice_note : Proton::Types::VoiceNote, @caption : Proton::Types::FormattedText, @is_listened : ::Bool = false)
     end
   end
 end

@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if the location is live
-    property is_live : ::Bool
+    property is_live : ::Bool = false
 
     # True, if the message is a pinned message with the specified content
-    property is_pinned : ::Bool
+    property is_pinned : ::Bool = false
 
-    def initialize(@is_live : ::Bool, @is_pinned : ::Bool)
+    def initialize(@is_live : ::Bool = false, @is_pinned : ::Bool = false)
     end
   end
 end

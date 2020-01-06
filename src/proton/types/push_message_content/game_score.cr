@@ -10,13 +10,13 @@ module Proton::Types
     # New score, 0 for pinned message
     property score : ::Int32
 
-    # True, if the message is a pinned message with the specified content
-    property is_pinned : ::Bool
-
     # Game title, empty for pinned message
     property title : ::String? = nil
 
-    def initialize(@score : ::Int32, @is_pinned : ::Bool, @title : ::String? = nil)
+    # True, if the message is a pinned message with the specified content
+    property is_pinned : ::Bool = false
+
+    def initialize(@score : ::Int32, @title : ::String? = nil, @is_pinned : ::Bool = false)
     end
   end
 end

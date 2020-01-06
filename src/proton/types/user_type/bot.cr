@@ -7,22 +7,22 @@ module Proton::Types
   class UserType::Bot < Types::UserType
     include JSON::Serializable
 
-    # True, if the bot can be invited to basic group and supergroup chats
-    property can_join_groups : ::Bool
-
-    # True, if the bot can read all messages in basic group or supergroup chats and not just those addressed to the bot. In private and channel chats a bot can always read all messages
-    property can_read_all_group_messages : ::Bool
-
-    # True, if the bot supports inline queries
-    property is_inline : ::Bool
-
     # Placeholder for inline queries (displayed on the client input field)
     property inline_query_placeholder : ::String
 
-    # True, if the location of the user should be sent with every inline query to this bot
-    property need_location : ::Bool
+    # True, if the bot can be invited to basic group and supergroup chats
+    property can_join_groups : ::Bool = false
 
-    def initialize(@can_join_groups : ::Bool, @can_read_all_group_messages : ::Bool, @is_inline : ::Bool, @inline_query_placeholder : ::String, @need_location : ::Bool)
+    # True, if the bot can read all messages in basic group or supergroup chats and not just those addressed to the bot. In private and channel chats a bot can always read all messages
+    property can_read_all_group_messages : ::Bool = false
+
+    # True, if the bot supports inline queries
+    property is_inline : ::Bool = false
+
+    # True, if the location of the user should be sent with every inline query to this bot
+    property need_location : ::Bool = false
+
+    def initialize(@inline_query_placeholder : ::String, @can_join_groups : ::Bool = false, @can_read_all_group_messages : ::Bool = false, @is_inline : ::Bool = false, @need_location : ::Bool = false)
     end
   end
 end

@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if the user is a member of the chat
-    property is_member : ::Bool
+    property is_member : ::Bool = false
 
-    def initialize(@is_member : ::Bool)
+    def initialize(@is_member : ::Bool = false)
     end
   end
 end

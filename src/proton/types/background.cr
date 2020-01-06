@@ -11,22 +11,22 @@ module Proton::Types
     # Unique background identifier
     property id : ::String
 
-    # True, if this is one of default backgrounds
-    property is_default : ::Bool
-
-    # True, if the background is dark and is recommended to be used with dark theme
-    property is_dark : ::Bool
-
     # Unique background name
     property name : ::String
 
     # Type of the background
     property type : Proton::Types::BackgroundType
 
+    # True, if this is one of default backgrounds
+    property is_default : ::Bool = false
+
+    # True, if the background is dark and is recommended to be used with dark theme
+    property is_dark : ::Bool = false
+
     # Document with the background; may be null. Null only for solid backgrounds
     property document : Proton::Types::Document? = nil
 
-    def initialize(@id : ::String, @is_default : ::Bool, @is_dark : ::Bool, @name : ::String, @type : Proton::Types::BackgroundType, @document : Proton::Types::Document? = nil)
+    def initialize(@id : ::String, @name : ::String, @type : Proton::Types::BackgroundType, @is_default : ::Bool = false, @is_dark : ::Bool = false, @document : Proton::Types::Document? = nil)
     end
   end
 end

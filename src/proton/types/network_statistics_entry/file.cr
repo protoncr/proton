@@ -14,12 +14,12 @@ module Proton::Types
     property network_type : Proton::Types::NetworkType
 
     # Total number of bytes sent
-    property sent_bytes : ::Int32
+    property sent_bytes : ::Int64
 
     # Total number of bytes received
-    property received_bytes : ::Int32
+    property received_bytes : ::Int64
 
-    def initialize(@file_type : Proton::Types::FileType, @network_type : Proton::Types::NetworkType, @sent_bytes : ::Int32, @received_bytes : ::Int32)
+    def initialize(@file_type : Proton::Types::FileType, @network_type : Proton::Types::NetworkType, @sent_bytes : ::Int64, @received_bytes : ::Int64)
     end
   end
 end

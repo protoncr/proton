@@ -12,12 +12,6 @@ module Proton::Types
     # Session identifier
     property id : ::String
 
-    # True, if this session is the current session
-    property is_current : ::Bool
-
-    # True, if a password is needed to complete authorization of the session
-    property is_password_pending : ::Bool
-
     # Telegram API identifier, as provided by the application
     property api_id : ::Int32
 
@@ -26,9 +20,6 @@ module Proton::Types
 
     # The version of the application, as provided by the application
     property application_version : ::String
-
-    # True, if the application is an official application or uses the api_id of an official application
-    property is_official_application : ::Bool
 
     # Model of the device the application has been run or is running on, as provided by the application
     property device_model : ::String
@@ -54,7 +45,16 @@ module Proton::Types
     # Region code from which the session was created, based on the IP address
     property region : ::String
 
-    def initialize(@id : ::String, @is_current : ::Bool, @is_password_pending : ::Bool, @api_id : ::Int32, @application_name : ::String, @application_version : ::String, @is_official_application : ::Bool, @device_model : ::String, @platform : ::String, @system_version : ::String, @log_in_date : ::Int32, @last_active_date : ::Int32, @ip : ::String, @country : ::String, @region : ::String)
+    # True, if this session is the current session
+    property is_current : ::Bool = false
+
+    # True, if a password is needed to complete authorization of the session
+    property is_password_pending : ::Bool = false
+
+    # True, if the application is an official application or uses the api_id of an official application
+    property is_official_application : ::Bool = false
+
+    def initialize(@id : ::String, @api_id : ::Int32, @application_name : ::String, @application_version : ::String, @device_model : ::String, @platform : ::String, @system_version : ::String, @log_in_date : ::Int32, @last_active_date : ::Int32, @ip : ::String, @country : ::String, @region : ::String, @is_current : ::Bool = false, @is_password_pending : ::Bool = false, @is_official_application : ::Bool = false)
     end
   end
 end

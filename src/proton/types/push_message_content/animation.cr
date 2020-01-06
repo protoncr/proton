@@ -10,13 +10,13 @@ module Proton::Types
     # Animation caption
     property caption : ::String
 
-    # True, if the message is a pinned message with the specified content
-    property is_pinned : ::Bool
-
     # Message content; may be null
     property animation : Proton::Types::Animation? = nil
 
-    def initialize(@caption : ::String, @is_pinned : ::Bool, @animation : Proton::Types::Animation? = nil)
+    # True, if the message is a pinned message with the specified content
+    property is_pinned : ::Bool = false
+
+    def initialize(@caption : ::String, @animation : Proton::Types::Animation? = nil, @is_pinned : ::Bool = false)
     end
   end
 end

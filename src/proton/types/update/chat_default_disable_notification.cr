@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # The new default_disable_notification value
-    property default_disable_notification : ::Bool
+    property default_disable_notification : ::Bool = false
 
-    def initialize(@chat_id : ::Int32, @default_disable_notification : ::Bool)
+    def initialize(@chat_id : ::Int64, @default_disable_notification : ::Bool = false)
     end
   end
 end

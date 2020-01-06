@@ -19,25 +19,12 @@ module Proton
       add_handler(handler)
     end
 
-    def run(callback)
-      spawn do
-        loop do
-          handle_update(callback)
-        end
-      end
-      sleep
-    end
-
-    def run(&block : Types::Base ->)
-      run(block)
-    end
-
-    private def handle_update(callback)
+    private def handle_update(callback : Proc(Types::Base, Nil)? = nil)
       update = API.client_receive(@td_client, TIMEOUT)
 
       unless update.nil?
         json = JSON.parse(update).as_h
-        puts "Incoming: " + json.to_pretty_json
+        # puts "Incoming: " + json.to_pretty_json
         extra = json.delete("@extra").try &.as_s
         update = Types::Base.from_json(update)
 
@@ -46,6 +33,10 @@ module Proton
 
         match_handlers!(update, extra).each { |h| h.run(update) }
       end
+    end
+
+    def handle_update(&block : Types::Base ->)
+      handle_update(block)
     end
 
     private def match_handlers!(update : U, extra : String?) forall U

@@ -8,13 +8,13 @@ module Proton::Types
   class TemporaryPasswordState < Types::Base
     include JSON::Serializable
 
-    # True, if a temporary password is available
-    property has_password : ::Bool
-
     # Time left before the temporary password expires, in seconds
     property valid_for : ::Int32
 
-    def initialize(@has_password : ::Bool, @valid_for : ::Int32)
+    # True, if a temporary password is available
+    property has_password : ::Bool = false
+
+    def initialize(@valid_for : ::Int32, @has_password : ::Bool = false)
     end
   end
 end

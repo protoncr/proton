@@ -15,9 +15,9 @@ module Proton::Types
     property min_user_age : ::Int32
 
     # True, if a blocking popup with terms of service must be shown to the user
-    property show_popup : ::Bool
+    property show_popup : ::Bool = false
 
-    def initialize(@text : Proton::Types::FormattedText, @min_user_age : ::Int32, @show_popup : ::Bool)
+    def initialize(@text : Proton::Types::FormattedText, @min_user_age : ::Int32, @show_popup : ::Bool = false)
     end
   end
 end

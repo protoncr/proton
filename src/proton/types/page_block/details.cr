@@ -14,9 +14,9 @@ module Proton::Types
     property page_blocks : ::Array(Proton::Types::PageBlock)
 
     # True, if the block is open by default
-    property is_open : ::Bool
+    property is_open : ::Bool = false
 
-    def initialize(@header : Proton::Types::RichText, @page_blocks : ::Array(Proton::Types::PageBlock), @is_open : ::Bool)
+    def initialize(@header : Proton::Types::RichText, @page_blocks : ::Array(Proton::Types::PageBlock), @is_open : ::Bool = false)
     end
   end
 end

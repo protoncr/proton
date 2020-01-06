@@ -9,9 +9,9 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if a prompt with the "Report spam" action should be shown to the user
-    property can_report_spam : ::Bool
+    property can_report_spam : ::Bool = false
 
-    def initialize(@can_report_spam : ::Bool)
+    def initialize(@can_report_spam : ::Bool = false)
     end
   end
 end

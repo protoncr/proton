@@ -8,13 +8,13 @@ module Proton::Types
   class PaymentResult < Types::Base
     include JSON::Serializable
 
-    # True, if the payment request was successful; otherwise the verification_url will be not empty
-    property success : ::Bool
-
     # URL for additional payment credentials verification
     property verification_url : ::String
 
-    def initialize(@success : ::Bool, @verification_url : ::String)
+    # True, if the payment request was successful; otherwise the verification_url will be not empty
+    property success : ::Bool = false
+
+    def initialize(@verification_url : ::String, @success : ::Bool = false)
     end
   end
 end

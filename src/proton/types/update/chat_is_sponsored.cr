@@ -8,15 +8,15 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int32
-
-    # New value of is_sponsored
-    property is_sponsored : ::Bool
+    property chat_id : ::Int64
 
     # New value of chat order
     property order : ::String
 
-    def initialize(@chat_id : ::Int32, @is_sponsored : ::Bool, @order : ::String)
+    # New value of is_sponsored
+    property is_sponsored : ::Bool = false
+
+    def initialize(@chat_id : ::Int64, @order : ::String, @is_sponsored : ::Bool = false)
     end
   end
 end

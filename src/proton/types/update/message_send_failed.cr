@@ -13,7 +13,7 @@ module Proton::Types
     property message : Proton::Types::Message
 
     # The previous temporary message identifier
-    property old_message_id : ::Int32
+    property old_message_id : ::Int64
 
     # An error code
     property error_code : ::Int32
@@ -21,7 +21,7 @@ module Proton::Types
     # Error message
     property error_message : ::String
 
-    def initialize(@message : Proton::Types::Message, @old_message_id : ::Int32, @error_code : ::Int32, @error_message : ::String)
+    def initialize(@message : Proton::Types::Message, @old_message_id : ::Int64, @error_code : ::Int32, @error_message : ::String)
     end
   end
 end

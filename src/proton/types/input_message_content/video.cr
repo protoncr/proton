@@ -22,9 +22,6 @@ module Proton::Types
     # Video height
     property height : ::Int32
 
-    # True, if the video should be tried to be streamed
-    property supports_streaming : ::Bool
-
     # Video caption; 0-GetOption("message_caption_length_max") characters
     property caption : Proton::Types::FormattedText
 
@@ -34,7 +31,10 @@ module Proton::Types
     # Video thumbnail, if available
     property thumbnail : Proton::Types::InputThumbnail? = nil
 
-    def initialize(@video : Proton::Types::InputFile, @added_sticker_file_ids : ::Array(::Int32), @duration : ::Int32, @width : ::Int32, @height : ::Int32, @supports_streaming : ::Bool, @caption : Proton::Types::FormattedText, @ttl : ::Int32, @thumbnail : Proton::Types::InputThumbnail? = nil)
+    # True, if the video should be tried to be streamed
+    property supports_streaming : ::Bool = false
+
+    def initialize(@video : Proton::Types::InputFile, @added_sticker_file_ids : ::Array(::Int32), @duration : ::Int32, @width : ::Int32, @height : ::Int32, @caption : Proton::Types::FormattedText, @ttl : ::Int32, @thumbnail : Proton::Types::InputThumbnail? = nil, @supports_streaming : ::Bool = false)
     end
   end
 end

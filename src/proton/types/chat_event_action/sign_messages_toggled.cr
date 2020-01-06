@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # New value of sign_messages
-    property sign_messages : ::Bool
+    property sign_messages : ::Bool = false
 
-    def initialize(@sign_messages : ::Bool)
+    def initialize(@sign_messages : ::Bool = false)
     end
   end
 end

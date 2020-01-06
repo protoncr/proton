@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # The value
-    property value : ::Bool
+    property value : ::Bool = false
 
-    def initialize(@value : ::Bool)
+    def initialize(@value : ::Bool = false)
     end
   end
 end

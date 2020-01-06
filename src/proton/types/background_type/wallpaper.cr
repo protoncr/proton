@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if the wallpaper must be downscaled to fit in 450x450 square and then box-blurred with radius 12
-    property is_blurred : ::Bool
+    property is_blurred : ::Bool = false
 
     # True, if the background needs to be slightly moved when device is rotated
-    property is_moving : ::Bool
+    property is_moving : ::Bool = false
 
-    def initialize(@is_blurred : ::Bool, @is_moving : ::Bool)
+    def initialize(@is_blurred : ::Bool = false, @is_moving : ::Bool = false)
     end
   end
 end

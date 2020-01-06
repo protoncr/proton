@@ -17,24 +17,6 @@ module Proton::Types
     # Name of the sticker set
     property name : ::String
 
-    # True, if the sticker set has been installed by the current user
-    property is_installed : ::Bool
-
-    # True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
-    property is_archived : ::Bool
-
-    # True, if the sticker set is official
-    property is_official : ::Bool
-
-    # True, is the stickers in the set are animated
-    property is_animated : ::Bool
-
-    # True, if the stickers in the set are masks
-    property is_masks : ::Bool
-
-    # True for already viewed trending sticker sets
-    property is_viewed : ::Bool
-
     # List of stickers in this set
     property stickers : ::Array(Proton::Types::Sticker)
 
@@ -44,7 +26,25 @@ module Proton::Types
     # Sticker set thumbnail in WEBP format with width and height 100; may be null. The file can be downloaded only before the thumbnail is changed
     property thumbnail : Proton::Types::PhotoSize? = nil
 
-    def initialize(@id : ::String, @title : ::String, @name : ::String, @is_installed : ::Bool, @is_archived : ::Bool, @is_official : ::Bool, @is_animated : ::Bool, @is_masks : ::Bool, @is_viewed : ::Bool, @stickers : ::Array(Proton::Types::Sticker), @emojis : ::Array(Proton::Types::Emojis), @thumbnail : Proton::Types::PhotoSize? = nil)
+    # True, if the sticker set has been installed by the current user
+    property is_installed : ::Bool = false
+
+    # True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
+    property is_archived : ::Bool = false
+
+    # True, if the sticker set is official
+    property is_official : ::Bool = false
+
+    # True, is the stickers in the set are animated
+    property is_animated : ::Bool = false
+
+    # True, if the stickers in the set are masks
+    property is_masks : ::Bool = false
+
+    # True for already viewed trending sticker sets
+    property is_viewed : ::Bool = false
+
+    def initialize(@id : ::String, @title : ::String, @name : ::String, @stickers : ::Array(Proton::Types::Sticker), @emojis : ::Array(Proton::Types::Emojis), @thumbnail : Proton::Types::PhotoSize? = nil, @is_installed : ::Bool = false, @is_archived : ::Bool = false, @is_official : ::Bool = false, @is_animated : ::Bool = false, @is_masks : ::Bool = false, @is_viewed : ::Bool = false)
     end
   end
 end

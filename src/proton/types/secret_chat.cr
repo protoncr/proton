@@ -17,9 +17,6 @@ module Proton::Types
     # State of the secret chat
     property state : Proton::Types::SecretChatState
 
-    # True, if the chat was created by the current user; otherwise false
-    property is_outbound : ::Bool
-
     # Current message Time To Live setting (self-destruct timer) for the chat, in seconds
     property ttl : ::Int32
 
@@ -29,7 +26,10 @@ module Proton::Types
     # Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66
     property layer : ::Int32
 
-    def initialize(@id : ::Int32, @user_id : ::Int32, @state : Proton::Types::SecretChatState, @is_outbound : ::Bool, @ttl : ::Int32, @key_hash : ::String, @layer : ::Int32)
+    # True, if the chat was created by the current user; otherwise false
+    property is_outbound : ::Bool = false
+
+    def initialize(@id : ::Int32, @user_id : ::Int32, @state : Proton::Types::SecretChatState, @ttl : ::Int32, @key_hash : ::String, @layer : ::Int32, @is_outbound : ::Bool = false)
     end
   end
 end

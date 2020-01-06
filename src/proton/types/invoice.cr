@@ -15,30 +15,30 @@ module Proton::Types
     property price_parts : ::Array(Proton::Types::LabeledPricePart)
 
     # True, if the payment is a test payment
-    property is_test : ::Bool
+    property is_test : ::Bool = false
 
     # True, if the user's name is needed for payment
-    property need_name : ::Bool
+    property need_name : ::Bool = false
 
     # True, if the user's phone number is needed for payment
-    property need_phone_number : ::Bool
+    property need_phone_number : ::Bool = false
 
     # True, if the user's email address is needed for payment
-    property need_email_address : ::Bool
+    property need_email_address : ::Bool = false
 
     # True, if the user's shipping address is needed for payment
-    property need_shipping_address : ::Bool
+    property need_shipping_address : ::Bool = false
 
     # True, if the user's phone number will be sent to the provider
-    property send_phone_number_to_provider : ::Bool
+    property send_phone_number_to_provider : ::Bool = false
 
     # True, if the user's email address will be sent to the provider
-    property send_email_address_to_provider : ::Bool
+    property send_email_address_to_provider : ::Bool = false
 
     # True, if the total price depends on the shipping method
-    property is_flexible : ::Bool
+    property is_flexible : ::Bool = false
 
-    def initialize(@currency : ::String, @price_parts : ::Array(Proton::Types::LabeledPricePart), @is_test : ::Bool, @need_name : ::Bool, @need_phone_number : ::Bool, @need_email_address : ::Bool, @need_shipping_address : ::Bool, @send_phone_number_to_provider : ::Bool, @send_email_address_to_provider : ::Bool, @is_flexible : ::Bool)
+    def initialize(@currency : ::String, @price_parts : ::Array(Proton::Types::LabeledPricePart), @is_test : ::Bool = false, @need_name : ::Bool = false, @need_phone_number : ::Bool = false, @need_email_address : ::Bool = false, @need_shipping_address : ::Bool = false, @send_phone_number_to_provider : ::Bool = false, @send_email_address_to_provider : ::Bool = false, @is_flexible : ::Bool = false)
     end
   end
 end

@@ -8,16 +8,16 @@ module Proton::Types
   class Photo < Types::Base
     include JSON::Serializable
 
-    # True, if stickers were added to the photo
-    property has_stickers : ::Bool
-
     # Available variants of the photo, in different sizes
     property sizes : ::Array(Proton::Types::PhotoSize)
+
+    # True, if stickers were added to the photo
+    property has_stickers : ::Bool = false
 
     # Photo minithumbnail; may be null
     property minithumbnail : Proton::Types::Minithumbnail? = nil
 
-    def initialize(@has_stickers : ::Bool, @sizes : ::Array(Proton::Types::PhotoSize), @minithumbnail : Proton::Types::Minithumbnail? = nil)
+    def initialize(@sizes : ::Array(Proton::Types::PhotoSize), @has_stickers : ::Bool = false, @minithumbnail : Proton::Types::Minithumbnail? = nil)
     end
   end
 end

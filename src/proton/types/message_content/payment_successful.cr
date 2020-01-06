@@ -8,15 +8,15 @@ module Proton::Types
     include JSON::Serializable
 
     # Identifier of the message with the corresponding invoice; can be an identifier of a deleted message
-    property invoice_message_id : ::Int32
+    property invoice_message_id : ::Int64
 
     # Currency for the price of the product
     property currency : ::String
 
     # Total price for the product, in the minimal quantity of the currency
-    property total_amount : ::Int32
+    property total_amount : ::Int64
 
-    def initialize(@invoice_message_id : ::Int32, @currency : ::String, @total_amount : ::Int32)
+    def initialize(@invoice_message_id : ::Int64, @currency : ::String, @total_amount : ::Int64)
     end
   end
 end

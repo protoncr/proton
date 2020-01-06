@@ -11,12 +11,12 @@ module Proton::Types
     property total_count : ::Int32
 
     # True, if the album has at least one photo
-    property has_photos : ::Bool
+    property has_photos : ::Bool = false
 
     # True, if the album has at least one video
-    property has_videos : ::Bool
+    property has_videos : ::Bool = false
 
-    def initialize(@total_count : ::Int32, @has_photos : ::Bool, @has_videos : ::Bool)
+    def initialize(@total_count : ::Int32, @has_photos : ::Bool = false, @has_videos : ::Bool = false)
     end
   end
 end

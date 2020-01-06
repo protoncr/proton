@@ -13,19 +13,19 @@ module Proton::Types
     # URL of the result, if it exists
     property url : ::String
 
-    # True, if the URL must be not shown
-    property hide_url : ::Bool
-
     # Title of the result
     property title : ::String
 
     # A short description of the result
     property description : ::String
 
+    # True, if the URL must be not shown
+    property hide_url : ::Bool = false
+
     # Result thumbnail; may be null
     property thumbnail : Proton::Types::PhotoSize? = nil
 
-    def initialize(@id : ::String, @url : ::String, @hide_url : ::Bool, @title : ::String, @description : ::String, @thumbnail : Proton::Types::PhotoSize? = nil)
+    def initialize(@id : ::String, @url : ::String, @title : ::String, @description : ::String, @hide_url : ::Bool = false, @thumbnail : Proton::Types::PhotoSize? = nil)
     end
   end
 end

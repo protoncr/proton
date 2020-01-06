@@ -11,12 +11,12 @@ module Proton::Types
     property reason : Proton::Types::CallDiscardReason
 
     # True, if the call rating should be sent to the server
-    property need_rating : ::Bool
+    property need_rating : ::Bool = false
 
     # True, if the call debug information should be sent to the server
-    property need_debug_information : ::Bool
+    property need_debug_information : ::Bool = false
 
-    def initialize(@reason : Proton::Types::CallDiscardReason, @need_rating : ::Bool, @need_debug_information : ::Bool)
+    def initialize(@reason : Proton::Types::CallDiscardReason, @need_rating : ::Bool = false, @need_debug_information : ::Bool = false)
     end
   end
 end

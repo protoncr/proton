@@ -1,4 +1,5 @@
 require "uuid"
+require "promise"
 
 require "./types/*"
 require "./client_methods"
@@ -11,7 +12,7 @@ module Proton
 
     DEFAULT_TIMEOUT = 20
 
-    getter? running : Bool
+    getter? alive : Bool
 
     property timeout : Int32
 
@@ -19,34 +20,59 @@ module Proton
 
     private getter update_manager : UpdateManager
 
-    def initialize(@timeout = DEFAULT_TIMEOUT)
+    def self.new(timeout = DEFAULT_TIMEOUT)
+      client = new(timeout, nil)
+      client.connect
+    end
+
+    def self.new(timeout = DEFAULT_TIMEOUT, &block : Client ->)
+      client = new(timeout, nil)
+      client.connect(&block)
+    end
+
+    private def initialize(@timeout, dummy)
       @td_client = td_client = API.client_create
-      @running = false
+      @alive = false
       @update_manager = UpdateManager.new(td_client)
+      set_log_file_path("./tdlib.log")
     end
 
     def on(klass : U.class, &block : U ->) forall U
       update_manager << UpdateHandler(U).new(&block)
     end
 
-    def broadcast(query, timeout = 10) forall U
-      channel = Channel(Types::Base).new
-      extra = Random.new.hex(16)
-      query = query.to_h
-        .transform_keys(&.to_s)
-        .merge({"@extra" => extra})
+    def broadcast(return_type : U.class, query) : Concurrent::Future(U) forall U
+      fut = Concurrent::Future(U).new do
+        channel = Channel(U).new
+        extra = Random.new.hex(16)
+        query = query.to_h
+          .transform_keys(&.to_s)
+          .merge({"@extra" => extra})
 
-      @update_manager << UpdateHandler(Types::Base).new(extra: extra, disposable: true) do |update|
-        spawn channel.send(update)
+        @update_manager << UpdateHandler(U).new(extra: extra, disposable: true) do |update|
+          channel.send(update)
+        end
+
+        API.client_send(@td_client, query)
+        channel.receive
       end
 
-      API.client_send(@td_client, query)
-      channel.receive
+      # spawn do
+      #   start_time = Time.local
+      #   loop do
+      #     time = Time.local
+      #     if (time - start_time) > @timeout.seconds
+      #       fut.cancel("Request timed out after #{(time - start_time).seconds} seconds")
+      #     end
+      #     sleep 10.milliseconds
+      #   end
+      # end
+
+      fut
     end
 
-    def connect
+    def connect(&block : Client ->)
       on Types::Update::AuthorizationState do |update|
-
         case update.authorization_state
         when Types::AuthorizationState::WaitTdlibParameters
           set_tdlib_parameters(Types::TdlibParameters.from_json(Client.settings.to_h.to_json))
@@ -64,17 +90,40 @@ module Proton
           print "Please enter your password: "
           password = STDIN.gets
           check_authentication_password(password.to_s)
+        when Types::AuthorizationState::Ready
+          block.call(self)
         end
       end
 
-      update_manager.run(&->handle_update(Types::Base))
+      return self
+    end
+
+    def connect
+      connect {}
+    end
+
+    def run
+      @alive = true
+      puts "Bot is running"
+      spawn do
+        while alive?
+          update_manager.handle_update(&->handle_update(Types::Base))
+          sleep 10.milliseconds
+        end
+      end
+      sleep
+    end
+
+    def stop
+      self.close
     end
 
     def handle_update(update : Types::Base)
       return unless update.is_a?(Types::AuthorizationState::Closed)
+      API.client_destroy(@td_client)
       @alive = false
       @ready = false
-      API.client_destroy(@td_client)
+      exit(0)
     end
 
     def set_log_file_path(path)

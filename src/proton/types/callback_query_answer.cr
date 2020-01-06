@@ -11,13 +11,13 @@ module Proton::Types
     # Text of the answer
     property text : ::String
 
-    # True, if an alert should be shown to the user instead of a toast notification
-    property show_alert : ::Bool
-
     # URL to be opened
     property url : ::String
 
-    def initialize(@text : ::String, @show_alert : ::Bool, @url : ::String)
+    # True, if an alert should be shown to the user instead of a toast notification
+    property show_alert : ::Bool = false
+
+    def initialize(@text : ::String, @url : ::String, @show_alert : ::Bool = false)
     end
   end
 end

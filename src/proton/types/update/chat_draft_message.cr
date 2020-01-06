@@ -10,7 +10,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # New value of the chat order
     property order : ::String
@@ -18,7 +18,7 @@ module Proton::Types
     # The new draft message; may be null
     property draft_message : Proton::Types::DraftMessage? = nil
 
-    def initialize(@chat_id : ::Int32, @order : ::String, @draft_message : Proton::Types::DraftMessage? = nil)
+    def initialize(@chat_id : ::Int64, @order : ::String, @draft_message : Proton::Types::DraftMessage? = nil)
     end
   end
 end

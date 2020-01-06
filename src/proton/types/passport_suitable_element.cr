@@ -12,15 +12,15 @@ module Proton::Types
     property type : Proton::Types::PassportElementType
 
     # True, if a selfie is required with the identity document
-    property is_selfie_required : ::Bool
+    property is_selfie_required : ::Bool = false
 
     # True, if a certified English translation is required with the document
-    property is_translation_required : ::Bool
+    property is_translation_required : ::Bool = false
 
     # True, if personal details must include the user's name in the language of their country of residence
-    property is_native_name_required : ::Bool
+    property is_native_name_required : ::Bool = false
 
-    def initialize(@type : Proton::Types::PassportElementType, @is_selfie_required : ::Bool, @is_translation_required : ::Bool, @is_native_name_required : ::Bool)
+    def initialize(@type : Proton::Types::PassportElementType, @is_selfie_required : ::Bool = false, @is_translation_required : ::Bool = false, @is_native_name_required : ::Bool = false)
     end
   end
 end

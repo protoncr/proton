@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # New value of can_invite_users permission
-    property can_invite_users : ::Bool
+    property can_invite_users : ::Bool = false
 
-    def initialize(@can_invite_users : ::Bool)
+    def initialize(@can_invite_users : ::Bool = false)
     end
   end
 end

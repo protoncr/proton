@@ -10,9 +10,9 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if the keyboard is removed only for the mentioned users or the target user of a reply
-    property is_personal : ::Bool
+    property is_personal : ::Bool = false
 
-    def initialize(@is_personal : ::Bool)
+    def initialize(@is_personal : ::Bool = false)
     end
   end
 end

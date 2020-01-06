@@ -20,13 +20,13 @@ module Proton::Types
     # Point in time (Unix timestamp) when the proxy was last used; 0 if never
     property last_used_date : ::Int32
 
-    # True, if the proxy is enabled now
-    property is_enabled : ::Bool
-
     # Type of the proxy
     property type : Proton::Types::ProxyType
 
-    def initialize(@id : ::Int32, @server : ::String, @port : ::Int32, @last_used_date : ::Int32, @is_enabled : ::Bool, @type : Proton::Types::ProxyType)
+    # True, if the proxy is enabled now
+    property is_enabled : ::Bool = false
+
+    def initialize(@id : ::Int32, @server : ::String, @port : ::Int32, @last_used_date : ::Int32, @type : Proton::Types::ProxyType, @is_enabled : ::Bool = false)
     end
   end
 end

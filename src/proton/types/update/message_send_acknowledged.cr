@@ -12,12 +12,12 @@ module Proton::Types
     include JSON::Serializable
 
     # The chat identifier of the sent message
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # A temporary message identifier
-    property message_id : ::Int32
+    property message_id : ::Int64
 
-    def initialize(@chat_id : ::Int32, @message_id : ::Int32)
+    def initialize(@chat_id : ::Int64, @message_id : ::Int64)
     end
   end
 end

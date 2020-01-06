@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # New value of is_marked_as_unread
-    property is_marked_as_unread : ::Bool
+    property is_marked_as_unread : ::Bool = false
 
-    def initialize(@chat_id : ::Int32, @is_marked_as_unread : ::Bool)
+    def initialize(@chat_id : ::Int64, @is_marked_as_unread : ::Bool = false)
     end
   end
 end

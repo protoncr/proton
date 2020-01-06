@@ -14,9 +14,9 @@ module Proton::Types
     property caption : Proton::Types::FormattedText
 
     # True, if the photo must be blurred and must be shown only while tapped
-    property is_secret : ::Bool
+    property is_secret : ::Bool = false
 
-    def initialize(@photo : Proton::Types::Photo, @caption : Proton::Types::FormattedText, @is_secret : ::Bool)
+    def initialize(@photo : Proton::Types::Photo, @caption : Proton::Types::FormattedText, @is_secret : ::Bool = false)
     end
   end
 end

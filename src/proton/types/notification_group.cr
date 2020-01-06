@@ -15,7 +15,7 @@ module Proton::Types
     property type : Proton::Types::NotificationGroupType
 
     # Identifier of a chat to which all notifications in the group belong
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # Total number of active notifications in the group
     property total_count : ::Int32
@@ -23,7 +23,7 @@ module Proton::Types
     # The list of active notifications
     property notifications : ::Array(Proton::Types::Notification)
 
-    def initialize(@id : ::Int32, @type : Proton::Types::NotificationGroupType, @chat_id : ::Int32, @total_count : ::Int32, @notifications : ::Array(Proton::Types::Notification))
+    def initialize(@id : ::Int32, @type : Proton::Types::NotificationGroupType, @chat_id : ::Int64, @total_count : ::Int32, @notifications : ::Array(Proton::Types::Notification))
     end
   end
 end

@@ -9,9 +9,9 @@ module Proton::Types
     include JSON::Serializable
 
     # List of chat identifiers
-    property chat_ids : ::Array(::Int32)
+    property chat_ids : ::Array(::Int64)
 
-    def initialize(@chat_ids : ::Array(::Int32))
+    def initialize(@chat_ids : ::Array(::Int64))
     end
   end
 end

@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # The new identifier of the pinned message; 0 if there is no pinned message in the chat
-    property pinned_message_id : ::Int32
+    property pinned_message_id : ::Int64
 
-    def initialize(@chat_id : ::Int32, @pinned_message_id : ::Int32)
+    def initialize(@chat_id : ::Int64, @pinned_message_id : ::Int64)
     end
   end
 end

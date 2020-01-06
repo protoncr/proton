@@ -7,13 +7,13 @@ module Proton::Types
   class Update::InstalledStickerSets < Types::Update
     include JSON::Serializable
 
-    # True, if the list of installed mask sticker sets was updated
-    property is_masks : ::Bool
-
     # The new list of installed ordinary sticker sets
     property sticker_set_ids : ::Array(::String)
 
-    def initialize(@is_masks : ::Bool, @sticker_set_ids : ::Array(::String))
+    # True, if the list of installed mask sticker sets was updated
+    property is_masks : ::Bool = false
+
+    def initialize(@sticker_set_ids : ::Array(::String), @is_masks : ::Bool = false)
     end
   end
 end

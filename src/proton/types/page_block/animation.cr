@@ -10,13 +10,13 @@ module Proton::Types
     # Animation caption
     property caption : Proton::Types::PageBlockCaption
 
-    # True, if the animation should be played automatically
-    property need_autoplay : ::Bool
-
     # Animation file; may be null
     property animation : Proton::Types::Animation? = nil
 
-    def initialize(@caption : Proton::Types::PageBlockCaption, @need_autoplay : ::Bool, @animation : Proton::Types::Animation? = nil)
+    # True, if the animation should be played automatically
+    property need_autoplay : ::Bool = false
+
+    def initialize(@caption : Proton::Types::PageBlockCaption, @animation : Proton::Types::Animation? = nil, @need_autoplay : ::Bool = false)
     end
   end
 end

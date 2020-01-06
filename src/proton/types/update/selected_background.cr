@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if background for dark theme has changed
-    property for_dark_theme : ::Bool
+    property for_dark_theme : ::Bool = false
 
     # The new selected background; may be null
     property background : Proton::Types::Background? = nil
 
-    def initialize(@for_dark_theme : ::Bool, @background : Proton::Types::Background? = nil)
+    def initialize(@for_dark_theme : ::Bool = false, @background : Proton::Types::Background? = nil)
     end
   end
 end

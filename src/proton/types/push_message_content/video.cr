@@ -10,16 +10,16 @@ module Proton::Types
     # Video caption
     property caption : ::String
 
-    # True, if the video is secret
-    property is_secret : ::Bool
-
-    # True, if the message is a pinned message with the specified content
-    property is_pinned : ::Bool
-
     # Message content; may be null
     property video : Proton::Types::Video? = nil
 
-    def initialize(@caption : ::String, @is_secret : ::Bool, @is_pinned : ::Bool, @video : Proton::Types::Video? = nil)
+    # True, if the video is secret
+    property is_secret : ::Bool = false
+
+    # True, if the message is a pinned message with the specified content
+    property is_pinned : ::Bool = false
+
+    def initialize(@caption : ::String, @video : Proton::Types::Video? = nil, @is_secret : ::Bool = false, @is_pinned : ::Bool = false)
     end
   end
 end

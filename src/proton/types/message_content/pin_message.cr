@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # Identifier of the pinned message, can be an identifier of a deleted message or 0
-    property message_id : ::Int32
+    property message_id : ::Int64
 
-    def initialize(@message_id : ::Int32)
+    def initialize(@message_id : ::Int64)
     end
   end
 end

@@ -14,12 +14,12 @@ module Proton::Types
     property cells : ::Array(::Array(Proton::Types::PageBlockTableCell))
 
     # True, if the table is bordered
-    property is_bordered : ::Bool
+    property is_bordered : ::Bool = false
 
     # True, if the table is striped
-    property is_striped : ::Bool
+    property is_striped : ::Bool = false
 
-    def initialize(@caption : Proton::Types::RichText, @cells : ::Array(::Array(Proton::Types::PageBlockTableCell)), @is_bordered : ::Bool, @is_striped : ::Bool)
+    def initialize(@caption : Proton::Types::RichText, @cells : ::Array(::Array(Proton::Types::PageBlockTableCell)), @is_bordered : ::Bool = false, @is_striped : ::Bool = false)
     end
   end
 end

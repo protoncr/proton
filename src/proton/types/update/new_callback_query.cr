@@ -14,10 +14,10 @@ module Proton::Types
     property sender_user_id : ::Int32
 
     # Identifier of the chat, in which the query was sent
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # Identifier of the message, from which the query originated
-    property message_id : ::Int32
+    property message_id : ::Int64
 
     # Identifier that uniquely corresponds to the chat to which the message was sent
     property chat_instance : ::String
@@ -25,7 +25,7 @@ module Proton::Types
     # Query payload
     property payload : Proton::Types::CallbackQueryPayload
 
-    def initialize(@id : ::String, @sender_user_id : ::Int32, @chat_id : ::Int32, @message_id : ::Int32, @chat_instance : ::String, @payload : Proton::Types::CallbackQueryPayload)
+    def initialize(@id : ::String, @sender_user_id : ::Int32, @chat_id : ::Int64, @message_id : ::Int64, @chat_instance : ::String, @payload : Proton::Types::CallbackQueryPayload)
     end
   end
 end

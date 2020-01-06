@@ -14,13 +14,13 @@ module Proton::Types
     # Peer user identifier
     property user_id : ::Int32
 
-    # True, if the call is outgoing
-    property is_outgoing : ::Bool
-
     # Call state
     property state : Proton::Types::CallState
 
-    def initialize(@id : ::Int32, @user_id : ::Int32, @is_outgoing : ::Bool, @state : Proton::Types::CallState)
+    # True, if the call is outgoing
+    property is_outgoing : ::Bool = false
+
+    def initialize(@id : ::Int32, @user_id : ::Int32, @state : Proton::Types::CallState, @is_outgoing : ::Bool = false)
     end
   end
 end

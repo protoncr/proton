@@ -12,9 +12,9 @@ module Proton::Types
     property supergroup_id : ::Int32
 
     # True, if the supergroup is a channel
-    property is_channel : ::Bool
+    property is_channel : ::Bool = false
 
-    def initialize(@supergroup_id : ::Int32, @is_channel : ::Bool)
+    def initialize(@supergroup_id : ::Int32, @is_channel : ::Bool = false)
     end
   end
 end

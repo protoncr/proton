@@ -14,9 +14,9 @@ module Proton::Types
     property caption : Proton::Types::FormattedText
 
     # True, if the video thumbnail must be blurred and the video must be shown only while tapped
-    property is_secret : ::Bool
+    property is_secret : ::Bool = false
 
-    def initialize(@video : Proton::Types::Video, @caption : Proton::Types::FormattedText, @is_secret : ::Bool)
+    def initialize(@video : Proton::Types::Video, @caption : Proton::Types::FormattedText, @is_secret : ::Bool = false)
     end
   end
 end

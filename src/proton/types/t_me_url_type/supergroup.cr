@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # Identifier of the supergroup or channel
-    property supergroup_id : ::Int32
+    property supergroup_id : ::Int64
 
-    def initialize(@supergroup_id : ::Int32)
+    def initialize(@supergroup_id : ::Int64)
     end
   end
 end

@@ -23,9 +23,9 @@ module Proton::Types
     property emojis : ::Array(::String)
 
     # True, if peer-to-peer connection is allowed by users privacy settings
-    property allow_p2p : ::Bool
+    property allow_p2p : ::Bool = false
 
-    def initialize(@protocol : Proton::Types::CallProtocol, @connections : ::Array(Proton::Types::CallConnection), @config : ::String, @encryption_key : ::String, @emojis : ::Array(::String), @allow_p2p : ::Bool)
+    def initialize(@protocol : Proton::Types::CallProtocol, @connections : ::Array(Proton::Types::CallConnection), @config : ::String, @encryption_key : ::String, @emojis : ::Array(::String), @allow_p2p : ::Bool = false)
     end
   end
 end

@@ -13,9 +13,6 @@ module Proton::Types
     # URL of the result, if it exists
     property url : ::String
 
-    # True, if the URL must be not shown
-    property hide_url : ::Bool
-
     # Title of the result
     property title : ::String
 
@@ -37,7 +34,10 @@ module Proton::Types
     # The content of the message to be sent. Must be one of the following types: InputMessageText, InputMessageLocation, InputMessageVenue or InputMessageContact
     property input_message_content : Proton::Types::InputMessageContent
 
-    def initialize(@id : ::String, @url : ::String, @hide_url : ::Bool, @title : ::String, @description : ::String, @thumbnail_url : ::String, @thumbnail_width : ::Int32, @thumbnail_height : ::Int32, @reply_markup : Proton::Types::ReplyMarkup, @input_message_content : Proton::Types::InputMessageContent)
+    # True, if the URL must be not shown
+    property hide_url : ::Bool = false
+
+    def initialize(@id : ::String, @url : ::String, @title : ::String, @description : ::String, @thumbnail_url : ::String, @thumbnail_width : ::Int32, @thumbnail_height : ::Int32, @reply_markup : Proton::Types::ReplyMarkup, @input_message_content : Proton::Types::InputMessageContent, @hide_url : ::Bool = false)
     end
   end
 end

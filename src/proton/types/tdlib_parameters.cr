@@ -8,18 +8,6 @@ module Proton::Types
   class TdlibParameters < Types::Base
     include JSON::Serializable
 
-    # If set to true, the Telegram test environment will be used instead of the production environment
-    property use_test_dc : ::Bool
-
-    # If set to true, the library will maintain a cache of users, basic groups, supergroups, channels and secret chats. Implies use_file_database
-    property use_chat_info_database : ::Bool
-
-    # If set to true, the library will maintain a cache of chats and messages. Implies use_chat_info_database
-    property use_message_database : ::Bool
-
-    # If set to true, support for secret chats will be enabled
-    property use_secret_chats : ::Bool
-
     # Application identifier for Telegram API access, which can be obtained at https://my.telegram.org
     property api_id : ::Int32
 
@@ -38,11 +26,8 @@ module Proton::Types
     # Application version; must be non-empty
     property application_version : ::String
 
-    # If set to true, old files will automatically be deleted
-    property enable_storage_optimizer : ::Bool
-
-    # If set to true, original file names will be ignored. Otherwise, downloaded files will be saved under names as close as possible to the original name
-    property ignore_file_names : ::Bool
+    # If set to true, the Telegram test environment will be used instead of the production environment
+    property use_test_dc : ::Bool = false
 
     # The path to the directory for the persistent database; if empty, the current working directory will be used
     property database_directory : ::String? = nil
@@ -51,9 +36,24 @@ module Proton::Types
     property files_directory : ::String? = nil
 
     # If set to true, information about downloaded and uploaded files will be saved between application restarts; may be null
-    property use_file_database : ::Bool? = nil
+    property use_file_database : ::Bool? = false
 
-    def initialize(@use_test_dc : ::Bool, @use_chat_info_database : ::Bool, @use_message_database : ::Bool, @use_secret_chats : ::Bool, @api_id : ::Int32, @api_hash : ::String, @system_language_code : ::String, @device_model : ::String, @system_version : ::String, @application_version : ::String, @enable_storage_optimizer : ::Bool, @ignore_file_names : ::Bool, @database_directory : ::String? = nil, @files_directory : ::String? = nil, @use_file_database : ::Bool? = nil)
+    # If set to true, the library will maintain a cache of users, basic groups, supergroups, channels and secret chats. Implies use_file_database
+    property use_chat_info_database : ::Bool = false
+
+    # If set to true, the library will maintain a cache of chats and messages. Implies use_chat_info_database
+    property use_message_database : ::Bool = false
+
+    # If set to true, support for secret chats will be enabled
+    property use_secret_chats : ::Bool = false
+
+    # If set to true, old files will automatically be deleted
+    property enable_storage_optimizer : ::Bool = false
+
+    # If set to true, original file names will be ignored. Otherwise, downloaded files will be saved under names as close as possible to the original name
+    property ignore_file_names : ::Bool = false
+
+    def initialize(@api_id : ::Int32, @api_hash : ::String, @system_language_code : ::String, @device_model : ::String, @system_version : ::String, @application_version : ::String, @use_test_dc : ::Bool = false, @database_directory : ::String? = nil, @files_directory : ::String? = nil, @use_file_database : ::Bool? = false, @use_chat_info_database : ::Bool = false, @use_message_database : ::Bool = false, @use_secret_chats : ::Bool = false, @enable_storage_optimizer : ::Bool = false, @ignore_file_names : ::Bool = false)
     end
   end
 end

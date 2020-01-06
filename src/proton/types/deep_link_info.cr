@@ -12,9 +12,9 @@ module Proton::Types
     property text : Proton::Types::FormattedText
 
     # True, if user should be asked to update the application
-    property need_update_application : ::Bool
+    property need_update_application : ::Bool = false
 
-    def initialize(@text : Proton::Types::FormattedText, @need_update_application : ::Bool)
+    def initialize(@text : Proton::Types::FormattedText, @need_update_application : ::Bool = false)
     end
   end
 end

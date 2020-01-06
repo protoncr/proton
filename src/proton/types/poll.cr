@@ -21,9 +21,9 @@ module Proton::Types
     property total_voter_count : ::Int32
 
     # True, if the poll is closed
-    property is_closed : ::Bool
+    property is_closed : ::Bool = false
 
-    def initialize(@id : ::String, @question : ::String, @options : ::Array(Proton::Types::PollOption), @total_voter_count : ::Int32, @is_closed : ::Bool)
+    def initialize(@id : ::String, @question : ::String, @options : ::Array(Proton::Types::PollOption), @total_voter_count : ::Int32, @is_closed : ::Bool = false)
     end
   end
 end

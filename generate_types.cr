@@ -9,8 +9,9 @@ class TLEntry
   property parent_class_name : String = "Base"
   property optional : Bool = true
   property description : String = ""
-  property arguments = {} of String => NamedTuple(type: String, description: String, optional: Bool)
+  property arguments = {} of String => NamedTuple(type: String, description: String, optional: Bool, default_value: String?)
   property is_abstract = false
+  property default_value : String? = nil
 end
 
 
@@ -21,7 +22,7 @@ def parse_tl_type(type)
     size = int[0][1].to_i
     if size == 64
       "::String"
-    elsif size == 54
+    elsif size > 32 && size < 64
       "::Int64"
     else
       "::Int32"
@@ -50,7 +51,7 @@ def parse_argument_description(argument, description)
     statements.each do |statement|
       statement = statement.downcase
 
-      if statement =~ /(can be null|may be null|can be empty|may be empty|optional|if empty|empty until|empty for|if available)/
+      if statement =~ /(for bots only|can be null|may be null|can be empty|may be empty|optional|if empty|empty until|empty for|if available)/
         optional = true
       elsif statement =~ /(must be non-empty)/
         optional = false
@@ -63,7 +64,8 @@ def parse_argument_description(argument, description)
       argument, {
           type: "",
           description: description,
-          optional: !!optional
+          optional: !!optional,
+          default_value: nil
       }
   }
 end
@@ -101,8 +103,11 @@ def parse_tl_entry(tl_entry)
 
       args = (args[1..-1] || [] of String).map do |a|
         arg, type = a.split(':')
-
-        entry.arguments[arg] = entry.arguments[arg].merge({ type: parse_tl_type(type) })
+        default_value = "false" if type == "Bool"
+        entry.arguments[arg] = entry.arguments[arg].merge({
+          type: parse_tl_type(type),
+          default_value: default_value
+        })
       end
     end
   end
@@ -227,7 +232,9 @@ end
 def write_class(class_hierarchy, class_info)
   class_name = normalize_class_name(class_info.class_name, class_info.parent_class_name)
   td_class_name = class_name.camelcase(lower: true)
-  attributes = class_info.arguments.to_a.sort_by { |(attr, info)| info[:optional] ? 1 : 0 }
+  attributes = class_info.arguments.to_a.sort_by do |(attr, info)|
+    (info[:optional] || info[:default_value]) ? 1 : 0
+  end
   description = class_info.description
   super_class_name = class_info.parent_class_name.camelcase
 
@@ -288,13 +295,40 @@ def write_class(class_hierarchy, class_info)
       str.puts
       attributes.each_with_index do |(attr, info), i|
         str.puts "    # #{info[:description]}" if info[:description]
-        str.puts "    property #{attr} : #{info[:type]}#{"? = nil" if info[:optional]}"
+        str.print "    property #{attr} : #{info[:type]}"
+
+        if info[:optional]
+          str.print "?"
+        end
+
+        if default = info[:default_value]
+          str.print " = #{default}"
+        end
+
+        if info[:optional] && info[:default_value].nil?
+          str.print " = nil"
+        end
+
+        str.puts
         str.puts unless i == (attributes.size - 1)
       end
       str.puts
       str.print "    def initialize("
       attributes.each_with_index do |(attr, info), i|
-        str.print "@#{attr} : #{info[:type]}#{"? = nil" if info[:optional]}"
+        str.print "@#{attr} : #{info[:type]}"
+
+        if info[:optional]
+          str.print "?"
+        end
+
+        if default = info[:default_value]
+          str.print " = #{default}"
+        end
+
+        if info[:optional] && info[:default_value].nil?
+          str.print " = nil"
+        end
+
         str.print ", " unless i == (attributes.size - 1)
       end
       str.puts ")"
@@ -378,45 +412,39 @@ def run
   functions = functions.map { |c| parse_tl_entry(c) }.sort_by { |c| c.class_name }
   functions = functions.map do |func|
     method_name = func.class_name.underscore
-    params = func.arguments
+    params = func.arguments.to_a.sort_by { |(attr, info)| info[:optional] ? 1 : 0 }
     description = func.description
-    return_class = "Proton::Types::#{func.parent_class_name.camelcase}"
+    return_class = "Types::#{func.parent_class_name.camelcase}"
+    param_max_length = func.arguments.merge({"@type" => nil}).max_by { |k, _| k.size }[0].size
 
-    param_max_length = params.merge({"@type" => nil}).max_by { |k, _| k.size }[0].size
-
-    if params.empty?
-      params_doc = ""
-      method_params = ""
-      func_params = ""
-    else
-      params_doc = "\n" + attrs_to_doc_comment(params)
-
-      method_params = params.to_a
-        .sort_by { |(attr, info)| info[:optional] ? 1 : 0 }
-        .map do |attr, info|
-        "#{attr} : #{info[:type]}#{"?" if info[:optional]}#{ " = nil" if info[:optional] }"
-      end.join(", ")
-
-      method_params = "(#{method_params})"
-
-      func_params = ",\n              " + params.map do |attr, info|
-        indent = " " * (param_max_length - attr.size + 1)
-
-        "\"#{attr}\"#{indent}=> #{attr}"
-      end.join(",\n              ")
-    end
-
-    unless description.empty?
-      description = wrap_comment(description, "  ")
-    end
-
-    <<-CRYSTAL
-    #{description}
-      ##{params_doc}
-      def #{method_name}#{method_params}
-        broadcast({"@type"#{" " * (param_max_length - 4)}=> "#{func.class_name}"#{func_params}})
+    String.build do |str|
+      str.puts wrap_comment(description, "  ") unless description.empty?
+      str.puts attrs_to_doc_comment(params) unless params.empty?
+      str.print "  def #{method_name}"
+      str.print "("
+      unless params.empty?
+        params.each_with_index do |(attr, info), i|
+          str.print "#{attr} : #{info[:type]}#{"?" if info[:optional]}#{ " = nil" if info[:optional] }"
+          str.print ", " unless i == (params.size - 1)
+        end
       end
-    CRYSTAL
+      str.puts ")"
+      str.puts "    broadcast(#{return_class},"
+      str.print "      {\"@type\"#{" " * (param_max_length - 4)}=> \"#{func.class_name}\""
+
+      unless params.empty?
+        str.puts ","
+        params.each_with_index do |(attr, info), i|
+          indent = " " * (param_max_length - attr.size + 1)
+          str.print " " * 7
+          str.print "\"#{attr}\"#{indent}=> #{attr}"
+          str.puts i == (params.size - 1) ? "" : ","
+        end
+      end
+
+      str.puts "      })"
+      str.puts "  end"
+    end
   end
 
   klass = <<-CRYSTAL

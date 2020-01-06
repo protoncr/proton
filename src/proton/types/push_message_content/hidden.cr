@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if the message is a pinned message with the specified content
-    property is_pinned : ::Bool
+    property is_pinned : ::Bool = false
 
-    def initialize(@is_pinned : ::Bool)
+    def initialize(@is_pinned : ::Bool = false)
     end
   end
 end

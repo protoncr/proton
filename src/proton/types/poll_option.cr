@@ -18,12 +18,12 @@ module Proton::Types
     property vote_percentage : ::Int32
 
     # True, if the option was chosen by the user
-    property is_chosen : ::Bool
+    property is_chosen : ::Bool = false
 
     # True, if the option is being chosen by a pending setPollAnswer request
-    property is_being_chosen : ::Bool
+    property is_being_chosen : ::Bool = false
 
-    def initialize(@text : ::String, @voter_count : ::Int32, @vote_percentage : ::Int32, @is_chosen : ::Bool, @is_being_chosen : ::Bool)
+    def initialize(@text : ::String, @voter_count : ::Int32, @vote_percentage : ::Int32, @is_chosen : ::Bool = false, @is_being_chosen : ::Bool = false)
     end
   end
 end

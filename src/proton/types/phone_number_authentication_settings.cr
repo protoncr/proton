@@ -9,15 +9,15 @@ module Proton::Types
     include JSON::Serializable
 
     # Pass true if the authentication code may be sent via flash call to the specified phone number
-    property allow_flash_call : ::Bool
+    property allow_flash_call : ::Bool = false
 
     # Pass true if the authenticated phone number is used on the current device
-    property is_current_phone_number : ::Bool
+    property is_current_phone_number : ::Bool = false
 
     # For official applications only. True, if the app can use Android SMS Retriever API (requires Google Play Services >= 10.2) to automatically receive the authentication code from the SMS. See https://developers.google.com/identity/sms-retriever/ for more details
-    property allow_sms_retriever_api : ::Bool
+    property allow_sms_retriever_api : ::Bool = false
 
-    def initialize(@allow_flash_call : ::Bool, @is_current_phone_number : ::Bool, @allow_sms_retriever_api : ::Bool)
+    def initialize(@allow_flash_call : ::Bool = false, @is_current_phone_number : ::Bool = false, @allow_sms_retriever_api : ::Bool = false)
     end
   end
 end

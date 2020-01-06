@@ -11,12 +11,12 @@ module Proton::Types
     property text : Proton::Types::FormattedText
 
     # True, if rich web page previews for URLs in the message text should be disabled
-    property disable_web_page_preview : ::Bool
+    property disable_web_page_preview : ::Bool = false
 
     # True, if a chat message draft should be deleted
-    property clear_draft : ::Bool
+    property clear_draft : ::Bool = false
 
-    def initialize(@text : Proton::Types::FormattedText, @disable_web_page_preview : ::Bool, @clear_draft : ::Bool)
+    def initialize(@text : Proton::Types::FormattedText, @disable_web_page_preview : ::Bool = false, @clear_draft : ::Bool = false)
     end
   end
 end

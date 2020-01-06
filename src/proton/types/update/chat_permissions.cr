@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # The new chat permissions
     property permissions : Proton::Types::ChatPermissions
 
-    def initialize(@chat_id : ::Int32, @permissions : Proton::Types::ChatPermissions)
+    def initialize(@chat_id : ::Int64, @permissions : Proton::Types::ChatPermissions)
     end
   end
 end

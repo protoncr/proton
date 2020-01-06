@@ -12,15 +12,15 @@ module Proton::Types
     property publishable_key : ::String
 
     # True, if the user country must be provided
-    property need_country : ::Bool
+    property need_country : ::Bool = false
 
     # True, if the user ZIP/postal code must be provided
-    property need_postal_code : ::Bool
+    property need_postal_code : ::Bool = false
 
     # True, if the cardholder name must be provided
-    property need_cardholder_name : ::Bool
+    property need_cardholder_name : ::Bool = false
 
-    def initialize(@publishable_key : ::String, @need_country : ::Bool, @need_postal_code : ::Bool, @need_cardholder_name : ::Bool)
+    def initialize(@publishable_key : ::String, @need_country : ::Bool = false, @need_postal_code : ::Bool = false, @need_cardholder_name : ::Bool = false)
     end
   end
 end

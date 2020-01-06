@@ -11,9 +11,9 @@ module Proton::Types
     property data : ::String
 
     # True, if the credential identifier can be saved on the server side
-    property allow_save : ::Bool
+    property allow_save : ::Bool = false
 
-    def initialize(@data : ::String, @allow_save : ::Bool)
+    def initialize(@data : ::String, @allow_save : ::Bool = false)
     end
   end
 end

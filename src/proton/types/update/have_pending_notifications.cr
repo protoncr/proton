@@ -9,12 +9,12 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if there are some delayed notification updates, which will be sent soon
-    property have_delayed_notifications : ::Bool
+    property have_delayed_notifications : ::Bool = false
 
     # True, if there can be some yet unreceived notifications, which are being fetched from the server
-    property have_unreceived_notifications : ::Bool
+    property have_unreceived_notifications : ::Bool = false
 
-    def initialize(@have_delayed_notifications : ::Bool, @have_unreceived_notifications : ::Bool)
+    def initialize(@have_delayed_notifications : ::Bool = false, @have_unreceived_notifications : ::Bool = false)
     end
   end
 end

@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if a forced reply must automatically be shown to the current user. For outgoing messages, specify true to show the forced reply only for the mentioned users and for the target user of a reply
-    property is_personal : ::Bool
+    property is_personal : ::Bool = false
 
-    def initialize(@is_personal : ::Bool)
+    def initialize(@is_personal : ::Bool = false)
     end
   end
 end

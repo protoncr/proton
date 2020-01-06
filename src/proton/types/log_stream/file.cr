@@ -11,9 +11,9 @@ module Proton::Types
     property path : ::String
 
     # Maximum size of the file to where the internal TDLib log is written before the file will be auto-rotated
-    property max_file_size : ::Int32
+    property max_file_size : ::Int64
 
-    def initialize(@path : ::String, @max_file_size : ::Int32)
+    def initialize(@path : ::String, @max_file_size : ::Int64)
     end
   end
 end

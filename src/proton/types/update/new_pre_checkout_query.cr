@@ -18,7 +18,7 @@ module Proton::Types
     property currency : ::String
 
     # Total price for the product, in the minimal quantity of the currency
-    property total_amount : ::Int32
+    property total_amount : ::Int64
 
     # Invoice payload
     property invoice_payload : ::String
@@ -29,7 +29,7 @@ module Proton::Types
     # Information about the order; may be null
     property order_info : Proton::Types::OrderInfo? = nil
 
-    def initialize(@id : ::String, @sender_user_id : ::Int32, @currency : ::String, @total_amount : ::Int32, @invoice_payload : ::String, @shipping_option_id : ::String? = nil, @order_info : Proton::Types::OrderInfo? = nil)
+    def initialize(@id : ::String, @sender_user_id : ::Int32, @currency : ::String, @total_amount : ::Int64, @invoice_payload : ::String, @shipping_option_id : ::String? = nil, @order_info : Proton::Types::OrderInfo? = nil)
     end
   end
 end

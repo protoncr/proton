@@ -13,13 +13,13 @@ module Proton::Types
     # Error message
     property error_message : ::String
 
-    # True, if the message can be re-sent
-    property can_retry : ::Bool
-
     # Time left before the message can be re-sent, in seconds. No update is sent when this field changes
     property retry_after : ::Float64
 
-    def initialize(@error_code : ::Int32, @error_message : ::String, @can_retry : ::Bool, @retry_after : ::Float64)
+    # True, if the message can be re-sent
+    property can_retry : ::Bool = false
+
+    def initialize(@error_code : ::Int32, @error_message : ::String, @retry_after : ::Float64, @can_retry : ::Bool = false)
     end
   end
 end

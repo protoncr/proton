@@ -8,15 +8,6 @@ module Proton::Types
   class UserFullInfo < Types::Base
     include JSON::Serializable
 
-    # True, if the user is blacklisted by the current user
-    property is_blocked : ::Bool
-
-    # True, if the user can be called
-    property can_be_called : ::Bool
-
-    # True, if the user can't be called due to their privacy settings
-    property has_private_calls : ::Bool
-
     # A short user bio
     property bio : ::String
 
@@ -26,10 +17,19 @@ module Proton::Types
     # Number of group chats where both the other user and the current user are a member; 0 for the current user
     property group_in_common_count : ::Int32
 
+    # True, if the user is blacklisted by the current user
+    property is_blocked : ::Bool = false
+
+    # True, if the user can be called
+    property can_be_called : ::Bool = false
+
+    # True, if the user can't be called due to their privacy settings
+    property has_private_calls : ::Bool = false
+
     # If the user is a bot, information about the bot; may be null
     property bot_info : Proton::Types::BotInfo? = nil
 
-    def initialize(@is_blocked : ::Bool, @can_be_called : ::Bool, @has_private_calls : ::Bool, @bio : ::String, @share_text : ::String, @group_in_common_count : ::Int32, @bot_info : Proton::Types::BotInfo? = nil)
+    def initialize(@bio : ::String, @share_text : ::String, @group_in_common_count : ::Int32, @is_blocked : ::Bool = false, @can_be_called : ::Bool = false, @has_private_calls : ::Bool = false, @bot_info : Proton::Types::BotInfo? = nil)
     end
   end
 end

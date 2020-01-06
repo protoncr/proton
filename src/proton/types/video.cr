@@ -23,14 +23,14 @@ module Proton::Types
     # MIME type of the file; as defined by the sender
     property mime_type : ::String
 
-    # True, if stickers were added to the photo
-    property has_stickers : ::Bool
-
-    # True, if the video should be tried to be streamed
-    property supports_streaming : ::Bool
-
     # File containing the video
     property video : Proton::Types::File
+
+    # True, if stickers were added to the photo
+    property has_stickers : ::Bool = false
+
+    # True, if the video should be tried to be streamed
+    property supports_streaming : ::Bool = false
 
     # Video minithumbnail; may be null
     property minithumbnail : Proton::Types::Minithumbnail? = nil
@@ -38,7 +38,7 @@ module Proton::Types
     # Video thumbnail; as defined by the sender; may be null
     property thumbnail : Proton::Types::PhotoSize? = nil
 
-    def initialize(@duration : ::Int32, @width : ::Int32, @height : ::Int32, @file_name : ::String, @mime_type : ::String, @has_stickers : ::Bool, @supports_streaming : ::Bool, @video : Proton::Types::File, @minithumbnail : Proton::Types::Minithumbnail? = nil, @thumbnail : Proton::Types::PhotoSize? = nil)
+    def initialize(@duration : ::Int32, @width : ::Int32, @height : ::Int32, @file_name : ::String, @mime_type : ::String, @video : Proton::Types::File, @has_stickers : ::Bool = false, @supports_streaming : ::Bool = false, @minithumbnail : Proton::Types::Minithumbnail? = nil, @thumbnail : Proton::Types::PhotoSize? = nil)
     end
   end
 end

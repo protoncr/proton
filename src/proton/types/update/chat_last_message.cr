@@ -10,7 +10,7 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # New value of the chat order
     property order : ::String
@@ -18,7 +18,7 @@ module Proton::Types
     # The new last message in the chat; may be null
     property last_message : Proton::Types::Message? = nil
 
-    def initialize(@chat_id : ::Int32, @order : ::String, @last_message : Proton::Types::Message? = nil)
+    def initialize(@chat_id : ::Int64, @order : ::String, @last_message : Proton::Types::Message? = nil)
     end
   end
 end

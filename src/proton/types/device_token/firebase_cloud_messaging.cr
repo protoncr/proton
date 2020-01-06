@@ -7,13 +7,13 @@ module Proton::Types
   class DeviceToken::FirebaseCloudMessaging < Types::DeviceToken
     include JSON::Serializable
 
-    # True, if push notifications should be additionally encrypted
-    property encrypt : ::Bool
-
     # Device registration token; may be empty to de-register a device
     property token : ::String? = nil
 
-    def initialize(@encrypt : ::Bool, @token : ::String? = nil)
+    # True, if push notifications should be additionally encrypted
+    property encrypt : ::Bool = false
+
+    def initialize(@token : ::String? = nil, @encrypt : ::Bool = false)
     end
   end
 end

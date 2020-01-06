@@ -8,13 +8,13 @@ module Proton::Types
     include JSON::Serializable
 
     # Identifier of the message with the corresponding invoice; can be an identifier of a deleted message
-    property invoice_message_id : ::Int32
+    property invoice_message_id : ::Int64
 
     # Currency for price of the product
     property currency : ::String
 
     # Total price for the product, in the minimal quantity of the currency
-    property total_amount : ::Int32
+    property total_amount : ::Int64
 
     # Invoice payload
     property invoice_payload : ::String
@@ -31,7 +31,7 @@ module Proton::Types
     # Information about the order; may be null
     property order_info : Proton::Types::OrderInfo? = nil
 
-    def initialize(@invoice_message_id : ::Int32, @currency : ::String, @total_amount : ::Int32, @invoice_payload : ::String, @telegram_payment_charge_id : ::String, @provider_payment_charge_id : ::String, @shipping_option_id : ::String? = nil, @order_info : Proton::Types::OrderInfo? = nil)
+    def initialize(@invoice_message_id : ::Int64, @currency : ::String, @total_amount : ::Int64, @invoice_payload : ::String, @telegram_payment_charge_id : ::String, @provider_payment_charge_id : ::String, @shipping_option_id : ::String? = nil, @order_info : Proton::Types::OrderInfo? = nil)
     end
   end
 end

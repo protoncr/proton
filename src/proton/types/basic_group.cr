@@ -17,13 +17,13 @@ module Proton::Types
     # Status of the current user in the group
     property status : Proton::Types::ChatMemberStatus
 
-    # True, if the group is active
-    property is_active : ::Bool
-
     # Identifier of the supergroup to which this group was upgraded; 0 if none
     property upgraded_to_supergroup_id : ::Int32
 
-    def initialize(@id : ::Int32, @member_count : ::Int32, @status : Proton::Types::ChatMemberStatus, @is_active : ::Bool, @upgraded_to_supergroup_id : ::Int32)
+    # True, if the group is active
+    property is_active : ::Bool = false
+
+    def initialize(@id : ::Int32, @member_count : ::Int32, @status : Proton::Types::ChatMemberStatus, @upgraded_to_supergroup_id : ::Int32, @is_active : ::Bool = false)
     end
   end
 end

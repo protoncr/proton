@@ -11,9 +11,6 @@ module Proton::Types
     # Cell text
     property text : Proton::Types::RichText
 
-    # True, if it is a header cell
-    property is_header : ::Bool
-
     # The number of columns the cell should span
     property colspan : ::Int32
 
@@ -26,7 +23,10 @@ module Proton::Types
     # Vertical cell content alignment
     property valign : Proton::Types::PageBlockVerticalAlignment
 
-    def initialize(@text : Proton::Types::RichText, @is_header : ::Bool, @colspan : ::Int32, @rowspan : ::Int32, @align : Proton::Types::PageBlockHorizontalAlignment, @valign : Proton::Types::PageBlockVerticalAlignment)
+    # True, if it is a header cell
+    property is_header : ::Bool = false
+
+    def initialize(@text : Proton::Types::RichText, @colspan : ::Int32, @rowspan : ::Int32, @align : Proton::Types::PageBlockHorizontalAlignment, @valign : Proton::Types::PageBlockVerticalAlignment, @is_header : ::Bool = false)
     end
   end
 end

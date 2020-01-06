@@ -23,6 +23,45 @@ module Proton
       setting application_version : String = Proton::VERSION
       setting enable_storage_optimizer : Bool = true
       setting ignore_file_names : Bool = false
+      setting log_file_path : String = "~/.proton/tdlib.log"
     end
   end
 end
+
+include Proton
+
+Client.configure do |config|
+  config.encryption_key = "tIXiGBupL3VCFOwyEpG5JjMuAIGRLKlL"
+
+  config.api_id = 65534
+  config.api_hash = "e3e522e32853d0767df7b2113d5e2497"
+end
+
+client = Client.new
+
+def mark_all_as_read(message, client)
+  spawn do
+    # client.edit_message_text(message.chat_id, message.id, Types::InputMessageContent::Text.new(Types::FormattedText.new("Clearing unread counts...", [] of Types::TextEntity))).get
+    chat_ids = client.get_chats(Int64::MAX.to_s, 0, Int32::MAX).get.chat_ids
+    chats = chat_ids.each do |id|
+      chat = client.get_chat(id).get
+      if chat.unread_count > 0 && (last_message = chat.last_message)
+        client.view_messages(chat.id, [last_message.id], true)
+      end
+    end
+    # client.edit_message_text(message.chat_id, message.id, Types::InputMessageContent::Text.new(Types::FormattedText.new("Clearing unread counts...", [] of Types::TextEntity))).get
+  end
+end
+
+client.on(Types::Update::NewMessage) do |message|
+  message = message.message
+  case message.content
+  when Types::MessageContent::Text
+    text = message.content.as(Types::MessageContent::Text).text.text
+    if text.strip == "!markread"
+      mark_all_as_read(message, client)
+    end
+  end
+end
+
+client.run

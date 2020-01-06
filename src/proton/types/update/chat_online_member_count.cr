@@ -10,12 +10,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Identifier of the chat
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # New number of online members in the chat, or 0 if unknown
     property online_member_count : ::Int32
 
-    def initialize(@chat_id : ::Int32, @online_member_count : ::Int32)
+    def initialize(@chat_id : ::Int64, @online_member_count : ::Int32)
     end
   end
 end

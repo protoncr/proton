@@ -14,9 +14,9 @@ module Proton::Types
     property caption : Proton::Types::FormattedText
 
     # True, if the animation thumbnail must be blurred and the animation must be shown only while tapped
-    property is_secret : ::Bool
+    property is_secret : ::Bool = false
 
-    def initialize(@animation : Proton::Types::Animation, @caption : Proton::Types::FormattedText, @is_secret : ::Bool)
+    def initialize(@animation : Proton::Types::Animation, @caption : Proton::Types::FormattedText, @is_secret : ::Bool = false)
     end
   end
 end

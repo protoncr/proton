@@ -18,12 +18,12 @@ module Proton::Types
     property url : ::String
 
     # True, if the instant view must be shown from right to left
-    property is_rtl : ::Bool
+    property is_rtl : ::Bool = false
 
     # True, if the instant view contains the full page. A network request might be needed to get the full web page instant view
-    property is_full : ::Bool
+    property is_full : ::Bool = false
 
-    def initialize(@page_blocks : ::Array(Proton::Types::PageBlock), @version : ::Int32, @url : ::String, @is_rtl : ::Bool, @is_full : ::Bool)
+    def initialize(@page_blocks : ::Array(Proton::Types::PageBlock), @version : ::Int32, @url : ::String, @is_rtl : ::Bool = false, @is_full : ::Bool = false)
     end
   end
 end

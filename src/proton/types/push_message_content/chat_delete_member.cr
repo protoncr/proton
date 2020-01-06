@@ -11,12 +11,12 @@ module Proton::Types
     property member_name : ::String
 
     # True, if the current user was deleted from the group
-    property is_current_user : ::Bool
+    property is_current_user : ::Bool = false
 
     # True, if the user has left the group himself
-    property is_left : ::Bool
+    property is_left : ::Bool = false
 
-    def initialize(@member_name : ::String, @is_current_user : ::Bool, @is_left : ::Bool)
+    def initialize(@member_name : ::String, @is_current_user : ::Bool = false, @is_left : ::Bool = false)
     end
   end
 end

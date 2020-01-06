@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # True, if the database is currently encrypted
-    property is_encrypted : ::Bool
+    property is_encrypted : ::Bool = false
 
-    def initialize(@is_encrypted : ::Bool)
+    def initialize(@is_encrypted : ::Bool = false)
     end
   end
 end

@@ -8,9 +8,9 @@ module Proton::Types
     include JSON::Serializable
 
     # New value of is_all_history_available
-    property is_all_history_available : ::Bool
+    property is_all_history_available : ::Bool = false
 
-    def initialize(@is_all_history_available : ::Bool)
+    def initialize(@is_all_history_available : ::Bool = false)
     end
   end
 end

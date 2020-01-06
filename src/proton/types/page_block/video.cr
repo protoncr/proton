@@ -10,16 +10,16 @@ module Proton::Types
     # Video caption
     property caption : Proton::Types::PageBlockCaption
 
-    # True, if the video should be played automatically
-    property need_autoplay : ::Bool
-
-    # True, if the video should be looped
-    property is_looped : ::Bool
-
     # Video file; may be null
     property video : Proton::Types::Video? = nil
 
-    def initialize(@caption : Proton::Types::PageBlockCaption, @need_autoplay : ::Bool, @is_looped : ::Bool, @video : Proton::Types::Video? = nil)
+    # True, if the video should be played automatically
+    property need_autoplay : ::Bool = false
+
+    # True, if the video should be looped
+    property is_looped : ::Bool = false
+
+    def initialize(@caption : Proton::Types::PageBlockCaption, @video : Proton::Types::Video? = nil, @need_autoplay : ::Bool = false, @is_looped : ::Bool = false)
     end
   end
 end

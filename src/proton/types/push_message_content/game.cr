@@ -7,13 +7,13 @@ module Proton::Types
   class PushMessageContent::Game < Types::PushMessageContent
     include JSON::Serializable
 
-    # True, if the message is a pinned message with the specified content
-    property is_pinned : ::Bool
-
     # Game title, empty for pinned game message
     property title : ::String? = nil
 
-    def initialize(@is_pinned : ::Bool, @title : ::String? = nil)
+    # True, if the message is a pinned message with the specified content
+    property is_pinned : ::Bool = false
+
+    def initialize(@title : ::String? = nil, @is_pinned : ::Bool = false)
     end
   end
 end

@@ -20,14 +20,14 @@ module Proton::Types
     # Emoji corresponding to the sticker
     property emoji : ::String
 
-    # True, if the sticker is an animated sticker in TGS format
-    property is_animated : ::Bool
-
-    # True, if the sticker is a mask
-    property is_mask : ::Bool
-
     # File containing the sticker
     property sticker : Proton::Types::File
+
+    # True, if the sticker is an animated sticker in TGS format
+    property is_animated : ::Bool = false
+
+    # True, if the sticker is a mask
+    property is_mask : ::Bool = false
 
     # Position where the mask should be placed; may be null
     property mask_position : Proton::Types::MaskPosition? = nil
@@ -35,7 +35,7 @@ module Proton::Types
     # Sticker thumbnail in WEBP or JPEG format; may be null
     property thumbnail : Proton::Types::PhotoSize? = nil
 
-    def initialize(@set_id : ::String, @width : ::Int32, @height : ::Int32, @emoji : ::String, @is_animated : ::Bool, @is_mask : ::Bool, @sticker : Proton::Types::File, @mask_position : Proton::Types::MaskPosition? = nil, @thumbnail : Proton::Types::PhotoSize? = nil)
+    def initialize(@set_id : ::String, @width : ::Int32, @height : ::Int32, @emoji : ::String, @sticker : Proton::Types::File, @is_animated : ::Bool = false, @is_mask : ::Bool = false, @mask_position : Proton::Types::MaskPosition? = nil, @thumbnail : Proton::Types::PhotoSize? = nil)
     end
   end
 end

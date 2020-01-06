@@ -8,12 +8,12 @@ module Proton::Types
     include JSON::Serializable
 
     # Chat identifier
-    property chat_id : ::Int32
+    property chat_id : ::Int64
 
     # The new chat title
     property title : ::String
 
-    def initialize(@chat_id : ::Int32, @title : ::String)
+    def initialize(@chat_id : ::Int64, @title : ::String)
     end
   end
 end
