@@ -2,13 +2,11 @@
 
 [![Chat on Telegram](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/protoncr)
 
-Proton is a Telegram Client API adapter for Crystal. Currently it uses [TDLib](https://github.com/tdlib/td) to send and receive information from Telegram, but eventually it will include a pure Crystal MTProto implementation.
+Proton is pure Telegram/MTProto library for the Crystal programming language.
 
 ## Installation
 
-1. Install tdlib (and more specifically `libtdjson`) from https://github.com/tdlib/td
-
-2. Add the dependency to your `shard.yml`:
+1. Add the dependency to your `shard.yml`:
 
    ```yaml
    dependencies:
@@ -16,19 +14,56 @@ Proton is a Telegram Client API adapter for Crystal. Currently it uses [TDLib](h
        github: watzon/proton
    ```
 
-3. Run `shards install`
+2. Run `shards install`
+
+3. Profit
 
 ## Usage
 
+### Authenticating
+
 ```crystal
 require "proton"
+
+class MyClient < Proton::Client
+  # Stuff
+end
+
+SESSION = Proton::Session::TextSession.new("myclient")
+
+Proton::AuthFlow::Terminal.start(
+  api_id: 12345,
+  api_hash: "0123456789abcdef0123456789abcdef",
+  session: SESSION
+)
+
+MyClient.start(SESSION)
 ```
 
-TODO: Write usage instructions here
+`Session::TextSession` causes a plain text session to be generated with the given name. It will be saved as `{session_name}.session`.
 
-## Development
+`AuthFlow::Terminal` will ask for a phone number, auth code, and potential password via the terminal interface.
 
-TODO: Write development instructions here
+`MyClient.start` starts the client with the given session information.
+
+### Replying to Messages
+
+```crystal
+require "proton"
+
+class MyClient < Proton::Client
+  include Proton
+
+  @[On(:message, Filter::Private)]
+  def on_private_message(ctx)
+    ctx.message.reply("Hello, #{ctx.message.from_user.first_name}")
+  end
+end
+
+SESSION = Proton::Session::TextSession.new("myclient")
+
+MyClient.start(SESSION)
+```
 
 ## Contributing
 
