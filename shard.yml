@@ -5,14 +5,10 @@ authors:
   - Chris Watson <cawatson1993@gmail.com>
 
 dependencies:
-  habitat:
-    github: luckyframework/habitat
-    branch: master
-  promise:
-    github: spider-gazelle/promise
-    branch: master
-  timeout:
-    github: hugoabonizio/timeout.cr
+  tl_parser:
+    path: ../tl_parser
+    # github: protoncr/tl_parser
+    # branch: master
 
 crystal: 0.31.1
 
