@@ -11,7 +11,7 @@ Proton is pure Telegram/MTProto library for the Crystal programming language.
    ```yaml
    dependencies:
      proton:
-       github: proton/proton
+       github: protoncr/proton
    ```
 
 2. Run `shards install`
