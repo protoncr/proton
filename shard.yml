@@ -10,6 +10,12 @@ dependencies:
     github: protoncr/tl_parser
     branch: master
 
+scripts:
+  postinstall: generate_types.sh
+
+libraries:
+  tdlib: master
+
 crystal: 0.31.1
 
 license: MIT

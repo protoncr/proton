@@ -19,8 +19,17 @@ class Userbot < Proton::Client
     case parts[0]
     when "status"
       spawn edit_message(msg, "Firing on all cylinders!")
-    else
+    when "version"
+      git_revision = if Dir.exists?(".git") && `git status`
+        `git rev-parse HEAD`
+      else
+        "unknown"
+      end
 
+      proton_version = Proton::VERSION
+
+      edit_message(msg, "Proton version: #{proton_version}\nGit hash: #{git_revision}")
+    else
     end
   end
 
