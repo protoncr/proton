@@ -2,72 +2,53 @@
 
 [![Chat on Telegram](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/protoncr)
 
-Proton is pure Telegram/MTProto library for the Crystal programming language.
+Proton is a client library for Telegram. It uses [tdlib]() as a backbone, and builds on top of it by adding several convenience classes and methods. The overarching goal is to have something as friendly as Telethon, with the tdlib bindings eventually being replaced by a pure Crystal alternative.
 
 ## Installation
 
-1. Add the dependency to your `shard.yml`:
+1. Clone tdlib from [here](https://github.com/tdlib/td), build it, and make sure it's installed and available in your library path. Typically this should be either `/usr/lib` or `/usr/local/lib`.
+
+2. Add the dependency to your `shard.yml`:
 
    ```yaml
    dependencies:
      proton:
        github: protoncr/proton
+       branch: master
    ```
 
-2. Run `shards install`
+3. Run `shards install`
 
-3. Profit
+4. Profit
 
 ## Usage
+
+Check the [example](./example) directory for a simple userbot example. 
 
 ### Authenticating
 
 ```crystal
 require "proton"
 
-class MyClient < Proton::Client
+class Userbot < Proton::Client
   # Stuff
 end
 
-SESSION = Proton::Session::TextSession.new("myclient")
+auth_flow = Proton::TerminalAuthFlow.new(encryption_key: "SOME_DB_ENCRYPTION_KEY")
 
-Proton::AuthFlow::Terminal.start(
+userbot = Userbot.new(
   api_id: 12345,
   api_hash: "0123456789abcdef0123456789abcdef",
-  session: SESSION
+  auth_flow: auth_flow,
+  verbosity_level: 0 # This is the tdlib verbosity
 )
 
-MyClient.start(SESSION)
-```
-
-`Session::TextSession` causes a plain text session to be generated with the given name. It will be saved as `{session_name}.session`.
-
-`AuthFlow::Terminal` will ask for a phone number, auth code, and potential password via the terminal interface.
-
-`MyClient.start` starts the client with the given session information.
-
-### Replying to Messages
-
-```crystal
-require "proton"
-
-class MyClient < Proton::Client
-  include Proton
-
-  @[On(:message, Filter::Private)]
-  def on_private_message(ctx)
-    ctx.message.reply("Hello, #{ctx.message.from_user.first_name}")
-  end
-end
-
-SESSION = Proton::Session::TextSession.new("myclient")
-
-MyClient.start(SESSION)
+Userbot.start
 ```
 
 ## Contributing
 
-1. Fork it (<https://github.com/proton/proton/fork>)
+1. Fork it (<https://github.com/protoncr/proton/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

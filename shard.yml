@@ -6,9 +6,9 @@ authors:
 
 dependencies:
   tl_parser:
-    path: ../tl_parser
-    # github: protoncr/tl_parser
-    # branch: master
+    # path: ../tl_parser
+    github: protoncr/tl_parser
+    branch: master
 
 crystal: 0.31.1
 
