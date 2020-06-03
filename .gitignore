@@ -10,4 +10,6 @@
 /shard.lock
 
 # Ignore generated files
-/src/proton/tl/*.cr
+/src/proton/tl/functions.cr
+/src/proton/tl/tlobject.cr
+/src/proton/tl/types.cr

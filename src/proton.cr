@@ -8,7 +8,9 @@ require "./proton/errors"
 require "./proton/tl/tlobject"
 require "./proton/tl/types"
 require "./proton/tl/functions"
+require "./proton/tl/patched/*"
 
+require "./proton/parse_mode"
 require "./proton/client"
 require "./proton/auth_flow"
 

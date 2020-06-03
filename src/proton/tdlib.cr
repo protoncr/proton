@@ -1,5 +1,9 @@
 module Proton
+  {% if flag?(:static) %}
   @[Link(ldflags: "-ltdjson_static -ltdjson_private -ltdclient -ltdcore -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm")]
+  {% else %}
+  @[Link(ldflags: "-ltdjson -lstdc++ -lssl -lcrypto -ldl -lz -lm")]
+  {% end %}
   lib TDLib
       alias Client = Void*
       fun client_create = td_json_client_create() : Client

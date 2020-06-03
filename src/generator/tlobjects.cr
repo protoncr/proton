@@ -103,6 +103,11 @@ module Proton
 
         # Write the file
         write_file(filename, namespace) do |builder|
+          builder.writeln("extend self")
+          builder.writeln
+          builder.writeln("class_property! client : Proton::Client?")
+          builder.writeln
+
           tlobjects.each_with_index do |tlo, i|
             method_name = tlo.name.underscore
             return_type = to_crystal_type(tlo.type)
@@ -165,7 +170,7 @@ module Proton
             end
 
             builder.writeln
-            builder.writeln("res = send({")
+            builder.writeln("res = client.send({")
             builder.writeln("\"@type\" => \"#{tlo.name}\",")
             params.each do |param|
               builder.writeln("\"#{param.name}\" => #{param.name},")
@@ -249,8 +254,9 @@ module Proton
         unless type.params.empty?
           builder.writeln
           write_param_props(builder, type.params, comments)
-          write_initializer(builder, type.params, comments)
         end
+
+        write_initializer(builder, type.params, comments)
 
         builder.writeln("end")
       end
@@ -347,7 +353,10 @@ module Proton
 
       private def write_initializer(builder, params, comments)
         params = sort_params(params, comments)
-        unless params.empty?
+        if params.empty?
+          builder.writeln "def initialize"
+          builder.writeln "end"
+        else
           builder.writeln "def initialize("
           params.each_with_index do |p, i|
             write_param(builder, p, comments)

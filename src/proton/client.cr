@@ -1,6 +1,8 @@
+require "./client/*"
+
 module Proton
   class Client
-    include TL
+    include MessageMethods
 
     DEFAULT_TD_LIB_PARAMETERS = {
       use_test_dc: false,
@@ -21,11 +23,10 @@ module Proton
     }
 
     @client : TDLib::Client
-    @td_lib_parameters : TdlibParameters?
+    @td_lib_parameters : TL::TdlibParameters?
     @result_hash : Hash(Int32, JSON::Any)
     @auth_flow : AuthFlow?
     @counter : Atomic(Int64)
-    @mutex : Mutex
 
     getter? alive  : Bool
     property timeout : Time::Span
@@ -39,55 +40,55 @@ module Proton
       @counter = Atomic.new(0_i64)
       @passing_channel = Channel(JSON::Any).new
       @result_hash = {} of Int32 => JSON::Any
-      @mutex = Mutex.new
       @auth_flow = auth_flow
       @timeout = timeout
 
       if params
-        @td_lib_parameters = TdlibParameters.new(**DEFAULT_TD_LIB_PARAMETERS.merge(params))
+        @td_lib_parameters = TL::TdlibParameters.new(**DEFAULT_TD_LIB_PARAMETERS.merge(params))
       end
+
 
       send({
         "@type" => "setLogVerbosityLevel",
         "new_verbosity_level" => verbosity_level
-      }, false)
+        }, false)
+
+      TL.client = self
     end
 
-    def receive_loop(timeout = nil, &block : TLObject ->)
+    def receive_loop(timeout = nil, &block : TL::TLObject ->)
       loop do
         if update = receive(timeout || @timeout)
-          if event = TLObject.from_json(update.to_json)
+          if event = TL::TLObject.from_json(update.to_json)
             case event
-            when UpdateAuthorizationState
+            when TL::UpdateAuthorizationState
               if auth_flow = @auth_flow
                 auth_flow.client = self
                 case event.authorization_state
-                when AuthorizationStateClosed
+                when TL::AuthorizationStateClosed
                   @alive = false
                   break
-                when AuthorizationStateWaitTdlibParameters
+                when TL::AuthorizationStateWaitTdlibParameters
                   if params = @td_lib_parameters
-                    spawn set_tdlib_parameters(params)
+                    spawn TL.set_tdlib_parameters(params)
                   else
                     yield event
                   end
-                when AuthorizationStateWaitEncryptionKey
+                when TL::AuthorizationStateWaitEncryptionKey
                   auth_flow.request_encryption_key
-                when AuthorizationStateWaitPhoneNumber
+                when TL::AuthorizationStateWaitPhoneNumber
                   auth_flow.request_phone_number
-                when AuthorizationStateWaitCode
+                when TL::AuthorizationStateWaitCode
                   auth_flow.request_code
-                when AuthorizationStateWaitRegistration
+                when TL::AuthorizationStateWaitRegistration
                   auth_flow.request_registration
-                when AuthorizationStateWaitPassword
+                when TL::AuthorizationStateWaitPassword
                   auth_flow.request_password
                 else
                 end
               else
                 yield event
               end
-            when Error
-              raise event.message
             else
               yield event
             end
