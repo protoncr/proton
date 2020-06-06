@@ -1,5 +1,5 @@
 require "log"
 
 module Proton
-  Log = ::Log.for("Proton")
+  Log = ::Log.for("proton")
 end

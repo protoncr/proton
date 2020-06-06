@@ -3,6 +3,7 @@ require "./client/*"
 module Proton
   class Client
     include MessageMethods
+    include EventHandler::Annotator
 
     DEFAULT_TD_LIB_PARAMETERS = {
       use_test_dc: false,
@@ -24,12 +25,20 @@ module Proton
 
     @client : TDLib::Client
     @td_lib_parameters : TL::TdlibParameters?
-    @result_hash : Hash(Int32, JSON::Any)
     @auth_flow : AuthFlow?
     @counter : Atomic(Int64)
+    @result_hash : Hash(Int32, JSON::Any)
 
+    getter event_handlers : Array(EventHandler)
+
+    # True if this client is currently running
     getter? alive  : Bool
+
+    # Receive timeout
     property timeout : Time::Span
+
+    # Returns the id of the current user. Lazily evaluated.
+    getter my_id : Int32 { TL.get_me.id }
 
     def initialize(verbosity_level = 1,
                    auth_flow = nil,
@@ -40,6 +49,7 @@ module Proton
       @counter = Atomic.new(0_i64)
       @passing_channel = Channel(JSON::Any).new
       @result_hash = {} of Int32 => JSON::Any
+      @event_handlers = [] of EventHandler
       @auth_flow = auth_flow
       @timeout = timeout
 
@@ -54,6 +64,21 @@ module Proton
         }, false)
 
       TL.client = self
+      register_event_handler_annotations
+    end
+
+    def add_event_handler(handler : EventHandler)
+      @event_handlers << handler
+    end
+
+    def start(timeout = nil)
+      receive_loop(timeout) do |update|
+        if update.is_a?(TL::Update)
+          @event_handlers.each do |handler|
+            handler.call(update)
+          end
+        end
+      end
     end
 
     def receive_loop(timeout = nil, &block : TL::TLObject ->)
@@ -140,7 +165,14 @@ module Proton
     def send!(query, counter = true, wait_max = @timeout)
       select
       when res = send_async(query, counter).receive
-        res
+        return unless res
+        case res["@type"]
+        when "error"
+          # TODO: Use generated errors
+          raise Errors::Error.new(res["message"].as_s)
+        else
+          res
+        end
       when timeout wait_max
         raise Errors::TimeoutError.new
       end
