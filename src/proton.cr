@@ -5,7 +5,7 @@ require "./proton/tdlib"
 require "./proton/logger"
 require "./proton/errors"
 require "./proton/event"
-require "./proton/helpers"
+require "./proton/utils"
 require "./proton/annotations"
 
 require "./proton/tl/tlobject"
@@ -24,4 +24,7 @@ require "./proton/auth_flow"
 # the tdlib bindings eventually being replaced by a pure Crystal
 # alternative.
 module Proton
+  include Logger
 end
+
+# pp Proton::Utils.parse_entities("Hello *world*")

@@ -2,12 +2,16 @@ require "./client/*"
 
 module Proton
   class Client
+    include Proton
+
+    include Logger
+    include ChatMethods
     include MessageMethods
     include EventHandler::Annotator
 
     DEFAULT_TD_LIB_PARAMETERS = {
       use_test_dc: false,
-      database_directory: Path.home.join(".proton").to_s,
+      database_directory: Path.home.join(".proton/{{ @type.class.name.underscore  }}").to_s,
       files_directory: "",
       use_file_database: true,
       use_chat_info_database: true,
@@ -36,9 +40,6 @@ module Proton
 
     # Receive timeout
     property timeout : Time::Span
-
-    # Returns the id of the current user. Lazily evaluated.
-    getter my_id : Int32 { TL.get_me.id }
 
     def initialize(verbosity_level = 1,
                    auth_flow = nil,
@@ -74,8 +75,20 @@ module Proton
     def start(timeout = nil)
       receive_loop(timeout) do |update|
         if update.is_a?(TL::Update)
+          type = update.responds_to?(:_type) ? update._type : "Unknown"
           @event_handlers.each do |handler|
-            handler.call(update)
+            spawn do
+              handler = handler.not_nil!
+              begin
+                handler.call(update.as(TL::Update))
+              rescue ex
+                Log.error exception: ex, &.emit(
+                  "Unhandled exception",
+                  handler: handler.class.name,
+                  update: type.to_s
+                )
+              end
+            end
           end
         end
       end

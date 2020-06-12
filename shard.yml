@@ -6,12 +6,16 @@ authors:
 
 dependencies:
   tl_parser:
-    # path: ../tl_parser
     github: protoncr/tl_parser
     branch: master
+  magic:
+    github: dscottboggs/magic.cr
+    branch: master
+  markd:
+    github: icyleaf/markd
 
 scripts:
-  postinstall: generate_types.sh
+  postinstall: ./generate_types.sh
 
 libraries:
   tdlib: master

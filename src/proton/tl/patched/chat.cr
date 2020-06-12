@@ -1,6 +1,10 @@
 module Proton
   module TL
     class Chat < TLObject
+      def display_name
+        title
+      end
+
       def private?
         @type.is_a?(TL::ChatTypePrivate)
       end

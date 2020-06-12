@@ -13,7 +13,7 @@ module Proton
                    @edited = false,
                    @no_caption = false,
                    @pattern = nil,
-                   &block : CommandContext ->)
+                   &block : Context ->)
       command = Regex.escape(command) unless command.is_a?(Regex)
       @command = /^#{command}(?:\s|$)/
       @proc = block
@@ -22,64 +22,63 @@ module Proton
     def call(update : TL::Update)
       update_events = Event.from_tl_update(update)
       if update_events.includes?(Event::NewMessage)
+        was_edited = false
         message = update.as(TL::UpdateNewMessage).message
-        if (@outgoing && message.is_outgoing) ||
-            (@incoming && !message.is_outgoing)
-
-          content = message.content
-          formatted_text = case content
-          when TL::MessageText
-            content.text
-          when TL::MessageAnimation, TL::MessageAudio, TL::MessageDocument, TL::MessagePhoto, TL::MessageVideo, TL::MessageVoiceNote
-            if content.responds_to?(:caption) && !@no_caption
-              content.caption
-            end
-          else
-          end
-
-          return unless formatted_text
-          return unless formatted_text.text.match(command)
-
-          raw_text = formatted_text.text
-          text = raw_text.sub(command, "")
-          entities = formatted_text.entities
-
-          if pattern = @pattern
-            match = text.match(pattern)
-            return unless match
-          end
-
-          context = CommandContext.new(message, text, raw_text, match, entities)
-          spawn @proc.call(context)
-        end
+      elsif update_events.includes?(Event::MessageEdited) && @edited
+        was_edited = true
+        edited_message = update.as(TL::UpdateMessageEdited)
+        message = TL.get_message(edited_message.chat_id, edited_message.message_id)
+      else
+        return
       end
+
+      return if message.is_outgoing && !@outgoing
+      return if !message.is_outgoing && !@incoming
+
+      text = message.text
+      raw_text = message.raw_text
+
+      return unless text && raw_text
+      return unless raw_text.match(command)
+
+      text = text.sub(/#{@command}\s*/, "")
+
+      if pattern = @pattern
+        match = text.match(pattern)
+        return unless match
+      end
+
+      context = Context.new(message, text, raw_text, match, message.entities, was_edited)
+      @proc.call(context)
     end
 
     # :nodoc:
     def self.annotate(client)
-      {% for command_class in Proton::Client.subclasses %}
-        {% for method in command_class.methods %}
+      {% begin %}
+        {% for command_class in Proton::Client.subclasses %}
+          {% for method in command_class.methods %}
 
-          # Handle `Command` annotation
-          {% for ann in method.annotations(Command) %}
-            %commands   = {{ ann[:commands] || ann[:commands] || ann[0] }}
-            %commands   = %commands.is_a?(Array) ? %commands : [%commands]
+            # Handle `Command` annotation
+            {% for ann in method.annotations(Command) %}
+              %commands   = {{ ann[:commands] || ann[:commands] || ann[0] }}
+              %commands   = %commands.is_a?(Array) ? %commands : [%commands]
 
-            %outgoing   = {{ ann[:outgoing] }}.nil? ? true : !!{{ ann[:outgoing] }}
-            %incoming   = {{ !!ann[:incoming] }}
-            %edited     = {{ !!ann[:edited] }}
-            %no_caption = {{ !!ann[:no_caption] }}
-            %pattern    = {{ ann[:pattern] }}
+              %outgoing   = {{ ann[:outgoing] }}.nil? ? true : !!{{ ann[:outgoing] }}
+              %incoming   = {{ !!ann[:incoming] }}
+              %edited     = {{ !!ann[:edited] }}
+              %no_caption = {{ !!ann[:no_caption] }}
+              %pattern    = {{ ann[:pattern] }}
 
-            %commands.each do |cmd|
-              %handler = CommandHandler.new(cmd, %outgoing, %incoming, %edited, %no_caption, %pattern) { |ctx| client.{{ method.name.id }}(ctx) }
-              client.add_event_handler(%handler)
-            end
+              %commands.each do |cmd|
+                %handler = CommandHandler.new(cmd, %outgoing, %incoming, %edited, %no_caption, %pattern) { |ctx| client.{{ method.name.id }}(ctx); nil }
+                client.add_event_handler(%handler)
+              end
+            {% end %}
           {% end %}
         {% end %}
       {% end %}
     end
 
-    record CommandContext, message : TL::Message, text : String, raw_text : String, match : Regex::MatchData?, entities : Array(TL::TextEntity)
+    record Context, message : TL::Message, text : String, raw_text : String, match : Regex::MatchData?, entities : Array(TL::TextEntity), edited : Bool
   end
 end

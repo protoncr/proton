@@ -3,7 +3,7 @@ module Proton
     Log = ::Log.for("proton.message_methods")
 
     # Send a message to the given `to` user or chat.
-    def send_message(to chat,
+    def send_message(to entity,
                      message,
                      parse_mode : ParseMode = :markdown,
                      reply_to_message = nil,
@@ -20,8 +20,8 @@ module Proton
 
       # Reply to message can be either a message id or a TL::Message
       reply_to_message = reply_to_message.is_a?(TL::Message) ? reply_to_message.id : (reply_to_message || 0)
-      chat_id = parse_chat(chat)
-      schedule = parse_send_at(send_at, send_when_online)
+      chat = Utils.parse_chat(entity)
+      schedule = Utils.parse_send_at(send_at, send_when_online)
 
       # Create our options and message content
       # TODO: Do some client side validation of the message content
@@ -30,17 +30,17 @@ module Proton
       if message.is_a?(TL::Message)
         message_content = message.content
       else
-        formatted_text = TL.parse_text_entities(text, parse_mode)
+        formatted_text = TL.parse_text_entities(message, parse_mode)
         message_content = TL::InputMessageText.new(formatted_text, !link_preview, clear_draft)
       end
 
-      TL.send_message(chat_id, reply_to_message.to_i64, options, message_content, reply_markup)
+      TL.send_message(chat.id, reply_to_message.to_i64, options, message_content, reply_markup)
     end
 
-    def delete_messages(chat,
+    def delete_messages(entity,
                         messages,
                         revoke = true)
-      chat_id = parse_chat(chat) if chat
+      chat = Utils.parse_chat(entity) if entity
       message_tuples = [] of Tuple(Int64, Int64)
 
       # Create a collection of {chat_id, message_id} pairs
@@ -48,8 +48,8 @@ module Proton
         case message
         when Int
           # If just an int is provided, this will be assumed to be a message id.
-          if chat_id
-            message_tuples << {chat_id, message}
+          if chat
+            message_tuples << {chat.id, message}
           else
             # If a chat was not provided, we need to throw an error.
             raise ArgumentError.new("delete_messages requires a chat to be provided if message ids are supplied")
@@ -94,7 +94,7 @@ module Proton
       TL.edit_message_text(message.chat_id, message.id, message_content, reply_markup)
     end
 
-    def edit_message(chat,
+    def edit_message(entity,
                      message,
                      text,
                      parse_mode : ParseMode = :markdown,
@@ -105,19 +105,19 @@ module Proton
                      send_when_online = false,
                      clear_draft = true,
                      reply_markup = nil)
-      chat_id = chat.is_a?(TL::Chat) ? chat.id : chat.to_i64
+      chat = Utils.parse_chat(entity)
       message_id = message.is_a?(TL::Message) ? message.id : message.to_i64
 
       parse_mode = parse_mode.to_tl
       formatted_text = TL.parse_text_entities(text, parse_mode)
       message_content = TL::InputMessageText.new(formatted_text, !link_preview, clear_draft)
 
-      TL.edit_message_text(chat_id, message_id, message_content, reply_markup)
+      TL.edit_message_text(chat.id, message_id, message_content, reply_markup)
     end
 
-    def forward_messages(to to_chat,
+    def forward_messages(to to_entity,
                          messages,
-                         from from_chat = nil,
+                         from from_entity = nil,
                          silent = false,
                          background = false,
                          as_album = false,
@@ -125,16 +125,16 @@ module Proton
                          remove_caption = false,
                          send_at = nil,
                          send_when_online = false)
-      to_id = parse_chat(to_chat)
-      from_id = parse_chat(from_chat) if from_chat
+      to_chat = Utils.parse_chat(to_entity)
+      from_chat = Utils.parse_chat(from_entity) if from_entity
 
       # Create a collection of {to_chat, from_chat, message_id} pairs
       message_tuples = messages.reduce([] of Tuple(Int64, Int64)) do |acc, message|
         case message
         when Int
           # If just an int is provided, this will be assumed to be a message id.
-          if from_id
-            acc << {from_id, message}
+          if from_chat
+            acc << {from_chat.id, message}
           else
             # If to and from weren't provided, we need to throw an error.
             raise ArgumentError.new("a `from` param must be provided if message ids are supplied")
@@ -158,7 +158,7 @@ module Proton
         acc
       end
 
-      schedule = parse_send_at(send_at, send_when_online)
+      schedule = Utils.parse_send_at(send_at, send_when_online)
       options = TL::SendMessageOptions.new(silent, background, schedule)
 
       # Group the {from_chat, message_id} pairs into a Hash of from_chat => Array(message_id)
@@ -170,56 +170,51 @@ module Proton
 
       # Take each grouping and apply the delete operation separately
       groups.each do |fid, mids|
-        TL.forward_messages(to_id, fid, mids, options, as_album, send_copy, remove_caption)
+        TL.forward_messages(to_chat.id, fid, mids, options, as_album, send_copy, remove_caption)
       end
     end
 
-    def pin_message(chat,
+    # def each_message(entity, **options)
+    #   chat = Utils.parse_chat(entity)
+    #   MessageIterator.new(entity, **options)
+    # end
+
+    # def each_message(entity, **options, &block : TL::Message ->)
+    #   iter = each_message(entity, **options)
+    #   iter.each(&block)
+    # end
+
+    def pin_message(entity,
                     message,
                     silent = true)
-      chat_id = parse_chat(chat)
+      chat = Utils.parse_chat(entity)
       message_id = message.is_a?(TL::Message) ? message.id : message.to_i64
-      TL.pin_chat_message(chat_id, message_id, !silent)
+      TL.pin_chat_message(chat.id, message_id, !silent)
     end
 
-    private def parse_chat(chat)
-      case chat
-      when "me", "self", :me, :self
-        # Make it easy to send messages to yourself using "me" and "self"
-        my_id.to_i64
-      when TL::User, TL::Chat
-        # Allow passing a chat or user in directly
-        chat.id
-      when Int
-        # Also allow passing an id in directly
-        chat.to_i64
-      else
-        raise ArgumentError.new("invalid type #{typeof(chat)} for property `to`")
-      end
-    end
+    def send_read_acknowledge(entity,
+                              message = nil,
+                              last_message = nil)
+      chat = Utils.parse_chat(entity)
+      last_message = last_message.is_a?(TL::Message) ? last_message.id : last_message
 
-    private def parse_send_at(send_at, send_when_online)
-      # Warn if send_at and send_when_online are provided
-      if send_at && send_when_online
-        Log.warn do
-          "both send_at and send_when_online supplied to send_message call. " \
-          "using send_at value."
-        end
-      end
+      # Open the chat so we can act on it
+      TL.open_chat(chat.id)
 
-      if send_at.is_a?(Int)
-        # If send_at is an Int value it should represent an epoch time
-        TL::MessageSchedulingStateSendAtDate.new(send_at)
-      elsif send_at.is_a?(Time)
-        # If send_at is a Time we convert it to a unix time stamp
-        TL::MessageSchedulingStateSendAtDate.new(send_at.to_unix.to_i32)
-      elsif send_at.is_a?(Time::Span)
-        # If send_at is a Time::Span we need to get the current time, and add the time span to it
-        TL::MessageSchedulingStateSendAtDate.new(Time.utc.to_unix.to_i32 + send_at.total_seconds)
-      elsif send_when_online
-        # Otherwise check for send_when_online and use that
-        TL::MessageSchedulingStateSendWhenOnline.new
-      end
+      # Get the chat item
+      chat = TL.get_chat(chat.id)
+
+      # Get the id of the last read message, and the last message
+      from_message_id = chat.last_read_inbox_message_id
+
+      to_message_id = chat.last_message.try &.id || 0
+      to_message_id = last_message ? Math.min(to_message_id, last_message) : to_message_id
+
+      # No last message means nothing to do
+      return if to_message_id = 0
+
+      messages_to_read = (from_message_id..to_message_id).to_a
+      TL.view_messages(chat.id, messages_to_read, false)
     end
   end
 end

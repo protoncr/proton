@@ -22,7 +22,7 @@ module Proton
 
       PRIMITIVE_SUPER_CLASSES = ["Bool", "True", "Null"]
       PRIMITIVE_TYPES = ["int", "int53", "int128", "int256", "long", "double", "bytes", "string", "true", "date", "vector", "Vector"]
-      OPTIONAL_KEYS = ["may be null", "may be empty", "for bots only"]
+      OPTIONAL_KEYS = ["may be null", "may be empty", "for bots only", "pass null"]
 
       # [Types|Functions] => Namespace => []TLParser::Definition
       @definitions : Hash(String, Hash(String, Array(TLParser::Definition)))
