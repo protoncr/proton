@@ -25,46 +25,47 @@ module Proton
         @nested = false
       end
 
-      def item(item)
+      def add_item(item)
         @items << item unless @nested
         item
       end
 
       def text(txt)
-        item txt.to_s
+        add_item txt.to_s
       end
 
       def bold(txt)
-        item Bold.new(txt)
+        add_item Bold.new(txt)
       end
 
       def italic(txt)
-        item Italic.new(txt)
+        add_item Italic.new(txt)
       end
 
       def code(txt)
-        item Code.new(txt)
+        add_item Code.new(txt)
       end
 
       def pre(txt, language = nil)
-        item Pre.new(txt, language)
+        add_item Pre.new(txt, language)
       end
 
       def link(txt, url)
-        item Link.new(txt, url)
+        add_item Link.new(txt, url)
       end
 
       def mention(txt, user)
-        item Mention.new(txt, user)
+        add_item Mention.new(txt, user)
       end
 
       def key_value_item(key, value)
+        @items.delete key
         @items.delete value
-        item KeyValueItem.new(key, value)
+        add_item KeyValueItem.new(key, value)
       end
 
       def section(items, indent = 4)
-        item Section.new(items, indent)
+        add_item Section.new(items, indent)
       end
 
       def section(*items, indent = 4)
@@ -80,7 +81,7 @@ module Proton
       end
 
       def sub_section(items, indent = 8)
-        item SubSection.new(items, indent)
+        add_item SubSection.new(items, indent)
       end
 
       def sub_section(*items, indent = 8)
@@ -96,7 +97,7 @@ module Proton
       end
 
       def sub_sub_section(items, indent = 12)
-        item SubSubSection.new(items, indent)
+        add_item SubSubSection.new(items, indent)
       end
 
       def sub_sub_section(*items, indent = 12)

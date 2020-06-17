@@ -79,11 +79,11 @@ module Proton
       TL::TextEntityTypeTextUrl => {"<a href=\"{url}\">", "</a>"}
     }
 
-    class_getter my_id : Int32 { TL.get_me.id }
+    class_getter my_id : Int32 { TL.get_me.id! }
 
     def unparse_text(text : String, entities ents : Array(TL::TextEntity), parse_mode : ParseMode = :markdown)
-      start_entities = ents.reduce({} of Int32 => TL::TextEntity) { |acc, e| acc[e.offset] = e; acc }
-      end_entities   = ents.reduce({} of Int32 => TL::TextEntity) { |acc, e| acc[e.offset + e.length] = e; acc }
+      start_entities = ents.reduce({} of Int32 => TL::TextEntity) { |acc, e| acc[e.offset!] = e; acc }
+      end_entities   = ents.reduce({} of Int32 => TL::TextEntity) { |acc, e| acc[e.offset! + e.length!] = e; acc }
 
       chars = text.chars
       chars << ' ' # The last entity doesn't complete without this
@@ -102,9 +102,9 @@ module Proton
       String.build do |str|
         idx = 0
         chars.each do |char|
-          if (entity = start_entities[idx]?.try &.type) && (pieces = entity_map[entity.class]?)
+          if (entity = start_entities[idx]?.try &.type!) && (pieces = entity_map[entity.class]?)
             str << format_entity_chunk(pieces[0], entity)
-          elsif (entity = end_entities[idx]?.try &.type) && (pieces = entity_map[entity.class]?)
+          elsif (entity = end_entities[idx]?.try &.type!) && (pieces = entity_map[entity.class]?)
             str << format_entity_chunk(pieces[1], entity)
           end
           str << char
@@ -113,7 +113,7 @@ module Proton
       end
     end
 
-    def get_mime_type(file)
+    def guess_mime_type(file)
       case file
       when String
         MIME.from_extension(Path[file].extension)
@@ -133,22 +133,22 @@ module Proton
     end
 
     def image?(file)
-      mime = get_mime_type(file)
+      mime = guess_mime_type(file)
       mime.starts_with?("image")
     end
 
     def gif?(file)
-      mime = get_mime_type(file)
+      mime = guess_mime_type(file)
       mime.ends_with?("gif")
     end
 
     def audio?(file)
-      mime = get_mime_type(file)
+      mime = guess_mime_type(file)
       mime.starts_with?("audio")
     end
 
     def video?(file)
-      mime = get_mime_type(file)
+      mime = guess_mime_type(file)
       mime.starts_with?("video")
     end
 
@@ -179,16 +179,15 @@ module Proton
 
       case version
       when 0, 1
-        text = text
-          .gsub("[", "\u{FF3B}")
-          .gsub("]", "\u{FF3D}")
+        chars = ['_', '*', '[', '`']
       when 2
         chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
-        chars.each do |char|
-          text = text.gsub(char, "\\#{char}")
-        end
       else
         raise "Invalid version #{version} for `escape_md`"
+      end
+
+      chars.each do |char|
+        text = text.gsub(char, "\\#{char}")
       end
 
       text
@@ -227,13 +226,13 @@ module Proton
       when TL::User
         user
       when TL::Chat
-        TL.get_user(user.id.to_i32)
+        TL.get_user(user.id!.to_i32)
       when Int
         TL.get_user(user.to_i32)
       when String
         uname = chat.lstrip("@")
         chat = TL.search_public_chat(uname)
-        TL.get_user(chat.id.to_i32)
+        TL.get_user(chat.id!.to_i32)
       else
         raise ArgumentError.new("invalid type #{typeof(user)} for property `user`")
       end
@@ -266,11 +265,11 @@ module Proton
     private def format_entity_chunk(chunk, entity)
       case entity
       when TL::TextEntityTypePreCode
-        chunk = chunk.sub("{language}", entity.language)
+        chunk = chunk.sub("{language}", entity.language!)
       when TL::TextEntityTypeMentionName
-        chunk = chunk.sub("{id}", entity.user_id)
+        chunk = chunk.sub("{id}", entity.user_id!)
       when TL::TextEntityTypeTextUrl
-        chunk = chunk.sub("{url}", entity.url)
+        chunk = chunk.sub("{url}", entity.url!)
       end
       chunk
     end

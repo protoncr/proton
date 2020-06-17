@@ -22,11 +22,11 @@ module Proton
       update_events = Event.from_tl_update(update)
       if update_events.includes?(Event::NewMessage)
         was_edited = false
-        message = update.as(TL::UpdateNewMessage).message
+        message = update.as(TL::UpdateNewMessage).message!
       elsif update_events.includes?(Event::MessageEdited) && @edited
         was_edited = true
         edited_message = update.as(TL::UpdateMessageEdited)
-        message = TL.get_message_locally(edited_message.chat_id, edited_message.message_id)
+        message = TL.get_message_locally(edited_message.chat_id!, edited_message.message_id!)
       else
         return
       end

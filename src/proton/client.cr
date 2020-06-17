@@ -6,6 +6,7 @@ module Proton
 
     include Logger
     include ChatMethods
+    include UploadMethods
     include MessageMethods
     include EventHandler::Annotator
 
@@ -72,10 +73,11 @@ module Proton
       @event_handlers << handler
     end
 
-    def start(timeout = nil)
+    def start(timeout = nil, &block)
       receive_loop(timeout) do |update|
         if update.is_a?(TL::Update)
           type = update.responds_to?(:_type) ? update._type : "Unknown"
+          yield update.as(TL::Update)
           @event_handlers.each do |handler|
             spawn do
               handler = handler.not_nil!
@@ -92,6 +94,10 @@ module Proton
           end
         end
       end
+    end
+
+    def start(timeout = nil)
+      start(timeout) { }
     end
 
     def receive_loop(timeout = nil, &block : TL::TLObject ->)

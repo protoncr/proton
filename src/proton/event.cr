@@ -1,6 +1,7 @@
 module Proton
   enum Event
     NewMessage
+    NewChatMember
     MessageEdited
     MessageDeleted
     MessageRead
@@ -23,6 +24,10 @@ module Proton
       case update
       when TL::UpdateNewMessage
         actions << NewMessage
+        case update.message!.content!
+        when TL::MessageChatAddMembers, TL::MessageChatJoinByLink
+          actions << NewChatMember
+        end
       when TL::UpdateMessageEdited
         actions << MessageEdited
       when TL::UpdateMessageSendAcknowledged
@@ -49,7 +54,6 @@ module Proton
         actions << CallbackQuery
       when TL::UpdateNewChosenInlineResult
         actions << ChosenInlineResult
-      else
       end
 
       actions << Raw

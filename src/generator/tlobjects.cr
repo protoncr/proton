@@ -22,7 +22,7 @@ module Proton
 
       PRIMITIVE_SUPER_CLASSES = ["Bool", "True", "Null"]
       PRIMITIVE_TYPES = ["int", "int53", "int128", "int256", "long", "double", "bytes", "string", "true", "date", "vector", "Vector"]
-      OPTIONAL_KEYS = ["may be null", "may be empty", "for bots only", "pass null"]
+      OPTIONAL_KEYS = ["; may be null", "; may be empty", "for bots only", "pass null", "if known", "if available"]
 
       # [Types|Functions] => Namespace => []TLParser::Definition
       @definitions : Hash(String, Hash(String, Array(TLParser::Definition)))
@@ -330,39 +330,34 @@ module Proton
       end
 
       private def write_param_props(builder, params, comments)
-        params = sort_params(params, comments)
         params.each do |p|
           type = p.type
           comment = comments[p.name]?
           if type.is_a?(TLParser::NormalParam)
             cr_type = to_crystal_type(p.type.as(TLParser::NormalParam).type)
 
-            if comment
-              comment.lines.each do |line|
-                builder.writeln("# #{line}")
-              end
-            end
-
-            builder.write("property #{p.name} : #{cr_type}")
-            builder.write("?") if param_optional?(p, comments)
+            comment.lines.each { |ln| builder.writeln("# #{ln}") } if comment
+            builder.writeln "property #{p.name} : #{cr_type}?"
             builder.writeln
+            builder.writeln "# :ditto:" if comment
+            builder.writeln "def #{p.name}!"
+            builder.writeln "@#{p.name}.not_nil!"
+            builder.writeln "end"
             builder.writeln
           end
         end
       end
 
       private def write_initializer(builder, params, comments)
-        params = sort_params(params, comments)
         if params.empty?
           builder.writeln "def initialize"
           builder.writeln "end"
         else
-          builder.writeln "def initialize("
+          builder.write "def initialize("
           params.each_with_index do |p, i|
             write_param(builder, p, comments)
-            builder.writeln(i < (params.size - 1) ? "," : "")
+            builder.write(i < (params.size - 1) ? ", " : "")
           end
-          builder.dedent
           builder.writeln ")"
           builder.indent
           builder.writeln("end")
@@ -372,10 +367,7 @@ module Proton
       private def write_param(builder, param, comments)
         type = param.type.as(TLParser::NormalParam)
         cr_type = to_crystal_type(type.type)
-        builder.write("@#{param.name} : #{cr_type}")
-        if param_optional?(param, comments)
-          builder.write("? = nil")
-        end
+        builder.write("@#{param.name} : #{cr_type}? = nil")
       end
 
       private def sort_params(params, comments)
@@ -391,7 +383,7 @@ module Proton
 
       private def param_optional?(param, comments)
         comment = comments[param.name]?
-        optional = comment ? OPTIONAL_KEYS.any? { |key| comment.includes?("; #{key}") } : false
+        optional = comment ? OPTIONAL_KEYS.any? { |key| comment.includes?("#{key}") } : false
       end
     end
   end

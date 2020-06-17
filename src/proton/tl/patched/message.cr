@@ -1,8 +1,30 @@
 module Proton
   module TL
     class Message < TLObject
+      def server_id
+        divisor = self.id! / 1048576
+        if (divisor * (2^20)) % 1 == 0
+          divisor.to_i64
+        else
+          self.id!
+        end
+      end
+
+      def link
+        chat = TL.get_chat(chat_id!)
+        if (sg = chat.supergroup)
+          if (sg.username!.empty?)
+            "https://t.me/c/#{sg.id!}/#{server_id}"
+          else
+            "https://t.me/#{sg.username!}/#{server_id}"
+          end
+        else
+          "https://t.me/c/#{chat.id!}/#{server_id}"
+        end
+      end
+
       def reply?
-        reply_to_message_id > 0
+        reply_to_message_id! > 0
       end
 
       def forwarded?
@@ -10,13 +32,13 @@ module Proton
       end
 
       def text(caption = true)
-        content = self.content
+        content = self.content!
         case content
         when TL::MessageText
-          content.text.text
+          content.text!.text!
         when .responds_to?(:caption)
           if caption
-            content.caption.text
+            content.caption!.text!
           end
         else
         end
@@ -29,13 +51,13 @@ module Proton
       end
 
       def entities(caption = true)
-        content = self.content
+        content = self.content!
         case content
         when TL::MessageText
-          content.text.entities
+          content.text!.entities!
         when .responds_to?(:caption)
           if caption
-            content.caption.entities
+            content.caption!.entities!
           else
             [] of TL::TextEntity
           end
@@ -47,7 +69,7 @@ module Proton
       def text_entities(caption = true)
         if text = self.text(caption)
           entities(caption).flatten.reduce({} of TL::TextEntity => String) do |acc, ent|
-            acc[ent] = text[ent.offset, ent.length]
+            acc[ent] = text[ent.offset!, ent.length!]
             acc
           end
         else
@@ -55,9 +77,15 @@ module Proton
         end
       end
 
-      def reply_to_message
-        if reply_to_message_id > 0
-          TL.get_message(chat_id, reply_to_message_id)
+      def reply_message
+        if reply_to_message_id! > 0
+          TL.get_message(chat_id!, reply_to_message_id!)
+        end
+      end
+
+      def from_user
+        if sender_user_id! > 0
+          TL.get_user(sender_user_id!)
         end
       end
     end

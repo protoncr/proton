@@ -15,8 +15,8 @@ module Proton
 
       def inline_mention(markdown_version = 1)
         name = display_name
-        name = name.strip.empty? ? id : name
-        "[#{Utils.escape_md(name, markdown_version)}](tg://user?id=#{id})"
+        name = name.strip.empty? ? id.to_s : name.gsub(/\[|\]/, '|')
+        "[#{name}](tg://user?id=#{id})"
       end
     end
   end
