@@ -18,7 +18,12 @@ module Proton
         when String
           if file.match(/https?:\/\//)
             # Looks like a URL
-            raise "File URLs are not yet supported. Please download first."
+            ext = File.extname(file)
+            localfile = File.tempfile(suffix: ext) do |f|
+              response = HTTP::Client.get(file)
+              f << response.body
+            end
+            TL::InputFileLocal.new(File.real_path(localfile.path))
           elsif file.includes?("/") || file.match(/\.[a-z0-9_\-]$/)
             # Looks like a local path
             TL::InputFileLocal.new(file)

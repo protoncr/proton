@@ -42,8 +42,7 @@ module Proton
     # Receive timeout
     property timeout : Time::Span
 
-    def initialize(verbosity_level = 1,
-                   auth_flow = nil,
+    def initialize(auth_flow = nil,
                    timeout = 5.seconds,
                    **params)
       @client = TDLib.client_create
@@ -59,14 +58,15 @@ module Proton
         @td_lib_parameters = TL::TdlibParameters.new(**DEFAULT_TD_LIB_PARAMETERS.merge(params))
       end
 
-
-      send({
-        "@type" => "setLogVerbosityLevel",
-        "new_verbosity_level" => verbosity_level
-        }, false)
-
       TL.client = self
       register_event_handler_annotations
+    end
+
+    def set_tdlib_verbosity(level)
+      send({
+        "@type" => "setLogVerbosityLevel",
+        "new_verbosity_level" => level
+      }, false)
     end
 
     def add_event_handler(handler : EventHandler)
