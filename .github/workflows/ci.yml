@@ -1,0 +1,36 @@
+name: Crystal CI
+
+on:
+  push:
+    branches: [ native ]
+  pull_request:
+    branches: [ native ]
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  specs:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu-latest, crystal: latest}
+          - {os: ubuntu-latest, crystal: nightly}
+          - {os: macos-latest}
+          - {os: windows-latest}
+    runs-on: ${{matrix.os}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: oprypin/install-crystal@v1
+        with:
+          crystal: ${{matrix.crystal}}
+
+      - name: Check formatting
+        run: crystal tool format && git diff --exit-code
+        if: matrix.crystal == 'latest'
+
+      - name: Install dependencies
+        run: shards install
+
+      - name: Run specs
+        run: crystal spec
