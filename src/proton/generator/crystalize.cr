@@ -34,20 +34,34 @@ module Proton::Generator
     end
 
     module Definitions
-      def self.type_name(d : Proton::Parser::Definition)
-        Crystalize.classify(d.name)
+      def self.type_name(d : Proton::Parser::Definition, interface = false)
+        String.build do |str|
+          str << "I" if interface
+          str << Crystalize.classify(d.name)
+          case d.category
+          when Parser::Category::Functions
+            str << "Request"
+          end
+        end
       end
 
-      def self.qual_name(d : Proton::Parser::Definition)
-        name = d.namespace.map(&->Crystalize.classify(String))
-        name << "Root" if name.empty?
-        name << type_name(d)
-        name.join("::")
+      def self.qual_name(d : Proton::Parser::Definition, interface = false)
+        String.build do |str|
+          if d.namespace.size > 0
+            d.namespace.each do |ns|
+              str << Crystalize.classify(ns)
+              str << "::"
+            end
+          else
+            str << "Root::"
+          end
+          str << type_name(d, interface)
+        end
       end
 
-      def self.variant_name(d : Proton::Parser::Definition)
+      def self.variant_name(d : Proton::Parser::Definition, interface = false)
         name = type_name(d)
-        type_name = Types.type_name(d.type)
+        type_name = Types.type_name(d.type, interface)
 
         variant = name.starts_with?(type_name) ? name[type_name.size..] : name
 
@@ -81,25 +95,35 @@ module Proton::Generator
         end
       end
 
-      def self.type_name(type : Proton::Parser::Type)
-        Crystalize.classify(type.name)
+      def self.type_name(type : Proton::Parser::Type, interface = false)
+        String.build do |str|
+          str << "I" if interface
+          str << Crystalize.classify(type.name)
+        end
       end
 
-      def self.qual_name(type : Proton::Parser::Type)
+      def self.qual_name(type : Proton::Parser::Type, interface = false)
         result =
           if name = builtin_type(type)
             name
           elsif type.generic_ref
             name = "TLObject"
           else
-            name = type.namespace.map(&->Crystalize.classify(String))
-            name << "Root" if name.empty?
-            name << Crystalize.classify(type.name)
-            name.join("::")
+            name = String.build do |str|
+              if type.namespace.size > 0
+                type.namespace.each do |ns|
+                  str << Crystalize.classify(ns)
+                  str << "::"
+                end
+              else
+                str << "Root::"
+              end
+              str << type_name(type, interface)
+            end
           end
 
         if generic = type.generic_arg
-          result += "(#{qual_name(generic)})"
+          result += "(#{qual_name(generic, interface)})"
         end
 
         result
@@ -107,7 +131,7 @@ module Proton::Generator
     end
 
     module Parameters
-      def self.qual_name(param : Proton::Parser::Parameter)
+      def self.qual_name(param : Proton::Parser::Parameter, interface = false)
         type = param.type
         case type
         when Proton::Parser::FlagsParam
@@ -116,7 +140,7 @@ module Proton::Generator
           if type.flag && type.type.name == "true"
             "Bool"
           else
-            result = Types.qual_name(type.type)
+            result = Types.qual_name(type.type, interface)
             if type.flag
               result += "?"
             end

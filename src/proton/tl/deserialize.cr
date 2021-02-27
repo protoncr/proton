@@ -3,7 +3,7 @@ module Proton::TL
     # Serializes the instance into the given io.
     abstract def tl_deserialize(io : IO, boxed = false)
 
-    def from_bytes(bytes, boxed = false)
+    def from_bytes(bytes, boxed = true)
       io = IO::Memory.new(bytes)
       self.tl_deserialize(io, boxed)
     end

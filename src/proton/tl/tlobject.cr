@@ -1,11 +1,11 @@
 module Proton::TL
   abstract class TLObject
     include TL::Serializable
-    include TL::Deserializable
-    include TL::Identifiable
+    extend  TL::Deserializable
   end
 
-  abstract class TLRequest < TLObject
-    include TL::RemoteCallable
+  abstract class TLRequest
+    include TL::Serializable
+    extend  TL::RemoteCallable
   end
 end

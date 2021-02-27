@@ -1,5 +1,7 @@
 module Proton::Generator
   module Writer
+    include Crystalize
+
     def self.write_module(builder, name, comment = nil, &block)
       if comment
         builder.writeln(comment)
@@ -11,71 +13,13 @@ module Proton::Generator
 
     def self.write_category(builder, category, definitions, metadata)
       is_function = category == Parser::Category::Functions
-
       metadata.cat_ns_defs[category].each do |ns, defs|
-        ns_name = ns.empty? ? "Root" : ns.map { |n| classify_name(n) }.join("::")
-        abstracts = metadata.ns_abstracts[ns]?
+        ns_name = ns.empty? ? "Root" : ns.map { |n| Crystalize.classify(n) }.join("::")
         write_module(builder, ns_name) do
-          if !is_function
-            abstracts.try &.each do |abs|
-              builder.writeln("abstract class #{classify_name(abs)} < TLObject")
-              builder.writeln("end")
-              builder.writeln
-            end
-          end
+          write_abstracts(builder, category, defs, metadata) unless is_function
 
-          defs.each_with_index do |d, i|
-            name = classify_name(d.name)
-            name = "#{name}Request" if is_function
-
-            abstract_base = false
-            parent_type = is_function ? "TLRequest" : "TLObject"
-
-            # Check if the type is a subclass of an abstract type
-            if abstracts && abstracts.includes?(classify_name(d.type.name))
-              abstract_base = true
-              parent_type = classify_name(d.type.name)
-            end
-
-            builder.writeln("class #{name} < #{parent_type}")
-            builder.writeln("getter contructor_id = 0x%08x" % d.id)
-
-            init_args = d.params
-              .select { |a| a.type.is_a?(Parser::NormalParam) }
-              .sort_by { |a| a.type.flag? ? 1 : 0 }
-              .map do |a|
-                type = a.type.as(Parser::NormalParam)
-                {a.fixed_name, type}
-              end
-
-            # Write properties and intitializer
-            unless init_args.empty?
-              builder.writeln
-              init_args.each do |name, type|
-                builder.writeln("property #{name} : #{type.type_hint}")
-              end
-
-              builder.writeln
-              builder.write("def initialize(")
-              init_args.each_with_index do |(name, type), i|
-                builder.write("@#{name} : #{type.type_hint}")
-                builder.write(" = nil") if !!type.flag
-                builder.write(", ") if i < init_args.size - 1
-              end
-              builder.write(")")
-              builder.indent
-              builder.writeln
-              builder.writeln("end")
-            end
-
-            # Write serialization function
-            write_tl_serialize(builder, d, metadata, abstract_base)
-
-            # Write de-serialization function
-            write_tl_deserialize(builder, d, metadata, abstract_base)
-
-            builder.writeln("end")
-            builder.writeln unless i >= defs.size - 1
+          defs.each_with_index do |d|
+            write_class(builder, category, d, metadata)
           end
         end
         builder.writeln
@@ -84,17 +28,68 @@ module Proton::Generator
       builder.writeln
     end
 
-    def self.write_tl_serialize(builder, definition, metadata, abstract_base)
-      builder.writeln
-      builder.writeln("def tl_serialize(io)")
-
-      case definition.category
-      when Parser::Category::Types
-        # Bare types should not write their constructor id
-        builder.writeln("@constructor_id.tl_serialize(io)") if abstract_base
-      else
-        builder.writeln("@constructor_id.tl_serialize(io)")
+    def self.write_abstracts(builder, category, defs, metadata)
+      parent = category == Parser::Category::Types ? "TLObject" : "TLRequest"
+      bases = Set(String).new
+      defs.each do |d|
+        bases.add(Types.type_name(d.type, interface: true))
+        bases.add(Definitions.type_name(d, interface: true))
       end
+      bases.to_a.sort.each do |b|
+        builder.writeln("abstract class #{b} < #{parent}; end")
+      end
+    end
+
+    def self.write_class(builder, category, definition, metadata)
+      is_function = category == Parser::Category::Functions
+      class_name = Definitions.type_name(definition)
+      extending_type = is_function ? "TLRequest" : Types.type_name(definition.type, interface: true)
+
+      params = definition.params.sort_by do |d|
+        type = d.type
+        type.is_a?(Parser::NormalParam) && type.flag ? 1 : 0
+      end
+
+      builder.writeln
+      builder.writeln("class #{class_name} < #{extending_type}")
+      builder.writeln("CONSTRUCTOR_ID = 0x%08X" % definition.id)
+      if params.size > 0
+        builder.writeln
+        params.each do |p|
+          _type = p.type
+          case _type
+          when Proton::Parser::NormalParam
+            builder.writeln("property #{Parameters.attr_name(p)} : #{Parameters.qual_name(p, interface: true)}")
+          end
+        end
+
+        builder.writeln
+        builder.write("def initialize(")
+        params.each_with_index do |p, i|
+          _type = p.type
+          case _type
+          when Proton::Parser::NormalParam
+            builder.write("@#{Parameters.attr_name(p)} : #{Parameters.qual_name(p, interface: true)}")
+            builder.write(" = nil") if _type.flag
+            builder.write(", ") if i < params.size - 1
+          end
+        end
+        builder.writeln(")")
+        builder.indent
+        builder.writeln("end")
+      end
+
+      write_tl_serialize(builder, definition, metadata)
+      write_tl_deserialize(builder, definition, metadata) unless is_function
+      write_return_type(builder, definition, metadata) if is_function
+
+      builder.writeln("end")
+    end
+
+    def self.write_tl_serialize(builder, definition, metadata)
+      builder.writeln
+      builder.writeln("def tl_serialize(io, boxed = false)")
+      builder.writeln("CONSTRUCTOR_ID.tl_serialize(io) if boxed")
 
       definition.params.each do |param|
         type = param.type
@@ -113,7 +108,7 @@ module Proton::Generator
 
                 # OR (if the flag is present) the correct bit index.
                 # Only the special-cased "true" flags are booleans.
-                builder.write(" | @#{p.fixed_name} ? #{1 << flag.index} : 0")
+                builder.write(" | @#{Parameters.attr_name(p)} ? #{1 << flag.index} : 0")
               end
             end
           end
@@ -122,12 +117,13 @@ module Proton::Generator
         when Parser::NormalParam
           ty = type.type
           if ty.name != true
+            param_name = Parameters.attr_name(param)
             if flag = type.flag
-              builder.writeln("if #{param.fixed_name} = @#{param.fixed_name}")
-              builder.writeln("#{param.fixed_name}.tl_serialize(io)")
+              builder.writeln("if #{param_name} = @#{param_name}")
+              builder.writeln("#{param_name}.tl_serialize(io)")
               builder.writeln("end")
             else
-              builder.writeln("@#{param.fixed_name}.tl_serialize(io)")
+              builder.writeln("@#{param_name}.tl_serialize(io)")
             end
           end
         end
@@ -136,18 +132,82 @@ module Proton::Generator
       builder.writeln("end")
     end
 
-    def self.write_tl_deserialize(builder, definition, metadata, abstract_base)
+    def self.write_tl_deserialize(builder, definition, metadata)
       builder.writeln
-      builder.writeln("def tl_deserialize(io)")
-      builder.writeln("@constructor_id.tl_deserialize(io)")
+      builder.writeln("def self.tl_deserialize(io, boxed = false)")
+      builder.writeln("if boxed")
+      builder.writeln("constructor_id = UInt64.tl_deserialize(io)" % definition.id)
+      builder.writeln("raise \"Invalid constructor_id\" unless constructor_id == CONSTRUCTOR_ID")
+      builder.writeln("end")
+
+      definition.params.each_with_index do |param, i|
+        type = param.type
+        case type
+        when Parser::FlagsParam
+          builder.writeln("#{Parameters.attr_name(param)} = UInt32.tl_deserialize(io)")
+        when Parser::NormalParam
+          ty = type.type
+          if ty.name == "true"
+            if flag = type.flag
+              builder.writeln("#{Parameters.attr_name(param)} = (#{flag.name} & #{1 << flag.index}) != 0")
+            else
+              raise "the `true` type must always be used in a flag"
+            end
+          else
+            builder.write("#{Parameters.attr_name(param)} = ")
+            if flag = type.flag
+              builder.write("(#{flag.name} & #{1 << flag.index}) != 0 ? ")
+              builder.indent
+            end
+
+            if ty.generic_ref
+              # Deserialization of a generic reference requires
+              # parsing *any* constructor, because the length is
+              # not included anywhere. Unfortunately, we do not
+              # have the machinery to do that; we would need a
+              # single `match` with all the possible constructors!.
+              #
+              # But, if the generic is the last parameter, we can
+              # just read the entire remaining thing.
+              #
+              # This will only potentially happen while
+              # deserializing functions anyway.
+              if i == definition.params.size - 1
+                builder.write("io.gets_to_end.to_slice")
+              else
+                builder.write("raise \"cannot read generic params in the middle\"")
+              end
+            else
+              builder.write("#{Types.qual_name(ty)}.tl_deserialize(io)")
+            end
+
+            if flag = type.flag
+              builder.writeln(" : nil")
+              builder.dedent
+            else
+              builder.writeln
+            end
+          end
+        end
+      end
+
+      builder.write("new(")
+      definition.params.each_with_index do |param, i|
+        case param.type
+        when Parser::NormalParam
+          builder.write("#{Parameters.attr_name(param)}: #{Parameters.attr_name(param)}")
+          builder.write(", ") if i < definition.params.size - 1
+        end
+      end
+      builder.writeln(")")
       builder.writeln("end")
     end
 
-    def self.write_aliases(builder, definitions, metadata)
-    end
-
-    def self.classify_name(name)
-      name.camelcase
+    def self.write_return_type(builder, definition, metadata)
+      builder.writeln
+      builder.writeln("def self.return_type : TLObject")
+      builder.writeln(Types.qual_name(definition.type))
+      builder.writeln("end")
     end
   end
 end

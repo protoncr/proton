@@ -43,7 +43,6 @@ module Proton::Generator
 
       Writer.write_category(builder, Parser::Category::Types, defs, metadata)
       Writer.write_category(builder, Parser::Category::Functions, defs, metadata)
-      Writer.write_aliases(builder, defs, metadata)
     end
   end
 end
