@@ -1,0 +1,21 @@
+name: proton
+version: 0.1.0
+
+authors:
+  - Chris Watson <cawatson1993@gmail.com>
+
+crystal: 0.36.1
+
+license: MIT
+
+targets:
+  tl-to-json:
+    main: src/bin/tl-to-json.cr
+
+scripts:
+  postinstall: crystal run build.cr
+
+development_dependencies:
+  spectator:
+    gitlab: arctic-fox/spectator
+    branch: master
