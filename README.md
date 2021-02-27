@@ -1,5 +1,7 @@
 # Proton
 
+[![Crystal CI](https://github.com/protoncr/proton/actions/workflows/ci.yml/badge.svg)](https://github.com/protoncr/proton/actions/workflows/ci.yml)
+
 A work-in-progress set of libraries to interact with Telegram's MTProto protocol.
 
 ## Installation
