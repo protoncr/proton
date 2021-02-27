@@ -2,7 +2,7 @@ module Proton::Generator
   class Metadata
     IGNORED_TYPES = {
       "Bool",
-      "Vector"
+      "Vector",
     }
 
     getter ns_cat_defs : Hash(Tuple(Array(String), Parser::Category), Array(Parser::Definition))
