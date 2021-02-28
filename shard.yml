@@ -18,6 +18,10 @@ scripts:
 crystalline:
   main: spec/spec_helper.cr
 
+dependencies:
+  crypto:
+    github: protoncr/crypto
+    branch: master
 development_dependencies:
   spectator:
     gitlab: arctic-fox/spectator

@@ -25,7 +25,7 @@ This library is a work in progress and not currently usable. Please check back s
 Since `shards` doesn't _currently_ support multi-repos, all of the libraries contained within are technically one library. That being said, here are the pieces of the puzzle that make up Proton:
 
 - Proton::Client - High level MTProto wrapper
-- Proton::Crypto - Cryptographic functions specific to MTProto
+- [Proton::Crypto](./src/proton/crypto) - Cryptographic functions specific to MTProto
 - Proton::MTProto - Low level implementation of the [Mobile Transport Protocol](https://core.telegram.org/mtproto)
 - Proton::MTSender - RPC layer for connecting to Telegram
 - Proton::Session - Session storage for the client

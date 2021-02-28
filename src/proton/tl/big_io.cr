@@ -1,11 +1,5 @@
 require "big"
 
-lib LibGMP
-  # https://gmplib.org/manual/Integer-Import-and-Export
-  fun import = __gmpz_import(rop : MPZ*, count : SizeT, order : Int, size : SizeT, endian : Int, nails : SizeT, op : Void*)
-  fun export = __gmpz_export(rop : Void*, countp : SizeT*, order : Int, size : SizeT, endian : Int, nails : SizeT, op : MPZ*) : Void*
-end
-
 module Proton::TL
   struct I128
     MAX = I128.new("340282366920938463463374607431768211455")

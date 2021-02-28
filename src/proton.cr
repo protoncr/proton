@@ -1,3 +1,5 @@
+require "./core_ext/*"
 require "./proton/parser"
 require "./proton/tl"
 require "./proton/generator"
+require "./proton/crypto"

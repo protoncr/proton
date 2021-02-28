@@ -32,5 +32,8 @@ jobs:
       - name: Install dependencies
         run: shards install --ignore-crystal-version
 
+      - name: Generate type definitions
+        run: crystal run build.cr
+
       - name: Run specs
         run: crystal spec
