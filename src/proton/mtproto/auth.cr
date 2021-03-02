@@ -205,7 +205,7 @@ module Proton::MTProto
         nonce: TL::I128.from_bytes(nonce),
         server_nonce: TL::I128.from_bytes(server_nonce),
         retry_id: 0_i64, # TODO: Use a real retry id
-        g_b: g_b.to_slice(IO::ByteFormat::BigEndian)).to_bytes
+        g_b: g_b.to_slice(IO::ByteFormat::BigEndian)      ).to_bytes
 
       # sha1(client_dh_inner).digest() + client_dh_inner
       client_dh_inner_hashed = begin
@@ -242,14 +242,14 @@ module Proton::MTProto
 
       dh_gen = TL::Root::SetClientDhParamsRequest.return_type.from_bytes(response)
       dh_gen = case dh_gen
-      when TL::Root::DhGenOk
+               when TL::Root::DhGenOk
                  DhGenData.new(dh_gen.nonce.to_bytes, dh_gen.server_nonce.to_bytes, dh_gen.new_nonce_hash1.to_bytes, 1_u8)
-      when TL::Root::DhGenRetry
+               when TL::Root::DhGenRetry
                  DhGenData.new(dh_gen.nonce.to_bytes, dh_gen.server_nonce.to_bytes, dh_gen.new_nonce_hash2.to_bytes, 2_u8)
-      when TL::Root::DhGenFail
+               when TL::Root::DhGenFail
                  DhGenData.new(dh_gen.nonce.to_bytes, dh_gen.server_nonce.to_bytes, dh_gen.new_nonce_hash3.to_bytes, 3_u8)
-      else
-        raise "Unreachable"
+               else
+                 raise "Unreachable"
                end
 
       check_nonce(dh_gen.nonce, nonce)
