@@ -46,7 +46,11 @@ module Proton::TL
       end
 
       def self.from_io(io : IO, format : IO::ByteFormat)
-        format.decode(self, io)
+        new(format.decode(self, io))
+      end
+
+      def ==(other : self)
+        @big == other.@big
       end
     end
   {% end %}

@@ -1,3 +1,4 @@
+require "./tl/error"
 require "./tl/serialize"
 require "./tl/deserialize"
 require "./tl/identifiable"

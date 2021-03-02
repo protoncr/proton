@@ -1,6 +1,6 @@
 module Proton::Generator
   class SourceBuilder
-    INDENT_PATTERN = /(^(abstract class|class |module |def |when |if |elsif |else|begin))|({|\(|do|do \|[\w\d\s,_]+\|)$/
+    INDENT_PATTERN = /(^(abstract class|class |module |def |if |elsif |else|begin))|({|\(|do|do \|[\w\d\s,_]+\|)$/
     DEDENT_PATTERN = /((^|\s)end|})$/
 
     property current_indent : Int32

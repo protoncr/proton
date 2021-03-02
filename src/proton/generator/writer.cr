@@ -16,7 +16,7 @@ module Proton::Generator
       metadata.cat_ns_defs[category].each do |ns, defs|
         ns_name = ns.empty? ? "Root" : ns.map { |n| Crystalize.classify(n) }.join("::")
         write_module(builder, ns_name) do
-          write_abstracts(builder, category, defs, metadata) unless is_function
+          write_interfaces(builder, ns, category, defs, metadata) unless is_function
 
           defs.each_with_index do |d|
             write_class(builder, category, d, metadata)
@@ -28,15 +28,25 @@ module Proton::Generator
       builder.writeln
     end
 
-    def self.write_abstracts(builder, category, defs, metadata)
+    def self.write_interfaces(builder, ns, category, defs, metadata)
       parent = category == Parser::Category::Types ? "TLObject" : "TLRequest"
-      bases = Set(String).new
-      defs.each do |d|
-        bases.add(Types.type_name(d.type, interface: true))
-        bases.add(Definitions.type_name(d, interface: true))
-      end
-      bases.to_a.sort.each do |b|
-        builder.writeln("abstract class #{b} < #{parent}; end")
+      metadata.ns_type_defs[ns]?.try &.each do |type, defs|
+        builder.writeln
+        builder.writeln("abstract class #{type} < #{parent}")
+        builder.writeln("def self.tl_deserialize(io : IO, boxed = false)")
+        builder.writeln("constructor_id = UInt32.tl_deserialize(io)")
+        builder.writeln("case constructor_id")
+        defs.each do |d|
+          builder.writeln("when 0x%08X_u32" % d.id)
+          builder.indent
+          builder.writeln("#{Definitions.qual_name(d)}.tl_deserialize(io.rewind, boxed)")
+          builder.dedent
+        end
+        builder.write("else; raise Error::UnexpectedConstructor.new(constructor_id)\n")
+        builder.indent
+        builder.writeln("end")
+        builder.writeln("end")
+        builder.writeln("end")
       end
     end
 
@@ -52,7 +62,7 @@ module Proton::Generator
 
       builder.writeln
       builder.writeln("class #{class_name} < #{extending_type}")
-      builder.writeln("CONSTRUCTOR_ID = 0x%08X" % definition.id)
+      builder.writeln("CONSTRUCTOR_ID = 0x%08X_u32" % definition.id)
       if params.size > 0
         builder.writeln
         params.each do |p|
@@ -136,8 +146,8 @@ module Proton::Generator
       builder.writeln
       builder.writeln("def self.tl_deserialize(io, boxed = false)")
       builder.writeln("if boxed")
-      builder.writeln("constructor_id = UInt64.tl_deserialize(io)" % definition.id)
-      builder.writeln("raise \"Invalid constructor_id\" unless constructor_id == CONSTRUCTOR_ID")
+      builder.writeln("constructor_id = UInt32.tl_deserialize(io)" % definition.id)
+      builder.writeln("raise Error::UnexpectedConstructor.new(constructor_id) unless constructor_id == CONSTRUCTOR_ID")
       builder.writeln("end")
 
       definition.params.each_with_index do |param, i|
@@ -178,7 +188,7 @@ module Proton::Generator
                 builder.write("raise \"cannot read generic params in the middle\"")
               end
             else
-              builder.write("#{Types.qual_name(ty)}.tl_deserialize(io)")
+              builder.write("#{Parameters.qual_name(param)}.tl_deserialize(io)")
             end
 
             if flag = type.flag
@@ -205,8 +215,8 @@ module Proton::Generator
 
     def self.write_return_type(builder, definition, metadata)
       builder.writeln
-      builder.writeln("def self.return_type : TLObject")
-      builder.writeln(Types.qual_name(definition.type))
+      builder.writeln("def self.return_type")
+      builder.writeln(Types.qual_name(definition.type, interface: true))
       builder.writeln("end")
     end
   end
