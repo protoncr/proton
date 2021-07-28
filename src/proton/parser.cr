@@ -1,6 +1,9 @@
+require "log"
 require "./parser/**"
 
 module Proton::Parser
+  Log = ::Log.for(self)
+
   def self.parse_tl(contents : String)
     Parser::Iter.new(contents)
   end

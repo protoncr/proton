@@ -1,7 +1,10 @@
+require "log"
 require "digest"
 require "./crypto/*"
 
 module Proton::Crypto
+  Log = ::Log.for(self)
+
   enum Side
     Client
     Server

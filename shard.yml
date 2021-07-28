@@ -15,14 +15,25 @@ targets:
 scripts:
   postinstall: crystal run build.cr
 
-crystalline:
-  main: spec/spec_helper.cr
+# crystalline:
+#   main: spec/spec_helper.cr
 
 dependencies:
   crypto:
     github: protoncr/crypto
     branch: master
+  structure:
+    github: watzon/structure
+    branch: main
 development_dependencies:
   spectator:
     gitlab: arctic-fox/spectator
+    branch: master
+  code_writer:
+    # path: ../code_writer
+    github: watzon/code_writer
+    branch: main
+  tl_parser:
+    # path: ../tl_parser
+    github: protoncr/tl_parser
     branch: master

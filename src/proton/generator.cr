@@ -1,7 +1,10 @@
+require "log"
 require "./parser"
 require "./generator/*"
 
 module Proton::Generator
+  Log = ::Log.for(self)
+
   DEFAULT_HEADER = <<-EOF
   # Copyright 2021 - Chris Watson and contributors.
   #

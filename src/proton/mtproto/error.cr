@@ -103,5 +103,35 @@ module Proton::MTProto
         super("invalid new nonce hash: got #{@got}, expected #{@expected}")
       end
     end
+
+    # This error occurs when a Remote Procedure call was unsuccessful.
+    #
+    # The request should be retransmited when this happens, unless the
+    # variant is `InvalidParameters`.
+    class RequestError < Error
+      class RpcError < RequestError
+        def initialize(error)
+          super("request error: #{error}")
+        end
+      end
+
+      class Dropped < RequestError
+        def initialize
+          super("request error: request dropped")
+        end
+      end
+
+      class BadMessage < RequestError
+        def initialize(code : Int32)
+          super("request error: bad message (code #{code})")
+        end
+      end
+
+      class Deserialize < RequestError
+        def initialize(error)
+          super("request error: #{error}")
+        end
+      end
+    end
   end
 end
