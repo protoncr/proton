@@ -1,6 +1,5 @@
 require "log"
 require "crinja"
-require "code_writer"
 require "compiler/crystal/tools/formatter"
 require "./templating"
 
@@ -75,17 +74,16 @@ module Proton::Generator
       #
       # Namespace              Type    Definitions
       # String     =>    Hash(String, Array(String))
-      ns_types = defs.reduce({} of String => Hash(String, Array(TLParser::Definition))) do |map, defn|
+      ns_types = defs.each_with_object({} of String => Hash(String, Array(TLParser::Definition))) do |defn, map|
         type = defn.type.name.to_s
         next map if type.in?(PRIMITIVE_TYPES + PRIMITIVE_SUPER_CLASSES)
         map[namespace] ||= {} of String => Array(TLParser::Definition)
         map[namespace][type] ||= [] of TLParser::Definition
         map[namespace][type] << defn
-        map
       end
 
       # Create a map of all referenced namespaces in a namespace. This is just for importing purposes.
-      ns_references = defs.reduce({} of String => Array(String)) do |map, defn|
+      ns_references = defs.each_with_object({} of String => Array(String)) do |defn, map|
         map[namespace] ||= [] of String
         map[namespace].push(defn.namespace.join("/")) unless defn.namespace == ns
         map[namespace].push(defn.type.namespace.join("/")) unless defn.type.namespace == ns
@@ -95,7 +93,6 @@ module Proton::Generator
           map[namespace].push(type.namespace.join("/")) unless type.namespace == ns
         end
         map[namespace].uniq!
-        map
       end
 
       ns_dir = types_dir
