@@ -1,11 +1,11 @@
 module Proton::TL
   module Deserializable
     # Serializes the instance into the given io.
-    abstract def tl_deserialize(io : IO, boxed = false)
+    abstract def tl_deserialize(io : IO, bare = false)
 
-    def from_bytes(bytes, boxed = true)
+    def from_bytes(bytes, bare = true)
       io = IO::Memory.new(bytes)
-      self.tl_deserialize(io, boxed)
+      self.tl_deserialize(io, bare)
     end
   end
 end
@@ -17,7 +17,7 @@ struct Bool
   #
   # * `boolFalse#bc799737 = Bool;` deserializes into `false`.
   # * `boolTrue#997275b5 = Bool;` deserializes into `true`.
-  def self.tl_deserialize(io : IO, boxed = false)
+  def self.tl_deserialize(io : IO, bare = false)
     id = UInt32.from_io(io, IO::ByteFormat::LittleEndian)
     case id
     when 0x997275b5_u32
@@ -33,7 +33,7 @@ end
 abstract struct Int
   extend Proton::TL::Deserializable
 
-  def self.tl_deserialize(io : IO, boxed = false)
+  def self.tl_deserialize(io : IO, bare = false)
     self.from_io(io, IO::ByteFormat::LittleEndian)
   end
 end
@@ -41,7 +41,7 @@ end
 struct Proton::TL::I128
   extend Proton::TL::Deserializable
 
-  def self.tl_deserialize(io : IO, boxed = false)
+  def self.tl_deserialize(io : IO, bare = false)
     self.from_io(io, IO::ByteFormat::LittleEndian)
   end
 end
@@ -49,7 +49,7 @@ end
 struct Proton::TL::I256
   extend Proton::TL::Deserializable
 
-  def self.tl_deserialize(io : IO, boxed = false)
+  def self.tl_deserialize(io : IO, bare = false)
     self.from_io(io, IO::ByteFormat::LittleEndian)
   end
 end
@@ -57,8 +57,8 @@ end
 class Array(T)
   extend Proton::TL::Deserializable
 
-  def self.tl_deserialize(io : IO, boxed = false)
-    unless boxed
+  def self.tl_deserialize(io : IO, bare = false)
+    unless bare
       id = UInt32.tl_deserialize(io)
       raise Proton::TL::Error::UnexpectedConstructor.new(id) unless id == 0x1cb5c415_u32
     end
@@ -72,7 +72,7 @@ end
 class String
   extend Proton::TL::Deserializable
 
-  def self.tl_deserialize(io : IO, boxed = false)
+  def self.tl_deserialize(io : IO, bare = false)
     self.new(Bytes.tl_deserialize(io))
   end
 end
@@ -80,7 +80,7 @@ end
 struct Slice(T)
   extend Proton::TL::Deserializable
 
-  def self.tl_deserialize(io : IO, boxed = false)
+  def self.tl_deserialize(io : IO, bare = false)
     first_byte = io.read_byte.not_nil!
     len, padding = if first_byte == 254
                      buffer = Bytes.new(3)

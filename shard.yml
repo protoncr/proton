@@ -9,6 +9,8 @@ crystal: 0.36.1
 license: MIT
 
 targets:
+  tl-gen:
+    main: src/bin/tl-gen.cr
   tl-to-json:
     main: src/bin/tl-to-json.cr
 
@@ -25,15 +27,19 @@ dependencies:
   structure:
     github: watzon/structure
     branch: main
+  crinja:
+    github: straight-shoota/crinja
+    branch: master
+  code_writer:
+    path: ../code_writer
+    # github: watzon/code_writer
+    # branch: main
+  tl_parser:
+    path: ../tl_parser
+    # github: protoncr/tl_parser
+    # branch: master
+
 development_dependencies:
   spectator:
     gitlab: arctic-fox/spectator
-    branch: master
-  code_writer:
-    # path: ../code_writer
-    github: watzon/code_writer
-    branch: main
-  tl_parser:
-    # path: ../tl_parser
-    github: protoncr/tl_parser
     branch: master

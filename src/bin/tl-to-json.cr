@@ -1,6 +1,6 @@
 require "json"
+require "tl_parser"
 require "option_parser"
-require "../proton/parser"
 
 record Schema, constructors : Array(Constructor), methods : Array(Method) do
   include JSON::Serializable
@@ -70,7 +70,7 @@ inputs.each do |input|
     end
   end
 
-  iter = Proton::Parser.parse_tl(input.to_s)
+  iter = TLParser::Iter.new(input.to_s)
 
   loop do
     _def = iter.next rescue nil
@@ -78,14 +78,14 @@ inputs.each do |input|
     break if _def.is_a?(Iterator::Stop)
 
     case _def.category
-    in Proton::Parser::Category::Types
+    in TLParser::Category::Types
       schema.constructors << Constructor.new(
         id: _def.id,
         predicate: (_def.namespace + [_def.name]).join('.'),
         params: _def.params.map { |p| Parameter.new(p.name, p.type.to_s) },
         type: _def.type.to_s
       )
-    in Proton::Parser::Category::Functions
+    in TLParser::Category::Functions
       schema.methods << Method.new(
         id: _def.id,
         method: (_def.namespace + [_def.name]).join('.'),
