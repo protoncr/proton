@@ -57,6 +57,7 @@ module Proton::Generator
       raw_file = File.read(template)
       rendered = Crinja.render(raw_file, {
         depth: dirname == "." ? 0 : dirname.parts.size,
+        defs: defs,
       }, config: CRINJA_CONFIG)
 
       output_file = Path[output_dir, dirname, basename + ".cr"].normalize

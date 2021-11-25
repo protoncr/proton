@@ -1,4 +1,5 @@
 require "big"
+require "compress/gzip"
 
 module Proton::TL
   module Utils
@@ -21,6 +22,40 @@ module Proton::TL
 
     def parse_bytes!(input : Bytes | IO | String | Nil)
       parse_bytes(input).not_nil!
+    end
+
+    def gzip_io(input : IO)
+      output = IO::Memory.new
+      Compress::Gzip::Writer.open(output) do |gz|
+        IO.copy(input, gz)
+      end
+      output.to_slice
+    end
+
+    def ungzip_io(input : IO)
+      data = nil
+      Compress::Gzip::Reader.open(input) do |gz|
+        data = gz.gets_to_end
+      end
+      data.not_nil!
+    end
+
+    def read_tlobject(io : IO)
+      constructor_id = Int32.tl_deserialize(io, true)
+      case constructor_id
+      when 0xf35c6d01
+        TL::RpcResult.tl_deserialize(io, true)
+      when 0x3072cfa1
+        TL::GzipPacked.tl_deserialize(io, true)
+      when 0x73f1f8dc
+        TL::MessageContainer.tl_deserialize(io, true)
+      {% for def in defs %}
+      when {{ def.id | hex(pad_to=8, capitalize=true) }}
+        {% if def.namespace|length > 0 %}{{ def.namespace|map("camelcase")|join("::") }}::{% else %}Root::{% endif %}{{ def.name | camelcase }}.tl_deserialize(io, false)
+      {% endfor %}
+      else
+        raise "Unknown constructor ID: #{constructor_id}"
+      end
     end
   end
 end

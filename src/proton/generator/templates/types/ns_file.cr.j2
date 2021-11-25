@@ -8,9 +8,6 @@
 # It is not advised to modify this code directly, other than to test
 # changes. All changes should be made in the code generator.
 
-require "{{ "../" * depth }}utils"
-require "{{ "../" * depth }}core/*"
-
 {% if namespace == "" %}
 # As this is the root, we import everything else here.
 {% for ns in namespaces|map("join", "/")|reject("equalto", "") %}
@@ -24,108 +21,106 @@ require "./{{ ref }}"
 {% endif %}
 
 module {{ module_root }}
-  module Types
-    {% if namespace == "" %}
-    module Root
-    {% else %}
-    module {{ namespace }}
-    {% endif %}
-      {# Loop over the type map and create an abstract class for each group #}
-      {% for type, defs in ns_types[namespace] %}
-      abstract class Type{{ type | camelcase }} < TLObject
-        def self.tl_deserialize(io : IO, bare = false)
-          constructor_id = Int32.tl_deserialize(io)
-          io.seek(-4, :current)
+  {% if namespace == "" %}
+  module Root
+  {% else %}
+  module {{ namespace }}
+  {% endif %}
+    {# Loop over the type map and create an abstract class for each group #}
+    {% for type, defs in ns_types[namespace] %}
+    abstract class Type{{ type | camelcase }} < TLObject
+      def self.tl_deserialize(io : IO, bare = false)
+        constructor_id = Int32.tl_deserialize(io)
+        io.seek(-4, :current)
 
-          case constructor_id
-          {% for def in defs %}
-          when {{ def.id | hex(pad_to=8, capitalize=true) }}
-            {{ def.name | camelcase }}.tl_deserialize(io, bare)
-          {% endfor %}
-          else
-            raise "Unknown constructor id: #{constructor_id}"
-          end
+        case constructor_id
+        {% for def in defs %}
+        when {{ def.id | hex(pad_to=8, capitalize=true) }}
+          {{ def.name | camelcase }}.tl_deserialize(io, bare)
+        {% endfor %}
+        else
+          raise "Unknown constructor id: #{constructor_id}"
         end
       end
+    end
 
-      {% endfor %}
+    {% endfor %}
 
-      {# Loop over the definitions and create a class for each #}
-      {% for def in definitions %}
-        {% set params = def.params|sort(attribute="optional") %}
-        class {{ def.name | camelcase }} < {% if def.category == "Types" %} Type{{ def.type.name|camelcase }}{% else %} TLRequest{% endif %}
-          CONSTRUCTOR_ID = {{ def.id | hex(pad_to=8, capitalize=true) }}
+    {# Loop over the definitions and create a class for each #}
+    {% for def in definitions %}
+      {% set params = def.params|sort(attribute="optional") %}
+      class {{ def.name | camelcase }} < {% if def.category == "Types" %} Type{{ def.type.name|camelcase }}{% else %} TLRequest{% endif %}
+        CONSTRUCTOR_ID = {{ def.id | hex(pad_to=8, capitalize=true) }}
 
+        {% for param in params|rejectattr("crystal_type", "equalto", "#") %}
+        getter {{ param.name }} : {{ param.crystal_type }}{% if param.optional == 1 %} | Nil{%endif%}
+        {% endfor %}
+
+        {% if params|length > 0 %}
+        def initialize(
           {% for param in params|rejectattr("crystal_type", "equalto", "#") %}
-          getter {{ param.name }} : {{ param.crystal_type }}{% if param.optional == 1 %} | Nil{%endif%}
+          {{ param.name }} : {{ param.acceptable_types|join(" | ") }}{% if param.optional == 1 %} | Nil = nil{%endif%},
           {% endfor %}
+        )
+          {% for param in params|rejectattr("crystal_type", "equalto", "#") %}
+          {% if param.type.type.name == "bytes" %}
+          @{{ param.name }} = TL::Utils.parse_bytes{% if param.optional != 1 %}!{% endif %}({{ param.name }}) 
+          {% else %}
+          @{{ param.name }} = {{ param.name }}
+          {% endif %}
+          {% endfor %}
+        end
+        {% endif %}
 
-          {% if params|length > 0 %}
-          def initialize(
+        def tl_serialize(io : IO, bare = false)
+          CONSTRUCTOR_ID.tl_serialize(io) unless bare
+          {% for param in def.params %}
+          {% if param.crystal_type == "#" %}
+          (
+            {% for param in params %}
+            {% if param.type.flag %}
+            (!{{ param.name }}.nil? ? {{ param.type.flag.index|shl(1) }} : 0) {% if not loop.last %} | {% endif %}
+            {% endif %}
+            {% endfor %}
+          ).tl_serialize(io)
+          {% elif param.type.flag %}
+          {% if param.type.type.name != "true" %}
+          @{{ param.name }}.tl_serialize(io, {{ param.type.type.bare }}) unless @{{ param.name }}.nil?
+          {% endif%}
+          {% else %}
+          @{{ param.name }}.tl_serialize(io, {{ param.type.type.bare }})
+          {% endif %}
+          {% endfor %}
+        end
+
+        {% if def.category == "Types" %}
+        def self.tl_deserialize(io : IO, bare = false)
+          {% set flag = params|selectattr("crystal_type", "equalto", "#") %}
+          {% set flags = flag|length > 0%}
+          {% if flags %}
+          flags = Int32.tl_deserialize(io)
+          {% endif %}
+          new(
             {% for param in params|rejectattr("crystal_type", "equalto", "#") %}
-            {{ param.name }} : {{ param.acceptable_types|join(" | ") }}{% if param.optional == 1 %} | Nil = nil{%endif%},
+              {% if param.type.flag %}
+              {% if param.type.type.name == "true" %}
+              {{ param.name }}: flags & {{ param.type.flag.index|shl(1) }} == 1,
+              {% else %}
+              {{ param.name }}: flags & {{ param.type.flag.index|shl(1) }} == 1 ? {{ param.crystal_type }}.tl_deserialize(io, {{ param.type.type.bare }}) : nil,
+              {% endif %}
+              {% else %}
+              {{ param.name }}: {{ param.crystal_type }}.tl_deserialize(io, {{ param.type.type.bare }}),
+              {% endif %}
             {% endfor %}
           )
-            {% for param in params|rejectattr("crystal_type", "equalto", "#") %}
-            {% if param.type.type.name == "bytes" %}
-            @{{ param.name }} = TL::Utils.parse_bytes{% if param.optional != 1 %}!{% endif %}({{ param.name }}) 
-            {% else %}
-            @{{ param.name }} = {{ param.name }}
-            {% endif %}
-            {% endfor %}
-          end
-          {% endif %}
-
-          def tl_serialize(io : IO, bare = false)
-            CONSTRUCTOR_ID.tl_serialize(io) unless bare
-            {% for param in def.params %}
-            {% if param.crystal_type == "#" %}
-            (
-              {% for param in params %}
-              {% if param.type.flag %}
-              (!{{ param.name }}.nil? ? {{ param.type.flag.index|shl(1) }} : 0) {% if not loop.last %} | {% endif %}
-              {% endif %}
-              {% endfor %}
-            ).tl_serialize(io)
-            {% elif param.type.flag %}
-            {% if param.type.type.name != "true" %}
-            @{{ param.name }}.tl_serialize(io, {{ param.type.type.bare }}) unless @{{ param.name }}.nil?
-            {% endif%}
-            {% else %}
-            @{{ param.name }}.tl_serialize(io, {{ param.type.type.bare }})
-            {% endif %}
-            {% endfor %}
-          end
-
-          {% if def.category == "Types" %}
-          def self.tl_deserialize(io : IO, bare = false)
-            {% set flag = params|selectattr("crystal_type", "equalto", "#") %}
-            {% set flags = flag|length > 0%}
-            {% if flags %}
-            flags = Int32.tl_deserialize(io)
-            {% endif %}
-            new(
-              {% for param in params|rejectattr("crystal_type", "equalto", "#") %}
-                {% if param.type.flag %}
-                {% if param.type.type.name == "true" %}
-                {{ param.name }} = flags & {{ param.type.flag.index|shl(1) }} == 1,
-                {% else %}
-                {{ param.name }} = flags & {{ param.type.flag.index|shl(1) }} == 1 ? {{ param.crystal_type }}.tl_deserialize(io, {{ param.type.type.bare }}) : nil,
-                {% endif %}
-                {% else %}
-                {{ param.name }} = {{ param.crystal_type }}.tl_deserialize(io, {{ param.type.type.bare }}),
-                {% endif %}
-              {% endfor %}
-            )
-          end
-          {% else %}
-          def return_type
-            {{ def.type.crystal_type }}
-          end
-          {% endif %}
         end
-        
-      {% endfor %}
-    end
+        {% else %}
+        def return_type
+          {{ def.type.crystal_type }}
+        end
+        {% endif %}
+      end
+      
+    {% endfor %}
   end
 end
