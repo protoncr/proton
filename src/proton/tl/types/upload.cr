@@ -15,7 +15,7 @@ module Proton::TL
   module Upload
     abstract class TypeFile < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -23,8 +23,6 @@ module Proton::TL
           File.tl_deserialize(io, bare)
         when 0xF18CDA44
           FileCdnRedirect.tl_deserialize(io, bare)
-        when 0xB15A9AFC
-          GetFile.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -33,14 +31,12 @@ module Proton::TL
 
     abstract class TypeWebFile < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x21E753BC
           WebFile.tl_deserialize(io, bare)
-        when 0x24E6818D
-          GetWebFile.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -49,7 +45,7 @@ module Proton::TL
 
     abstract class TypeCdnFile < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -57,8 +53,6 @@ module Proton::TL
           CdnFileReuploadNeeded.tl_deserialize(io, bare)
         when 0xA99FCA4F
           CdnFile.tl_deserialize(io, bare)
-        when 0x2000BCC3
-          GetCdnFile.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -66,7 +60,8 @@ module Proton::TL
     end
 
     class File < TypeFile
-      CONSTRUCTOR_ID = 0x096A18D5
+      getter constructor_id : UInt32 = 0x096A18D5_u32
+      class_getter constructor_id : UInt32 = 0x096A18D5_u32
 
       getter type : Storage::TypeFileType
       getter mtime : Int32
@@ -78,28 +73,30 @@ module Proton::TL
         bytes : Bytes | String | IO
       )
         @type = type
-        @mtime = mtime
+        @mtime = TL::Utils.parse_int!(mtime, Int32)
         @bytes = TL::Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @type.tl_serialize(io, false)
-        @mtime.tl_serialize(io, true)
-        @bytes.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @type.tl_serialize(io)
+        @mtime.tl_serialize(io)
+        @bytes.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          type: Storage::TypeFileType.tl_deserialize(io, false),
-          mtime: Int32.tl_deserialize(io, true),
-          bytes: Bytes.tl_deserialize(io, true),
+          type: Storage::TypeFileType.tl_deserialize(io),
+          mtime: Int32.tl_deserialize(io),
+          bytes: Bytes.tl_deserialize(io),
         )
       end
     end
 
     class FileCdnRedirect < TypeFile
-      CONSTRUCTOR_ID = 0xF18CDA44
+      getter constructor_id : UInt32 = 0xF18CDA44_u32
+      class_getter constructor_id : UInt32 = 0xF18CDA44_u32
 
       getter dc_id : Int32
       getter file_token : Bytes
@@ -114,7 +111,7 @@ module Proton::TL
         encryption_iv : Bytes | String | IO,
         file_hashes : Array(Root::TypeFileHash)
       )
-        @dc_id = dc_id
+        @dc_id = TL::Utils.parse_int!(dc_id, Int32)
         @file_token = TL::Utils.parse_bytes!(file_token)
         @encryption_key = TL::Utils.parse_bytes!(encryption_key)
         @encryption_iv = TL::Utils.parse_bytes!(encryption_iv)
@@ -122,27 +119,29 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @dc_id.tl_serialize(io, true)
-        @file_token.tl_serialize(io, true)
-        @encryption_key.tl_serialize(io, true)
-        @encryption_iv.tl_serialize(io, true)
-        @file_hashes.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @dc_id.tl_serialize(io)
+        @file_token.tl_serialize(io)
+        @encryption_key.tl_serialize(io)
+        @encryption_iv.tl_serialize(io)
+        @file_hashes.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          dc_id: Int32.tl_deserialize(io, true),
-          file_token: Bytes.tl_deserialize(io, true),
-          encryption_key: Bytes.tl_deserialize(io, true),
-          encryption_iv: Bytes.tl_deserialize(io, true),
-          file_hashes: Array(Root::TypeFileHash).tl_deserialize(io, false),
+          dc_id: Int32.tl_deserialize(io),
+          file_token: Bytes.tl_deserialize(io),
+          encryption_key: Bytes.tl_deserialize(io),
+          encryption_iv: Bytes.tl_deserialize(io),
+          file_hashes: Array(Root::TypeFileHash).tl_deserialize(io),
         )
       end
     end
 
     class WebFile < TypeWebFile
-      CONSTRUCTOR_ID = 0x21E753BC
+      getter constructor_id : UInt32 = 0x21E753BC_u32
+      class_getter constructor_id : UInt32 = 0x21E753BC_u32
 
       getter size : Int32
       getter mime_type : Bytes
@@ -157,35 +156,37 @@ module Proton::TL
         mtime : Int32,
         bytes : Bytes | String | IO
       )
-        @size = size
-        @mime_type = mime_type
+        @size = TL::Utils.parse_int!(size, Int32)
+        @mime_type = TL::Utils.parse_bytes!(mime_type)
         @file_type = file_type
-        @mtime = mtime
+        @mtime = TL::Utils.parse_int!(mtime, Int32)
         @bytes = TL::Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @size.tl_serialize(io, true)
-        @mime_type.tl_serialize(io, true)
-        @file_type.tl_serialize(io, false)
-        @mtime.tl_serialize(io, true)
-        @bytes.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @size.tl_serialize(io)
+        @mime_type.tl_serialize(io)
+        @file_type.tl_serialize(io)
+        @mtime.tl_serialize(io)
+        @bytes.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          size: Int32.tl_deserialize(io, true),
-          mime_type: Bytes.tl_deserialize(io, true),
-          file_type: Storage::TypeFileType.tl_deserialize(io, false),
-          mtime: Int32.tl_deserialize(io, true),
-          bytes: Bytes.tl_deserialize(io, true),
+          size: Int32.tl_deserialize(io),
+          mime_type: Bytes.tl_deserialize(io),
+          file_type: Storage::TypeFileType.tl_deserialize(io),
+          mtime: Int32.tl_deserialize(io),
+          bytes: Bytes.tl_deserialize(io),
         )
       end
     end
 
     class CdnFileReuploadNeeded < TypeCdnFile
-      CONSTRUCTOR_ID = 0xEEA8E46E
+      getter constructor_id : UInt32 = 0xEEA8E46E_u32
+      class_getter constructor_id : UInt32 = 0xEEA8E46E_u32
 
       getter request_token : Bytes
 
@@ -196,19 +197,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @request_token.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @request_token.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          request_token: Bytes.tl_deserialize(io, true),
+          request_token: Bytes.tl_deserialize(io),
         )
       end
     end
 
     class CdnFile < TypeCdnFile
-      CONSTRUCTOR_ID = 0xA99FCA4F
+      getter constructor_id : UInt32 = 0xA99FCA4F_u32
+      class_getter constructor_id : UInt32 = 0xA99FCA4F_u32
 
       getter bytes : Bytes
 
@@ -219,19 +222,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @bytes.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @bytes.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          bytes: Bytes.tl_deserialize(io, true),
+          bytes: Bytes.tl_deserialize(io),
         )
       end
     end
 
     class SaveFilePart < TLRequest
-      CONSTRUCTOR_ID = 0xB304A621
+      getter constructor_id : UInt32 = 0xB304A621_u32
+      class_getter constructor_id : UInt32 = 0xB304A621_u32
 
       getter file_id : Int64
       getter file_part : Int32
@@ -243,24 +248,25 @@ module Proton::TL
         bytes : Bytes | String | IO
       )
         @file_id = file_id
-        @file_part = file_part
+        @file_part = TL::Utils.parse_int!(file_part, Int32)
         @bytes = TL::Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @file_id.tl_serialize(io, true)
-        @file_part.tl_serialize(io, true)
-        @bytes.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @file_id.tl_serialize(io)
+        @file_part.tl_serialize(io)
+        @bytes.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetFile < TLRequest
-      CONSTRUCTOR_ID = 0xB15A9AFC
+      getter constructor_id : UInt32 = 0xB15A9AFC_u32
+      class_getter constructor_id : UInt32 = 0xB15A9AFC_u32
 
       getter location : Root::TypeInputFileLocation
       getter offset : Int32
@@ -276,30 +282,31 @@ module Proton::TL
         cdn_supported : Bool | Nil = nil
       )
         @location = location
-        @offset = offset
-        @limit = limit
+        @offset = TL::Utils.parse_int!(offset, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
         @precise = precise
         @cdn_supported = cdn_supported
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!precise.nil? ? 1 : 0) |
-            (!cdn_supported.nil? ? 2 : 0)
+          (!precise.nil? ? 0x01 : 0) |
+            (!cdn_supported.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @location.tl_serialize(io, false)
-        @offset.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        @location.tl_serialize(io)
+        @offset.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Upload::TypeFile
       end
     end
 
     class SaveBigFilePart < TLRequest
-      CONSTRUCTOR_ID = 0xDE7B673D
+      getter constructor_id : UInt32 = 0xDE7B673D_u32
+      class_getter constructor_id : UInt32 = 0xDE7B673D_u32
 
       getter file_id : Int64
       getter file_part : Int32
@@ -313,26 +320,27 @@ module Proton::TL
         bytes : Bytes | String | IO
       )
         @file_id = file_id
-        @file_part = file_part
-        @file_total_parts = file_total_parts
+        @file_part = TL::Utils.parse_int!(file_part, Int32)
+        @file_total_parts = TL::Utils.parse_int!(file_total_parts, Int32)
         @bytes = TL::Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @file_id.tl_serialize(io, true)
-        @file_part.tl_serialize(io, true)
-        @file_total_parts.tl_serialize(io, true)
-        @bytes.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @file_id.tl_serialize(io)
+        @file_part.tl_serialize(io)
+        @file_total_parts.tl_serialize(io)
+        @bytes.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetWebFile < TLRequest
-      CONSTRUCTOR_ID = 0x24E6818D
+      getter constructor_id : UInt32 = 0x24E6818D_u32
+      class_getter constructor_id : UInt32 = 0x24E6818D_u32
 
       getter location : Root::TypeInputWebFileLocation
       getter offset : Int32
@@ -344,24 +352,25 @@ module Proton::TL
         limit : Int32
       )
         @location = location
-        @offset = offset
-        @limit = limit
+        @offset = TL::Utils.parse_int!(offset, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @location.tl_serialize(io, false)
-        @offset.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @location.tl_serialize(io)
+        @offset.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Upload::TypeWebFile
       end
     end
 
     class GetCdnFile < TLRequest
-      CONSTRUCTOR_ID = 0x2000BCC3
+      getter constructor_id : UInt32 = 0x2000BCC3_u32
+      class_getter constructor_id : UInt32 = 0x2000BCC3_u32
 
       getter file_token : Bytes
       getter offset : Int32
@@ -373,24 +382,25 @@ module Proton::TL
         limit : Int32
       )
         @file_token = TL::Utils.parse_bytes!(file_token)
-        @offset = offset
-        @limit = limit
+        @offset = TL::Utils.parse_int!(offset, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @file_token.tl_serialize(io, true)
-        @offset.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @file_token.tl_serialize(io)
+        @offset.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Upload::TypeCdnFile
       end
     end
 
     class ReuploadCdnFile < TLRequest
-      CONSTRUCTOR_ID = 0x9B2754A8
+      getter constructor_id : UInt32 = 0x9B2754A8_u32
+      class_getter constructor_id : UInt32 = 0x9B2754A8_u32
 
       getter file_token : Bytes
       getter request_token : Bytes
@@ -404,18 +414,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @file_token.tl_serialize(io, true)
-        @request_token.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @file_token.tl_serialize(io)
+        @request_token.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeFileHash)
       end
     end
 
     class GetCdnFileHashes < TLRequest
-      CONSTRUCTOR_ID = 0x4DA54231
+      getter constructor_id : UInt32 = 0x4DA54231_u32
+      class_getter constructor_id : UInt32 = 0x4DA54231_u32
 
       getter file_token : Bytes
       getter offset : Int32
@@ -425,22 +436,23 @@ module Proton::TL
         offset : Int32
       )
         @file_token = TL::Utils.parse_bytes!(file_token)
-        @offset = offset
+        @offset = TL::Utils.parse_int!(offset, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @file_token.tl_serialize(io, true)
-        @offset.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @file_token.tl_serialize(io)
+        @offset.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeFileHash)
       end
     end
 
     class GetFileHashes < TLRequest
-      CONSTRUCTOR_ID = 0xC7025931
+      getter constructor_id : UInt32 = 0xC7025931_u32
+      class_getter constructor_id : UInt32 = 0xC7025931_u32
 
       getter location : Root::TypeInputFileLocation
       getter offset : Int32
@@ -450,16 +462,16 @@ module Proton::TL
         offset : Int32
       )
         @location = location
-        @offset = offset
+        @offset = TL::Utils.parse_int!(offset, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @location.tl_serialize(io, false)
-        @offset.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @location.tl_serialize(io)
+        @offset.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeFileHash)
       end
     end

@@ -12,7 +12,7 @@ module Proton::TL
   module Photos
     abstract class TypePhotos < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -20,8 +20,6 @@ module Proton::TL
           Photos.tl_deserialize(io, bare)
         when 0x15051F54
           PhotosSlice.tl_deserialize(io, bare)
-        when 0x91CD32A8
-          GetUserPhotos.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -30,16 +28,12 @@ module Proton::TL
 
     abstract class TypePhoto < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x20212CA8
           Photo.tl_deserialize(io, bare)
-        when 0x72D4742C
-          UpdateProfilePhoto.tl_deserialize(io, bare)
-        when 0x89F30F69
-          UploadProfilePhoto.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -47,7 +41,8 @@ module Proton::TL
     end
 
     class Photos < TypePhotos
-      CONSTRUCTOR_ID = 0x8DCA6AA5
+      getter constructor_id : UInt32 = 0x8DCA6AA5_u32
+      class_getter constructor_id : UInt32 = 0x8DCA6AA5_u32
 
       getter photos : Array(Root::TypePhoto)
       getter users : Array(Root::TypeUser)
@@ -61,21 +56,23 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @photos.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @photos.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          photos: Array(Root::TypePhoto).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          photos: Array(Root::TypePhoto).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class PhotosSlice < TypePhotos
-      CONSTRUCTOR_ID = 0x15051F54
+      getter constructor_id : UInt32 = 0x15051F54_u32
+      class_getter constructor_id : UInt32 = 0x15051F54_u32
 
       getter count : Int32
       getter photos : Array(Root::TypePhoto)
@@ -86,29 +83,31 @@ module Proton::TL
         photos : Array(Root::TypePhoto),
         users : Array(Root::TypeUser)
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @photos = photos
         @users = users
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
-        @photos.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
+        @photos.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
-          photos: Array(Root::TypePhoto).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          count: Int32.tl_deserialize(io),
+          photos: Array(Root::TypePhoto).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class Photo < TypePhoto
-      CONSTRUCTOR_ID = 0x20212CA8
+      getter constructor_id : UInt32 = 0x20212CA8_u32
+      class_getter constructor_id : UInt32 = 0x20212CA8_u32
 
       getter photo : Root::TypePhoto
       getter users : Array(Root::TypeUser)
@@ -122,21 +121,23 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @photo.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @photo.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          photo: Root::TypePhoto.tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          photo: Root::TypePhoto.tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class UpdateProfilePhoto < TLRequest
-      CONSTRUCTOR_ID = 0x72D4742C
+      getter constructor_id : UInt32 = 0x72D4742C_u32
+      class_getter constructor_id : UInt32 = 0x72D4742C_u32
 
       getter id : Root::TypeInputPhoto
 
@@ -147,17 +148,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Photos::TypePhoto
       end
     end
 
     class UploadProfilePhoto < TLRequest
-      CONSTRUCTOR_ID = 0x89F30F69
+      getter constructor_id : UInt32 = 0x89F30F69_u32
+      class_getter constructor_id : UInt32 = 0x89F30F69_u32
 
       getter file : Root::TypeInputFile | Nil
       getter video : Root::TypeInputFile | Nil
@@ -174,24 +176,25 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!file.nil? ? 1 : 0) |
-            (!video.nil? ? 2 : 0) |
-            (!video_start_ts.nil? ? 4 : 0)
+          (!file.nil? ? 0x01 : 0) |
+            (!video.nil? ? 0x02 : 0) |
+            (!video_start_ts.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @file.tl_serialize(io, false) unless @file.nil?
-        @video.tl_serialize(io, false) unless @video.nil?
-        @video_start_ts.tl_serialize(io, true) unless @video_start_ts.nil?
+        @file.tl_serialize(io) unless @file.nil?
+        @video.tl_serialize(io) unless @video.nil?
+        @video_start_ts.tl_serialize(io) unless @video_start_ts.nil?
       end
 
-      def return_type
+      def self.return_type
         Photos::TypePhoto
       end
     end
 
     class DeletePhotos < TLRequest
-      CONSTRUCTOR_ID = 0x87CF7F2F
+      getter constructor_id : UInt32 = 0x87CF7F2F_u32
+      class_getter constructor_id : UInt32 = 0x87CF7F2F_u32
 
       getter id : Array(Root::TypeInputPhoto)
 
@@ -202,17 +205,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Int64)
       end
     end
 
     class GetUserPhotos < TLRequest
-      CONSTRUCTOR_ID = 0x91CD32A8
+      getter constructor_id : UInt32 = 0x91CD32A8_u32
+      class_getter constructor_id : UInt32 = 0x91CD32A8_u32
 
       getter user_id : Root::TypeInputUser
       getter offset : Int32
@@ -226,20 +230,20 @@ module Proton::TL
         limit : Int32
       )
         @user_id = user_id
-        @offset = offset
+        @offset = TL::Utils.parse_int!(offset, Int32)
         @max_id = max_id
-        @limit = limit
+        @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @user_id.tl_serialize(io, false)
-        @offset.tl_serialize(io, true)
-        @max_id.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @user_id.tl_serialize(io)
+        @offset.tl_serialize(io)
+        @max_id.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Photos::TypePhotos
       end
     end

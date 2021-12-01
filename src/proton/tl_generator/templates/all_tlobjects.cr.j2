@@ -1,0 +1,9 @@
+module Proton
+  module TL
+    ALL_TLOBJECTS = {
+      {% for def in defs|selectattr("category", "equalto", "Types") %}
+      {{ def.id | hex(pad_to=8, capitalize=true) }} => {% if def.namespace|length > 0 %}{{ def.namespace|map("camelcase")|join("::") }}::{% else %}Root::{% endif %}{{ def.name | camelcase }},
+      {% endfor %}
+    }
+  end
+end

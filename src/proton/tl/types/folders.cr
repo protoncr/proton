@@ -12,14 +12,10 @@ module Proton::TL
   module Folders
     abstract class TypeUpdates < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x6847D0AB
-          EditPeerFolders.tl_deserialize(io, bare)
-        when 0x1C295881
-          DeleteFolder.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -27,7 +23,8 @@ module Proton::TL
     end
 
     class EditPeerFolders < TLRequest
-      CONSTRUCTOR_ID = 0x6847D0AB
+      getter constructor_id : UInt32 = 0x6847D0AB_u32
+      class_getter constructor_id : UInt32 = 0x6847D0AB_u32
 
       getter folder_peers : Array(Root::TypeInputFolderPeer)
 
@@ -38,32 +35,33 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @folder_peers.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @folder_peers.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class DeleteFolder < TLRequest
-      CONSTRUCTOR_ID = 0x1C295881
+      getter constructor_id : UInt32 = 0x1C295881_u32
+      class_getter constructor_id : UInt32 = 0x1C295881_u32
 
       getter folder_id : Int32
 
       def initialize(
         folder_id : Int32
       )
-        @folder_id = folder_id
+        @folder_id = TL::Utils.parse_int!(folder_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @folder_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @folder_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end

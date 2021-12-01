@@ -12,14 +12,12 @@ module Proton::TL
   module Updates
     abstract class TypeState < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xA56C2A3E
           State.tl_deserialize(io, bare)
-        when 0xEDD4882A
-          GetState.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -28,7 +26,7 @@ module Proton::TL
 
     abstract class TypeDifference < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -40,8 +38,6 @@ module Proton::TL
           DifferenceSlice.tl_deserialize(io, bare)
         when 0x4AFE8F6D
           DifferenceTooLong.tl_deserialize(io, bare)
-        when 0x25939651
-          GetDifference.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -50,7 +46,7 @@ module Proton::TL
 
     abstract class TypeChannelDifference < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -60,8 +56,6 @@ module Proton::TL
           ChannelDifferenceTooLong.tl_deserialize(io, bare)
         when 0x2064674E
           ChannelDifference.tl_deserialize(io, bare)
-        when 0x03173D78
-          GetChannelDifference.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -69,7 +63,8 @@ module Proton::TL
     end
 
     class State < TypeState
-      CONSTRUCTOR_ID = 0xA56C2A3E
+      getter constructor_id : UInt32 = 0xA56C2A3E_u32
+      class_getter constructor_id : UInt32 = 0xA56C2A3E_u32
 
       getter pts : Int32
       getter qts : Int32
@@ -84,35 +79,37 @@ module Proton::TL
         seq : Int32,
         unread_count : Int32
       )
-        @pts = pts
-        @qts = qts
-        @date = date
-        @seq = seq
-        @unread_count = unread_count
+        @pts = TL::Utils.parse_int!(pts, Int32)
+        @qts = TL::Utils.parse_int!(qts, Int32)
+        @date = TL::Utils.parse_int!(date, Int32)
+        @seq = TL::Utils.parse_int!(seq, Int32)
+        @unread_count = TL::Utils.parse_int!(unread_count, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @pts.tl_serialize(io, true)
-        @qts.tl_serialize(io, true)
-        @date.tl_serialize(io, true)
-        @seq.tl_serialize(io, true)
-        @unread_count.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @pts.tl_serialize(io)
+        @qts.tl_serialize(io)
+        @date.tl_serialize(io)
+        @seq.tl_serialize(io)
+        @unread_count.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          pts: Int32.tl_deserialize(io, true),
-          qts: Int32.tl_deserialize(io, true),
-          date: Int32.tl_deserialize(io, true),
-          seq: Int32.tl_deserialize(io, true),
-          unread_count: Int32.tl_deserialize(io, true),
+          pts: Int32.tl_deserialize(io),
+          qts: Int32.tl_deserialize(io),
+          date: Int32.tl_deserialize(io),
+          seq: Int32.tl_deserialize(io),
+          unread_count: Int32.tl_deserialize(io),
         )
       end
     end
 
     class DifferenceEmpty < TypeDifference
-      CONSTRUCTOR_ID = 0x5D75A138
+      getter constructor_id : UInt32 = 0x5D75A138_u32
+      class_getter constructor_id : UInt32 = 0x5D75A138_u32
 
       getter date : Int32
       getter seq : Int32
@@ -121,26 +118,28 @@ module Proton::TL
         date : Int32,
         seq : Int32
       )
-        @date = date
-        @seq = seq
+        @date = TL::Utils.parse_int!(date, Int32)
+        @seq = TL::Utils.parse_int!(seq, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @date.tl_serialize(io, true)
-        @seq.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @date.tl_serialize(io)
+        @seq.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          date: Int32.tl_deserialize(io, true),
-          seq: Int32.tl_deserialize(io, true),
+          date: Int32.tl_deserialize(io),
+          seq: Int32.tl_deserialize(io),
         )
       end
     end
 
     class Difference < TypeDifference
-      CONSTRUCTOR_ID = 0x00F49CA0
+      getter constructor_id : UInt32 = 0x00F49CA0_u32
+      class_getter constructor_id : UInt32 = 0x00F49CA0_u32
 
       getter new_messages : Array(Root::TypeMessage)
       getter new_encrypted_messages : Array(Root::TypeEncryptedMessage)
@@ -166,29 +165,31 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @new_messages.tl_serialize(io, false)
-        @new_encrypted_messages.tl_serialize(io, false)
-        @other_updates.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
-        @state.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @new_messages.tl_serialize(io)
+        @new_encrypted_messages.tl_serialize(io)
+        @other_updates.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
+        @state.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          new_messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          new_encrypted_messages: Array(Root::TypeEncryptedMessage).tl_deserialize(io, false),
-          other_updates: Array(Root::TypeUpdate).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          state: Updates::TypeState.tl_deserialize(io, false),
+          new_messages: Array(Root::TypeMessage).tl_deserialize(io),
+          new_encrypted_messages: Array(Root::TypeEncryptedMessage).tl_deserialize(io),
+          other_updates: Array(Root::TypeUpdate).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          state: Updates::TypeState.tl_deserialize(io),
         )
       end
     end
 
     class DifferenceSlice < TypeDifference
-      CONSTRUCTOR_ID = 0xA8FB1981
+      getter constructor_id : UInt32 = 0xA8FB1981_u32
+      class_getter constructor_id : UInt32 = 0xA8FB1981_u32
 
       getter new_messages : Array(Root::TypeMessage)
       getter new_encrypted_messages : Array(Root::TypeEncryptedMessage)
@@ -214,52 +215,56 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @new_messages.tl_serialize(io, false)
-        @new_encrypted_messages.tl_serialize(io, false)
-        @other_updates.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
-        @intermediate_state.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @new_messages.tl_serialize(io)
+        @new_encrypted_messages.tl_serialize(io)
+        @other_updates.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
+        @intermediate_state.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          new_messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          new_encrypted_messages: Array(Root::TypeEncryptedMessage).tl_deserialize(io, false),
-          other_updates: Array(Root::TypeUpdate).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          intermediate_state: Updates::TypeState.tl_deserialize(io, false),
+          new_messages: Array(Root::TypeMessage).tl_deserialize(io),
+          new_encrypted_messages: Array(Root::TypeEncryptedMessage).tl_deserialize(io),
+          other_updates: Array(Root::TypeUpdate).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          intermediate_state: Updates::TypeState.tl_deserialize(io),
         )
       end
     end
 
     class DifferenceTooLong < TypeDifference
-      CONSTRUCTOR_ID = 0x4AFE8F6D
+      getter constructor_id : UInt32 = 0x4AFE8F6D_u32
+      class_getter constructor_id : UInt32 = 0x4AFE8F6D_u32
 
       getter pts : Int32
 
       def initialize(
         pts : Int32
       )
-        @pts = pts
+        @pts = TL::Utils.parse_int!(pts, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @pts.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @pts.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          pts: Int32.tl_deserialize(io, true),
+          pts: Int32.tl_deserialize(io),
         )
       end
     end
 
     class ChannelDifferenceEmpty < TypeChannelDifference
-      CONSTRUCTOR_ID = 0x3E11AFFB
+      getter constructor_id : UInt32 = 0x3E11AFFB_u32
+      class_getter constructor_id : UInt32 = 0x3E11AFFB_u32
 
       getter pts : Int32
       getter final : Bool | Nil
@@ -270,33 +275,35 @@ module Proton::TL
         final : Bool | Nil = nil,
         timeout : Int32 | Nil = nil
       )
-        @pts = pts
+        @pts = TL::Utils.parse_int!(pts, Int32)
         @final = final
-        @timeout = timeout
+        @timeout = TL::Utils.parse_int(timeout, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!final.nil? ? 1 : 0) |
-            (!timeout.nil? ? 2 : 0)
+          (!final.nil? ? 0x01 : 0) |
+            (!timeout.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @pts.tl_serialize(io, true)
-        @timeout.tl_serialize(io, true) unless @timeout.nil?
+        @pts.tl_serialize(io)
+        @timeout.tl_serialize(io) unless @timeout.nil?
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          pts: Int32.tl_deserialize(io, true),
-          final: flags & 1 == 1,
-          timeout: flags & 2 == 1 ? Int32.tl_deserialize(io, true) : nil,
+          pts: Int32.tl_deserialize(io),
+          final: flags & 0x01 > 0 || nil,
+          timeout: flags & 0x02 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
 
     class ChannelDifferenceTooLong < TypeChannelDifference
-      CONSTRUCTOR_ID = 0xA4BCC6FE
+      getter constructor_id : UInt32 = 0xA4BCC6FE_u32
+      class_getter constructor_id : UInt32 = 0xA4BCC6FE_u32
 
       getter dialog : Root::TypeDialog
       getter messages : Array(Root::TypeMessage)
@@ -318,37 +325,39 @@ module Proton::TL
         @chats = chats
         @users = users
         @final = final
-        @timeout = timeout
+        @timeout = TL::Utils.parse_int(timeout, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!final.nil? ? 1 : 0) |
-            (!timeout.nil? ? 2 : 0)
+          (!final.nil? ? 0x01 : 0) |
+            (!timeout.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @timeout.tl_serialize(io, true) unless @timeout.nil?
-        @dialog.tl_serialize(io, false)
-        @messages.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        @timeout.tl_serialize(io) unless @timeout.nil?
+        @dialog.tl_serialize(io)
+        @messages.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          dialog: Root::TypeDialog.tl_deserialize(io, false),
-          messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          final: flags & 1 == 1,
-          timeout: flags & 2 == 1 ? Int32.tl_deserialize(io, true) : nil,
+          dialog: Root::TypeDialog.tl_deserialize(io),
+          messages: Array(Root::TypeMessage).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          final: flags & 0x01 > 0 || nil,
+          timeout: flags & 0x02 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
 
     class ChannelDifference < TypeChannelDifference
-      CONSTRUCTOR_ID = 0x2064674E
+      getter constructor_id : UInt32 = 0x2064674E_u32
+      class_getter constructor_id : UInt32 = 0x2064674E_u32
 
       getter pts : Int32
       getter new_messages : Array(Root::TypeMessage)
@@ -367,57 +376,60 @@ module Proton::TL
         final : Bool | Nil = nil,
         timeout : Int32 | Nil = nil
       )
-        @pts = pts
+        @pts = TL::Utils.parse_int!(pts, Int32)
         @new_messages = new_messages
         @other_updates = other_updates
         @chats = chats
         @users = users
         @final = final
-        @timeout = timeout
+        @timeout = TL::Utils.parse_int(timeout, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!final.nil? ? 1 : 0) |
-            (!timeout.nil? ? 2 : 0)
+          (!final.nil? ? 0x01 : 0) |
+            (!timeout.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @pts.tl_serialize(io, true)
-        @timeout.tl_serialize(io, true) unless @timeout.nil?
-        @new_messages.tl_serialize(io, false)
-        @other_updates.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        @pts.tl_serialize(io)
+        @timeout.tl_serialize(io) unless @timeout.nil?
+        @new_messages.tl_serialize(io)
+        @other_updates.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          pts: Int32.tl_deserialize(io, true),
-          new_messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          other_updates: Array(Root::TypeUpdate).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          final: flags & 1 == 1,
-          timeout: flags & 2 == 1 ? Int32.tl_deserialize(io, true) : nil,
+          pts: Int32.tl_deserialize(io),
+          new_messages: Array(Root::TypeMessage).tl_deserialize(io),
+          other_updates: Array(Root::TypeUpdate).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          final: flags & 0x01 > 0 || nil,
+          timeout: flags & 0x02 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
 
     class GetState < TLRequest
-      CONSTRUCTOR_ID = 0xEDD4882A
+      getter constructor_id : UInt32 = 0xEDD4882A_u32
+      class_getter constructor_id : UInt32 = 0xEDD4882A_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
-      def return_type
+      def self.return_type
         Updates::TypeState
       end
     end
 
     class GetDifference < TLRequest
-      CONSTRUCTOR_ID = 0x25939651
+      getter constructor_id : UInt32 = 0x25939651_u32
+      class_getter constructor_id : UInt32 = 0x25939651_u32
 
       getter pts : Int32
       getter date : Int32
@@ -430,30 +442,31 @@ module Proton::TL
         qts : Int32,
         pts_total_limit : Int32 | Nil = nil
       )
-        @pts = pts
-        @date = date
-        @qts = qts
-        @pts_total_limit = pts_total_limit
+        @pts = TL::Utils.parse_int!(pts, Int32)
+        @date = TL::Utils.parse_int!(date, Int32)
+        @qts = TL::Utils.parse_int!(qts, Int32)
+        @pts_total_limit = TL::Utils.parse_int(pts_total_limit, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!pts_total_limit.nil? ? 1 : 0)
+          (!pts_total_limit.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @pts.tl_serialize(io, true)
-        @pts_total_limit.tl_serialize(io, true) unless @pts_total_limit.nil?
-        @date.tl_serialize(io, true)
-        @qts.tl_serialize(io, true)
+        @pts.tl_serialize(io)
+        @pts_total_limit.tl_serialize(io) unless @pts_total_limit.nil?
+        @date.tl_serialize(io)
+        @qts.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Updates::TypeDifference
       end
     end
 
     class GetChannelDifference < TLRequest
-      CONSTRUCTOR_ID = 0x03173D78
+      getter constructor_id : UInt32 = 0x03173D78_u32
+      class_getter constructor_id : UInt32 = 0x03173D78_u32
 
       getter channel : Root::TypeInputChannel
       getter filter : Root::TypeChannelMessagesFilter
@@ -470,23 +483,23 @@ module Proton::TL
       )
         @channel = channel
         @filter = filter
-        @pts = pts
-        @limit = limit
+        @pts = TL::Utils.parse_int!(pts, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
         @force = force
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!force.nil? ? 1 : 0)
+          (!force.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @channel.tl_serialize(io, false)
-        @filter.tl_serialize(io, false)
-        @pts.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        @channel.tl_serialize(io)
+        @filter.tl_serialize(io)
+        @pts.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Updates::TypeChannelDifference
       end
     end

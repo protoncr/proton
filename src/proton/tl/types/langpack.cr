@@ -12,14 +12,10 @@ module Proton::TL
   module Langpack
     abstract class TypeLangPackDifference < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0xF2F2330A
-          GetLangPack.tl_deserialize(io, bare)
-        when 0xCD984AA5
-          GetDifference.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -28,12 +24,10 @@ module Proton::TL
 
     abstract class TypeLangPackLanguage < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x6A596502
-          GetLanguage.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -41,7 +35,8 @@ module Proton::TL
     end
 
     class GetLangPack < TLRequest
-      CONSTRUCTOR_ID = 0xF2F2330A
+      getter constructor_id : UInt32 = 0xF2F2330A_u32
+      class_getter constructor_id : UInt32 = 0xF2F2330A_u32
 
       getter lang_pack : Bytes
       getter lang_code : Bytes
@@ -50,23 +45,24 @@ module Proton::TL
         lang_pack : Bytes | String | IO,
         lang_code : Bytes | String | IO
       )
-        @lang_pack = lang_pack
-        @lang_code = lang_code
+        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
+        @lang_code = TL::Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @lang_pack.tl_serialize(io, true)
-        @lang_code.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @lang_pack.tl_serialize(io)
+        @lang_code.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeLangPackDifference
       end
     end
 
     class GetStrings < TLRequest
-      CONSTRUCTOR_ID = 0xEFEA3803
+      getter constructor_id : UInt32 = 0xEFEA3803_u32
+      class_getter constructor_id : UInt32 = 0xEFEA3803_u32
 
       getter lang_pack : Bytes
       getter lang_code : Bytes
@@ -77,25 +73,26 @@ module Proton::TL
         lang_code : Bytes | String | IO,
         keys : Array(Bytes)
       )
-        @lang_pack = lang_pack
-        @lang_code = lang_code
+        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
+        @lang_code = TL::Utils.parse_bytes!(lang_code)
         @keys = keys
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @lang_pack.tl_serialize(io, true)
-        @lang_code.tl_serialize(io, true)
-        @keys.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @lang_pack.tl_serialize(io)
+        @lang_code.tl_serialize(io)
+        @keys.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeLangPackString)
       end
     end
 
     class GetDifference < TLRequest
-      CONSTRUCTOR_ID = 0xCD984AA5
+      getter constructor_id : UInt32 = 0xCD984AA5_u32
+      class_getter constructor_id : UInt32 = 0xCD984AA5_u32
 
       getter lang_pack : Bytes
       getter lang_code : Bytes
@@ -106,46 +103,48 @@ module Proton::TL
         lang_code : Bytes | String | IO,
         from_version : Int32
       )
-        @lang_pack = lang_pack
-        @lang_code = lang_code
-        @from_version = from_version
+        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
+        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @from_version = TL::Utils.parse_int!(from_version, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @lang_pack.tl_serialize(io, true)
-        @lang_code.tl_serialize(io, true)
-        @from_version.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @lang_pack.tl_serialize(io)
+        @lang_code.tl_serialize(io)
+        @from_version.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeLangPackDifference
       end
     end
 
     class GetLanguages < TLRequest
-      CONSTRUCTOR_ID = 0x42C6978F
+      getter constructor_id : UInt32 = 0x42C6978F_u32
+      class_getter constructor_id : UInt32 = 0x42C6978F_u32
 
       getter lang_pack : Bytes
 
       def initialize(
         lang_pack : Bytes | String | IO
       )
-        @lang_pack = lang_pack
+        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @lang_pack.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @lang_pack.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeLangPackLanguage)
       end
     end
 
     class GetLanguage < TLRequest
-      CONSTRUCTOR_ID = 0x6A596502
+      getter constructor_id : UInt32 = 0x6A596502_u32
+      class_getter constructor_id : UInt32 = 0x6A596502_u32
 
       getter lang_pack : Bytes
       getter lang_code : Bytes
@@ -154,17 +153,17 @@ module Proton::TL
         lang_pack : Bytes | String | IO,
         lang_code : Bytes | String | IO
       )
-        @lang_pack = lang_pack
-        @lang_code = lang_code
+        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
+        @lang_code = TL::Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @lang_pack.tl_serialize(io, true)
-        @lang_code.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @lang_pack.tl_serialize(io)
+        @lang_code.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeLangPackLanguage
       end
     end

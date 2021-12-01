@@ -12,7 +12,7 @@ module Proton::TL
   module Storage
     abstract class TypeFileType < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -43,121 +43,141 @@ module Proton::TL
     end
 
     class FileUnknown < TypeFileType
-      CONSTRUCTOR_ID = 0xAA963B05
+      getter constructor_id : UInt32 = 0xAA963B05_u32
+      class_getter constructor_id : UInt32 = 0xAA963B05_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FilePartial < TypeFileType
-      CONSTRUCTOR_ID = 0x40BC6F52
+      getter constructor_id : UInt32 = 0x40BC6F52_u32
+      class_getter constructor_id : UInt32 = 0x40BC6F52_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FileJpeg < TypeFileType
-      CONSTRUCTOR_ID = 0x007EFE0E
+      getter constructor_id : UInt32 = 0x007EFE0E_u32
+      class_getter constructor_id : UInt32 = 0x007EFE0E_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FileGif < TypeFileType
-      CONSTRUCTOR_ID = 0xCAE1AADF
+      getter constructor_id : UInt32 = 0xCAE1AADF_u32
+      class_getter constructor_id : UInt32 = 0xCAE1AADF_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FilePng < TypeFileType
-      CONSTRUCTOR_ID = 0x0A4F63C0
+      getter constructor_id : UInt32 = 0x0A4F63C0_u32
+      class_getter constructor_id : UInt32 = 0x0A4F63C0_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FilePdf < TypeFileType
-      CONSTRUCTOR_ID = 0xAE1E508D
+      getter constructor_id : UInt32 = 0xAE1E508D_u32
+      class_getter constructor_id : UInt32 = 0xAE1E508D_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FileMp3 < TypeFileType
-      CONSTRUCTOR_ID = 0x528A0677
+      getter constructor_id : UInt32 = 0x528A0677_u32
+      class_getter constructor_id : UInt32 = 0x528A0677_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FileMov < TypeFileType
-      CONSTRUCTOR_ID = 0x4B09EBBC
+      getter constructor_id : UInt32 = 0x4B09EBBC_u32
+      class_getter constructor_id : UInt32 = 0x4B09EBBC_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FileMp4 < TypeFileType
-      CONSTRUCTOR_ID = 0xB3CEA0E4
+      getter constructor_id : UInt32 = 0xB3CEA0E4_u32
+      class_getter constructor_id : UInt32 = 0xB3CEA0E4_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FileWebp < TypeFileType
-      CONSTRUCTOR_ID = 0x1081464C
+      getter constructor_id : UInt32 = 0x1081464C_u32
+      class_getter constructor_id : UInt32 = 0x1081464C_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end

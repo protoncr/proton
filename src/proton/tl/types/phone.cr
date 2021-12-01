@@ -12,18 +12,12 @@ module Proton::TL
   module Phone
     abstract class TypePhoneCall < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xEC82E140
           PhoneCall.tl_deserialize(io, bare)
-        when 0x42FF96ED
-          RequestCall.tl_deserialize(io, bare)
-        when 0x3BD2B4A0
-          AcceptCall.tl_deserialize(io, bare)
-        when 0x2EFE1722
-          ConfirmCall.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -32,14 +26,12 @@ module Proton::TL
 
     abstract class TypeGroupCall < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x9E727AAD
           GroupCall.tl_deserialize(io, bare)
-        when 0x041845DB
-          GetGroupCall.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -48,14 +40,12 @@ module Proton::TL
 
     abstract class TypeGroupParticipants < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xF47751B6
           GroupParticipants.tl_deserialize(io, bare)
-        when 0xC558D8AB
-          GetGroupParticipants.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -64,14 +54,12 @@ module Proton::TL
 
     abstract class TypeJoinAsPeers < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xAFE5623F
           JoinAsPeers.tl_deserialize(io, bare)
-        when 0xEF7C213A
-          GetGroupCallJoinAs.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -80,14 +68,12 @@ module Proton::TL
 
     abstract class TypeExportedGroupCallInvite < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x204BD158
           ExportedGroupCallInvite.tl_deserialize(io, bare)
-        when 0xE6AA647F
-          ExportGroupCallInvite.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -96,12 +82,10 @@ module Proton::TL
 
     abstract class TypeDataJSON < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x55451FA9
-          GetCallConfig.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -110,40 +94,10 @@ module Proton::TL
 
     abstract class TypeUpdates < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0xB2CBC1C0
-          DiscardCall.tl_deserialize(io, bare)
-        when 0x59EAD627
-          SetCallRating.tl_deserialize(io, bare)
-        when 0x48CDC6D8
-          CreateGroupCall.tl_deserialize(io, bare)
-        when 0xB132FF7B
-          JoinGroupCall.tl_deserialize(io, bare)
-        when 0x500377F9
-          LeaveGroupCall.tl_deserialize(io, bare)
-        when 0x7B393160
-          InviteToGroupCall.tl_deserialize(io, bare)
-        when 0x7A777135
-          DiscardGroupCall.tl_deserialize(io, bare)
-        when 0x74BBB43D
-          ToggleGroupCallSettings.tl_deserialize(io, bare)
-        when 0xF128C708
-          ToggleGroupCallRecord.tl_deserialize(io, bare)
-        when 0xA5273ABF
-          EditGroupCallParticipant.tl_deserialize(io, bare)
-        when 0x1CA6AC0A
-          EditGroupCallTitle.tl_deserialize(io, bare)
-        when 0x219C34E6
-          ToggleGroupCallStartSubscription.tl_deserialize(io, bare)
-        when 0x5680E342
-          StartScheduledGroupCall.tl_deserialize(io, bare)
-        when 0xCBEA6BC4
-          JoinGroupCallPresentation.tl_deserialize(io, bare)
-        when 0x1C50D144
-          LeaveGroupCallPresentation.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -151,7 +105,8 @@ module Proton::TL
     end
 
     class PhoneCall < TypePhoneCall
-      CONSTRUCTOR_ID = 0xEC82E140
+      getter constructor_id : UInt32 = 0xEC82E140_u32
+      class_getter constructor_id : UInt32 = 0xEC82E140_u32
 
       getter phone_call : Root::TypePhoneCall
       getter users : Array(Root::TypeUser)
@@ -165,21 +120,23 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @phone_call.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @phone_call.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          phone_call: Root::TypePhoneCall.tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          phone_call: Root::TypePhoneCall.tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class GroupCall < TypeGroupCall
-      CONSTRUCTOR_ID = 0x9E727AAD
+      getter constructor_id : UInt32 = 0x9E727AAD_u32
+      class_getter constructor_id : UInt32 = 0x9E727AAD_u32
 
       getter call : Root::TypeGroupCall
       getter participants : Array(Root::TypeGroupCallParticipant)
@@ -196,33 +153,35 @@ module Proton::TL
       )
         @call = call
         @participants = participants
-        @participants_next_offset = participants_next_offset
+        @participants_next_offset = TL::Utils.parse_bytes!(participants_next_offset)
         @chats = chats
         @users = users
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
-        @participants.tl_serialize(io, false)
-        @participants_next_offset.tl_serialize(io, true)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
+        @participants.tl_serialize(io)
+        @participants_next_offset.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          call: Root::TypeGroupCall.tl_deserialize(io, false),
-          participants: Array(Root::TypeGroupCallParticipant).tl_deserialize(io, false),
-          participants_next_offset: Bytes.tl_deserialize(io, true),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          call: Root::TypeGroupCall.tl_deserialize(io),
+          participants: Array(Root::TypeGroupCallParticipant).tl_deserialize(io),
+          participants_next_offset: Bytes.tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class GroupParticipants < TypeGroupParticipants
-      CONSTRUCTOR_ID = 0xF47751B6
+      getter constructor_id : UInt32 = 0xF47751B6_u32
+      class_getter constructor_id : UInt32 = 0xF47751B6_u32
 
       getter count : Int32
       getter participants : Array(Root::TypeGroupCallParticipant)
@@ -239,38 +198,40 @@ module Proton::TL
         users : Array(Root::TypeUser),
         version : Int32
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @participants = participants
-        @next_offset = next_offset
+        @next_offset = TL::Utils.parse_bytes!(next_offset)
         @chats = chats
         @users = users
-        @version = version
+        @version = TL::Utils.parse_int!(version, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
-        @participants.tl_serialize(io, false)
-        @next_offset.tl_serialize(io, true)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
-        @version.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
+        @participants.tl_serialize(io)
+        @next_offset.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
+        @version.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
-          participants: Array(Root::TypeGroupCallParticipant).tl_deserialize(io, false),
-          next_offset: Bytes.tl_deserialize(io, true),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          version: Int32.tl_deserialize(io, true),
+          count: Int32.tl_deserialize(io),
+          participants: Array(Root::TypeGroupCallParticipant).tl_deserialize(io),
+          next_offset: Bytes.tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          version: Int32.tl_deserialize(io),
         )
       end
     end
 
     class JoinAsPeers < TypeJoinAsPeers
-      CONSTRUCTOR_ID = 0xAFE5623F
+      getter constructor_id : UInt32 = 0xAFE5623F_u32
+      class_getter constructor_id : UInt32 = 0xAFE5623F_u32
 
       getter peers : Array(Root::TypePeer)
       getter chats : Array(Root::TypeChat)
@@ -287,58 +248,63 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peers.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peers.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          peers: Array(Root::TypePeer).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          peers: Array(Root::TypePeer).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class ExportedGroupCallInvite < TypeExportedGroupCallInvite
-      CONSTRUCTOR_ID = 0x204BD158
+      getter constructor_id : UInt32 = 0x204BD158_u32
+      class_getter constructor_id : UInt32 = 0x204BD158_u32
 
       getter link : Bytes
 
       def initialize(
         link : Bytes | String | IO
       )
-        @link = link
+        @link = TL::Utils.parse_bytes!(link)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @link.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @link.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          link: Bytes.tl_deserialize(io, true),
+          link: Bytes.tl_deserialize(io),
         )
       end
     end
 
     class GetCallConfig < TLRequest
-      CONSTRUCTOR_ID = 0x55451FA9
+      getter constructor_id : UInt32 = 0x55451FA9_u32
+      class_getter constructor_id : UInt32 = 0x55451FA9_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
-      def return_type
+      def self.return_type
         Root::TypeDataJSON
       end
     end
 
     class RequestCall < TLRequest
-      CONSTRUCTOR_ID = 0x42FF96ED
+      getter constructor_id : UInt32 = 0x42FF96ED_u32
+      class_getter constructor_id : UInt32 = 0x42FF96ED_u32
 
       getter user_id : Root::TypeInputUser
       getter random_id : Int32
@@ -354,30 +320,31 @@ module Proton::TL
         video : Bool | Nil = nil
       )
         @user_id = user_id
-        @random_id = random_id
+        @random_id = TL::Utils.parse_int!(random_id, Int32)
         @g_a_hash = TL::Utils.parse_bytes!(g_a_hash)
         @protocol = protocol
         @video = video
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!video.nil? ? 1 : 0)
+          (!video.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @user_id.tl_serialize(io, false)
-        @random_id.tl_serialize(io, true)
-        @g_a_hash.tl_serialize(io, true)
-        @protocol.tl_serialize(io, false)
+        @user_id.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @g_a_hash.tl_serialize(io)
+        @protocol.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Phone::TypePhoneCall
       end
     end
 
     class AcceptCall < TLRequest
-      CONSTRUCTOR_ID = 0x3BD2B4A0
+      getter constructor_id : UInt32 = 0x3BD2B4A0_u32
+      class_getter constructor_id : UInt32 = 0x3BD2B4A0_u32
 
       getter peer : Root::TypeInputPhoneCall
       getter g_b : Bytes
@@ -394,19 +361,20 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @g_b.tl_serialize(io, true)
-        @protocol.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @g_b.tl_serialize(io)
+        @protocol.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Phone::TypePhoneCall
       end
     end
 
     class ConfirmCall < TLRequest
-      CONSTRUCTOR_ID = 0x2EFE1722
+      getter constructor_id : UInt32 = 0x2EFE1722_u32
+      class_getter constructor_id : UInt32 = 0x2EFE1722_u32
 
       getter peer : Root::TypeInputPhoneCall
       getter g_a : Bytes
@@ -426,20 +394,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @g_a.tl_serialize(io, true)
-        @key_fingerprint.tl_serialize(io, true)
-        @protocol.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @g_a.tl_serialize(io)
+        @key_fingerprint.tl_serialize(io)
+        @protocol.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Phone::TypePhoneCall
       end
     end
 
     class ReceivedCall < TLRequest
-      CONSTRUCTOR_ID = 0x17D54F61
+      getter constructor_id : UInt32 = 0x17D54F61_u32
+      class_getter constructor_id : UInt32 = 0x17D54F61_u32
 
       getter peer : Root::TypeInputPhoneCall
 
@@ -450,17 +419,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class DiscardCall < TLRequest
-      CONSTRUCTOR_ID = 0xB2CBC1C0
+      getter constructor_id : UInt32 = 0xB2CBC1C0_u32
+      class_getter constructor_id : UInt32 = 0xB2CBC1C0_u32
 
       getter peer : Root::TypeInputPhoneCall
       getter duration : Int32
@@ -476,30 +446,31 @@ module Proton::TL
         video : Bool | Nil = nil
       )
         @peer = peer
-        @duration = duration
+        @duration = TL::Utils.parse_int!(duration, Int32)
         @reason = reason
         @connection_id = connection_id
         @video = video
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!video.nil? ? 1 : 0)
+          (!video.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @duration.tl_serialize(io, true)
-        @reason.tl_serialize(io, false)
-        @connection_id.tl_serialize(io, true)
+        @peer.tl_serialize(io)
+        @duration.tl_serialize(io)
+        @reason.tl_serialize(io)
+        @connection_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class SetCallRating < TLRequest
-      CONSTRUCTOR_ID = 0x59EAD627
+      getter constructor_id : UInt32 = 0x59EAD627_u32
+      class_getter constructor_id : UInt32 = 0x59EAD627_u32
 
       getter peer : Root::TypeInputPhoneCall
       getter rating : Int32
@@ -513,28 +484,29 @@ module Proton::TL
         user_initiative : Bool | Nil = nil
       )
         @peer = peer
-        @rating = rating
-        @comment = comment
+        @rating = TL::Utils.parse_int!(rating, Int32)
+        @comment = TL::Utils.parse_bytes!(comment)
         @user_initiative = user_initiative
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!user_initiative.nil? ? 1 : 0)
+          (!user_initiative.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @rating.tl_serialize(io, true)
-        @comment.tl_serialize(io, true)
+        @peer.tl_serialize(io)
+        @rating.tl_serialize(io)
+        @comment.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class SaveCallDebug < TLRequest
-      CONSTRUCTOR_ID = 0x277ADD7E
+      getter constructor_id : UInt32 = 0x277ADD7E_u32
+      class_getter constructor_id : UInt32 = 0x277ADD7E_u32
 
       getter peer : Root::TypeInputPhoneCall
       getter debug : Root::TypeDataJSON
@@ -548,18 +520,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @debug.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @debug.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class SendSignalingData < TLRequest
-      CONSTRUCTOR_ID = 0xFF7A9383
+      getter constructor_id : UInt32 = 0xFF7A9383_u32
+      class_getter constructor_id : UInt32 = 0xFF7A9383_u32
 
       getter peer : Root::TypeInputPhoneCall
       getter data : Bytes
@@ -573,18 +546,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @data.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @data.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class CreateGroupCall < TLRequest
-      CONSTRUCTOR_ID = 0x48CDC6D8
+      getter constructor_id : UInt32 = 0x48CDC6D8_u32
+      class_getter constructor_id : UInt32 = 0x48CDC6D8_u32
 
       getter peer : Root::TypeInputPeer
       getter random_id : Int32
@@ -598,30 +572,31 @@ module Proton::TL
         schedule_date : Int32 | Nil = nil
       )
         @peer = peer
-        @random_id = random_id
-        @title = title
-        @schedule_date = schedule_date
+        @random_id = TL::Utils.parse_int!(random_id, Int32)
+        @title = TL::Utils.parse_bytes(title)
+        @schedule_date = TL::Utils.parse_int(schedule_date, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!title.nil? ? 1 : 0) |
-            (!schedule_date.nil? ? 2 : 0)
+          (!title.nil? ? 0x01 : 0) |
+            (!schedule_date.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @random_id.tl_serialize(io, true)
-        @title.tl_serialize(io, true) unless @title.nil?
-        @schedule_date.tl_serialize(io, true) unless @schedule_date.nil?
+        @peer.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @title.tl_serialize(io) unless @title.nil?
+        @schedule_date.tl_serialize(io) unless @schedule_date.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class JoinGroupCall < TLRequest
-      CONSTRUCTOR_ID = 0xB132FF7B
+      getter constructor_id : UInt32 = 0xB132FF7B_u32
+      class_getter constructor_id : UInt32 = 0xB132FF7B_u32
 
       getter call : Root::TypeInputGroupCall
       getter join_as : Root::TypeInputPeer
@@ -643,29 +618,30 @@ module Proton::TL
         @params = params
         @muted = muted
         @video_stopped = video_stopped
-        @invite_hash = invite_hash
+        @invite_hash = TL::Utils.parse_bytes(invite_hash)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!muted.nil? ? 1 : 0) |
-            (!video_stopped.nil? ? 4 : 0) |
-            (!invite_hash.nil? ? 2 : 0)
+          (!muted.nil? ? 0x01 : 0) |
+            (!video_stopped.nil? ? 0x04 : 0) |
+            (!invite_hash.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @call.tl_serialize(io, false)
-        @join_as.tl_serialize(io, false)
-        @invite_hash.tl_serialize(io, true) unless @invite_hash.nil?
-        @params.tl_serialize(io, false)
+        @call.tl_serialize(io)
+        @join_as.tl_serialize(io)
+        @invite_hash.tl_serialize(io) unless @invite_hash.nil?
+        @params.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class LeaveGroupCall < TLRequest
-      CONSTRUCTOR_ID = 0x500377F9
+      getter constructor_id : UInt32 = 0x500377F9_u32
+      class_getter constructor_id : UInt32 = 0x500377F9_u32
 
       getter call : Root::TypeInputGroupCall
       getter source : Int32
@@ -675,22 +651,23 @@ module Proton::TL
         source : Int32
       )
         @call = call
-        @source = source
+        @source = TL::Utils.parse_int!(source, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
-        @source.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
+        @source.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class InviteToGroupCall < TLRequest
-      CONSTRUCTOR_ID = 0x7B393160
+      getter constructor_id : UInt32 = 0x7B393160_u32
+      class_getter constructor_id : UInt32 = 0x7B393160_u32
 
       getter call : Root::TypeInputGroupCall
       getter users : Array(Root::TypeInputUser)
@@ -704,18 +681,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class DiscardGroupCall < TLRequest
-      CONSTRUCTOR_ID = 0x7A777135
+      getter constructor_id : UInt32 = 0x7A777135_u32
+      class_getter constructor_id : UInt32 = 0x7A777135_u32
 
       getter call : Root::TypeInputGroupCall
 
@@ -726,17 +704,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class ToggleGroupCallSettings < TLRequest
-      CONSTRUCTOR_ID = 0x74BBB43D
+      getter constructor_id : UInt32 = 0x74BBB43D_u32
+      class_getter constructor_id : UInt32 = 0x74BBB43D_u32
 
       getter call : Root::TypeInputGroupCall
       getter reset_invite_hash : Bool | Nil
@@ -753,22 +732,23 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!reset_invite_hash.nil? ? 2 : 0) |
-            (!join_muted.nil? ? 1 : 0)
+          (!reset_invite_hash.nil? ? 0x02 : 0) |
+            (!join_muted.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @call.tl_serialize(io, false)
-        @join_muted.tl_serialize(io, false) unless @join_muted.nil?
+        @call.tl_serialize(io)
+        @join_muted.tl_serialize(io) unless @join_muted.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetGroupCall < TLRequest
-      CONSTRUCTOR_ID = 0x041845DB
+      getter constructor_id : UInt32 = 0x041845DB_u32
+      class_getter constructor_id : UInt32 = 0x041845DB_u32
 
       getter call : Root::TypeInputGroupCall
       getter limit : Int32
@@ -778,22 +758,23 @@ module Proton::TL
         limit : Int32
       )
         @call = call
-        @limit = limit
+        @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
-        @limit.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Phone::TypeGroupCall
       end
     end
 
     class GetGroupParticipants < TLRequest
-      CONSTRUCTOR_ID = 0xC558D8AB
+      getter constructor_id : UInt32 = 0xC558D8AB_u32
+      class_getter constructor_id : UInt32 = 0xC558D8AB_u32
 
       getter call : Root::TypeInputGroupCall
       getter ids : Array(Root::TypeInputPeer)
@@ -811,26 +792,27 @@ module Proton::TL
         @call = call
         @ids = ids
         @sources = sources
-        @offset = offset
-        @limit = limit
+        @offset = TL::Utils.parse_bytes!(offset)
+        @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
-        @ids.tl_serialize(io, false)
-        @sources.tl_serialize(io, false)
-        @offset.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
+        @ids.tl_serialize(io)
+        @sources.tl_serialize(io)
+        @offset.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Phone::TypeGroupParticipants
       end
     end
 
     class CheckGroupCall < TLRequest
-      CONSTRUCTOR_ID = 0xB59CF977
+      getter constructor_id : UInt32 = 0xB59CF977_u32
+      class_getter constructor_id : UInt32 = 0xB59CF977_u32
 
       getter call : Root::TypeInputGroupCall
       getter sources : Array(Int32)
@@ -844,18 +826,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
-        @sources.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
+        @sources.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Int32)
       end
     end
 
     class ToggleGroupCallRecord < TLRequest
-      CONSTRUCTOR_ID = 0xF128C708
+      getter constructor_id : UInt32 = 0xF128C708_u32
+      class_getter constructor_id : UInt32 = 0xF128C708_u32
 
       getter call : Root::TypeInputGroupCall
       getter start : Bool | Nil
@@ -873,30 +856,31 @@ module Proton::TL
         @call = call
         @start = start
         @video = video
-        @title = title
+        @title = TL::Utils.parse_bytes(title)
         @video_portrait = video_portrait
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!start.nil? ? 1 : 0) |
-            (!video.nil? ? 4 : 0) |
-            (!title.nil? ? 2 : 0) |
-            (!video_portrait.nil? ? 4 : 0)
+          (!start.nil? ? 0x01 : 0) |
+            (!video.nil? ? 0x04 : 0) |
+            (!title.nil? ? 0x02 : 0) |
+            (!video_portrait.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @call.tl_serialize(io, false)
-        @title.tl_serialize(io, true) unless @title.nil?
-        @video_portrait.tl_serialize(io, false) unless @video_portrait.nil?
+        @call.tl_serialize(io)
+        @title.tl_serialize(io) unless @title.nil?
+        @video_portrait.tl_serialize(io) unless @video_portrait.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class EditGroupCallParticipant < TLRequest
-      CONSTRUCTOR_ID = 0xA5273ABF
+      getter constructor_id : UInt32 = 0xA5273ABF_u32
+      class_getter constructor_id : UInt32 = 0xA5273ABF_u32
 
       getter call : Root::TypeInputGroupCall
       getter participant : Root::TypeInputPeer
@@ -920,7 +904,7 @@ module Proton::TL
         @call = call
         @participant = participant
         @muted = muted
-        @volume = volume
+        @volume = TL::Utils.parse_int(volume, Int32)
         @raise_hand = raise_hand
         @video_stopped = video_stopped
         @video_paused = video_paused
@@ -928,32 +912,33 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!muted.nil? ? 1 : 0) |
-            (!volume.nil? ? 2 : 0) |
-            (!raise_hand.nil? ? 4 : 0) |
-            (!video_stopped.nil? ? 8 : 0) |
-            (!video_paused.nil? ? 16 : 0) |
-            (!presentation_paused.nil? ? 32 : 0)
+          (!muted.nil? ? 0x01 : 0) |
+            (!volume.nil? ? 0x02 : 0) |
+            (!raise_hand.nil? ? 0x04 : 0) |
+            (!video_stopped.nil? ? 0x08 : 0) |
+            (!video_paused.nil? ? 0x10 : 0) |
+            (!presentation_paused.nil? ? 0x20 : 0)
         ).tl_serialize(io)
-        @call.tl_serialize(io, false)
-        @participant.tl_serialize(io, false)
-        @muted.tl_serialize(io, false) unless @muted.nil?
-        @volume.tl_serialize(io, true) unless @volume.nil?
-        @raise_hand.tl_serialize(io, false) unless @raise_hand.nil?
-        @video_stopped.tl_serialize(io, false) unless @video_stopped.nil?
-        @video_paused.tl_serialize(io, false) unless @video_paused.nil?
-        @presentation_paused.tl_serialize(io, false) unless @presentation_paused.nil?
+        @call.tl_serialize(io)
+        @participant.tl_serialize(io)
+        @muted.tl_serialize(io) unless @muted.nil?
+        @volume.tl_serialize(io) unless @volume.nil?
+        @raise_hand.tl_serialize(io) unless @raise_hand.nil?
+        @video_stopped.tl_serialize(io) unless @video_stopped.nil?
+        @video_paused.tl_serialize(io) unless @video_paused.nil?
+        @presentation_paused.tl_serialize(io) unless @presentation_paused.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class EditGroupCallTitle < TLRequest
-      CONSTRUCTOR_ID = 0x1CA6AC0A
+      getter constructor_id : UInt32 = 0x1CA6AC0A_u32
+      class_getter constructor_id : UInt32 = 0x1CA6AC0A_u32
 
       getter call : Root::TypeInputGroupCall
       getter title : Bytes
@@ -963,22 +948,23 @@ module Proton::TL
         title : Bytes | String | IO
       )
         @call = call
-        @title = title
+        @title = TL::Utils.parse_bytes!(title)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
-        @title.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
+        @title.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetGroupCallJoinAs < TLRequest
-      CONSTRUCTOR_ID = 0xEF7C213A
+      getter constructor_id : UInt32 = 0xEF7C213A_u32
+      class_getter constructor_id : UInt32 = 0xEF7C213A_u32
 
       getter peer : Root::TypeInputPeer
 
@@ -989,17 +975,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Phone::TypeJoinAsPeers
       end
     end
 
     class ExportGroupCallInvite < TLRequest
-      CONSTRUCTOR_ID = 0xE6AA647F
+      getter constructor_id : UInt32 = 0xE6AA647F_u32
+      class_getter constructor_id : UInt32 = 0xE6AA647F_u32
 
       getter call : Root::TypeInputGroupCall
       getter can_self_unmute : Bool | Nil
@@ -1013,20 +1000,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!can_self_unmute.nil? ? 1 : 0)
+          (!can_self_unmute.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @call.tl_serialize(io, false)
+        @call.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Phone::TypeExportedGroupCallInvite
       end
     end
 
     class ToggleGroupCallStartSubscription < TLRequest
-      CONSTRUCTOR_ID = 0x219C34E6
+      getter constructor_id : UInt32 = 0x219C34E6_u32
+      class_getter constructor_id : UInt32 = 0x219C34E6_u32
 
       getter call : Root::TypeInputGroupCall
       getter subscribed : Bool
@@ -1040,18 +1028,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
-        @subscribed.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
+        @subscribed.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class StartScheduledGroupCall < TLRequest
-      CONSTRUCTOR_ID = 0x5680E342
+      getter constructor_id : UInt32 = 0x5680E342_u32
+      class_getter constructor_id : UInt32 = 0x5680E342_u32
 
       getter call : Root::TypeInputGroupCall
 
@@ -1062,17 +1051,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class SaveDefaultGroupCallJoinAs < TLRequest
-      CONSTRUCTOR_ID = 0x575E1F8C
+      getter constructor_id : UInt32 = 0x575E1F8C_u32
+      class_getter constructor_id : UInt32 = 0x575E1F8C_u32
 
       getter peer : Root::TypeInputPeer
       getter join_as : Root::TypeInputPeer
@@ -1086,18 +1076,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @join_as.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @join_as.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class JoinGroupCallPresentation < TLRequest
-      CONSTRUCTOR_ID = 0xCBEA6BC4
+      getter constructor_id : UInt32 = 0xCBEA6BC4_u32
+      class_getter constructor_id : UInt32 = 0xCBEA6BC4_u32
 
       getter call : Root::TypeInputGroupCall
       getter params : Root::TypeDataJSON
@@ -1111,18 +1102,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
-        @params.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
+        @params.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class LeaveGroupCallPresentation < TLRequest
-      CONSTRUCTOR_ID = 0x1C50D144
+      getter constructor_id : UInt32 = 0x1C50D144_u32
+      class_getter constructor_id : UInt32 = 0x1C50D144_u32
 
       getter call : Root::TypeInputGroupCall
 
@@ -1133,11 +1125,11 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @call.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @call.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end

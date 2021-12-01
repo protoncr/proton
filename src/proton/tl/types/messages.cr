@@ -15,7 +15,7 @@ module Proton::TL
   module Messages
     abstract class TypeDialogs < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -25,8 +25,6 @@ module Proton::TL
           DialogsSlice.tl_deserialize(io, bare)
         when 0xF0E3E596
           DialogsNotModified.tl_deserialize(io, bare)
-        when 0xA0F4CB4F
-          GetDialogs.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -35,7 +33,7 @@ module Proton::TL
 
     abstract class TypeMessages < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -47,24 +45,6 @@ module Proton::TL
           ChannelMessages.tl_deserialize(io, bare)
         when 0x74535F21
           MessagesNotModified.tl_deserialize(io, bare)
-        when 0x63C66506
-          GetMessages.tl_deserialize(io, bare)
-        when 0x4423E6C5
-          GetHistory.tl_deserialize(io, bare)
-        when 0xA0FDA762
-          Search.tl_deserialize(io, bare)
-        when 0x4BC6589A
-          SearchGlobal.tl_deserialize(io, bare)
-        when 0x46578472
-          GetUnreadMentions.tl_deserialize(io, bare)
-        when 0x702A40E0
-          GetRecentLocations.tl_deserialize(io, bare)
-        when 0xF516760B
-          GetScheduledHistory.tl_deserialize(io, bare)
-        when 0xBDBB0464
-          GetScheduledMessages.tl_deserialize(io, bare)
-        when 0x22DDD30C
-          GetReplies.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -73,7 +53,7 @@ module Proton::TL
 
     abstract class TypeChats < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -81,12 +61,6 @@ module Proton::TL
           Chats.tl_deserialize(io, bare)
         when 0x9CD81144
           ChatsSlice.tl_deserialize(io, bare)
-        when 0x49E9528F
-          GetChats.tl_deserialize(io, bare)
-        when 0xE40CA104
-          GetCommonChats.tl_deserialize(io, bare)
-        when 0x875F74BE
-          GetAllChats.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -95,14 +69,12 @@ module Proton::TL
 
     abstract class TypeChatFull < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xE5D7D19C
           ChatFull.tl_deserialize(io, bare)
-        when 0xAEB00B34
-          GetFullChat.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -111,18 +83,12 @@ module Proton::TL
 
     abstract class TypeAffectedHistory < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xB45C69D1
           AffectedHistory.tl_deserialize(io, bare)
-        when 0x1C015B09
-          DeleteHistory.tl_deserialize(io, bare)
-        when 0x0F0189D3
-          ReadMentions.tl_deserialize(io, bare)
-        when 0xF025BC8B
-          UnpinAllMessages.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -131,7 +97,7 @@ module Proton::TL
 
     abstract class TypeDhConfig < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -139,8 +105,6 @@ module Proton::TL
           DhConfigNotModified.tl_deserialize(io, bare)
         when 0x2C221EDD
           DhConfig.tl_deserialize(io, bare)
-        when 0x26CF8950
-          GetDhConfig.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -149,7 +113,7 @@ module Proton::TL
 
     abstract class TypeSentEncryptedMessage < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -157,12 +121,6 @@ module Proton::TL
           SentEncryptedMessage.tl_deserialize(io, bare)
         when 0x9493FF32
           SentEncryptedFile.tl_deserialize(io, bare)
-        when 0x44FA7A15
-          SendEncrypted.tl_deserialize(io, bare)
-        when 0x5559481D
-          SendEncryptedFile.tl_deserialize(io, bare)
-        when 0x32D439A4
-          SendEncryptedService.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -171,7 +129,7 @@ module Proton::TL
 
     abstract class TypeStickers < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -179,8 +137,6 @@ module Proton::TL
           StickersNotModified.tl_deserialize(io, bare)
         when 0x30A6EC7E
           Stickers.tl_deserialize(io, bare)
-        when 0xD5A5D3A1
-          GetStickers.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -189,7 +145,7 @@ module Proton::TL
 
     abstract class TypeAllStickers < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -197,10 +153,6 @@ module Proton::TL
           AllStickersNotModified.tl_deserialize(io, bare)
         when 0xCDBBCEBB
           AllStickers.tl_deserialize(io, bare)
-        when 0xB8A0A1A8
-          GetAllStickers.tl_deserialize(io, bare)
-        when 0x640F82B8
-          GetMaskStickers.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -209,18 +161,12 @@ module Proton::TL
 
     abstract class TypeAffectedMessages < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x84D19185
           AffectedMessages.tl_deserialize(io, bare)
-        when 0x0E306D3A
-          ReadHistory.tl_deserialize(io, bare)
-        when 0xE58E95D2
-          DeleteMessages.tl_deserialize(io, bare)
-        when 0x36A73F77
-          ReadMessageContents.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -229,14 +175,14 @@ module Proton::TL
 
     abstract class TypeStickerSet < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xB60A24A6
           StickerSet.tl_deserialize(io, bare)
-        when 0x2619A90E
-          GetStickerSet.tl_deserialize(io, bare)
+        when 0xD3F924EB
+          StickerSetNotModified.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -245,7 +191,7 @@ module Proton::TL
 
     abstract class TypeSavedGifs < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -253,8 +199,6 @@ module Proton::TL
           SavedGifsNotModified.tl_deserialize(io, bare)
         when 0x84A02A0D
           SavedGifs.tl_deserialize(io, bare)
-        when 0x5CF09635
-          GetSavedGifs.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -263,14 +207,12 @@ module Proton::TL
 
     abstract class TypeBotResults < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x947CA848
           BotResults.tl_deserialize(io, bare)
-        when 0x514E999D
-          GetInlineBotResults.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -279,14 +221,12 @@ module Proton::TL
 
     abstract class TypeBotCallbackAnswer < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x36585EA4
           BotCallbackAnswer.tl_deserialize(io, bare)
-        when 0x9342CA07
-          GetBotCallbackAnswer.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -295,14 +235,12 @@ module Proton::TL
 
     abstract class TypeMessageEditData < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x26B5DDE6
           MessageEditData.tl_deserialize(io, bare)
-        when 0xFDA68D36
-          GetMessageEditData.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -311,16 +249,12 @@ module Proton::TL
 
     abstract class TypePeerDialogs < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x3371C354
           PeerDialogs.tl_deserialize(io, bare)
-        when 0xE470BCFD
-          GetPeerDialogs.tl_deserialize(io, bare)
-        when 0xD6B94DF2
-          GetPinnedDialogs.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -329,7 +263,7 @@ module Proton::TL
 
     abstract class TypeFeaturedStickers < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -337,10 +271,6 @@ module Proton::TL
           FeaturedStickersNotModified.tl_deserialize(io, bare)
         when 0x84C02310
           FeaturedStickers.tl_deserialize(io, bare)
-        when 0x64780B14
-          GetFeaturedStickers.tl_deserialize(io, bare)
-        when 0x7ED094A1
-          GetOldFeaturedStickers.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -349,7 +279,7 @@ module Proton::TL
 
     abstract class TypeRecentStickers < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -357,8 +287,6 @@ module Proton::TL
           RecentStickersNotModified.tl_deserialize(io, bare)
         when 0x88D37C56
           RecentStickers.tl_deserialize(io, bare)
-        when 0x9DA9403B
-          GetRecentStickers.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -367,14 +295,12 @@ module Proton::TL
 
     abstract class TypeArchivedStickers < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x4FCBA9C8
           ArchivedStickers.tl_deserialize(io, bare)
-        when 0x57F17692
-          GetArchivedStickers.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -383,7 +309,7 @@ module Proton::TL
 
     abstract class TypeStickerSetInstallResult < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -391,8 +317,6 @@ module Proton::TL
           StickerSetInstallResultSuccess.tl_deserialize(io, bare)
         when 0x35E410A8
           StickerSetInstallResultArchive.tl_deserialize(io, bare)
-        when 0xC78FE460
-          InstallStickerSet.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -401,16 +325,12 @@ module Proton::TL
 
     abstract class TypeHighScores < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x9A3BFD99
           HighScores.tl_deserialize(io, bare)
-        when 0xE822649D
-          GetGameHighScores.tl_deserialize(io, bare)
-        when 0x0F635E1B
-          GetInlineGameHighScores.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -419,7 +339,7 @@ module Proton::TL
 
     abstract class TypeFavedStickers < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -427,8 +347,6 @@ module Proton::TL
           FavedStickersNotModified.tl_deserialize(io, bare)
         when 0x2CB51097
           FavedStickers.tl_deserialize(io, bare)
-        when 0x04F1AAA9
-          GetFavedStickers.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -437,7 +355,7 @@ module Proton::TL
 
     abstract class TypeFoundStickerSets < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -445,8 +363,6 @@ module Proton::TL
           FoundStickerSetsNotModified.tl_deserialize(io, bare)
         when 0x8AF09DD2
           FoundStickerSets.tl_deserialize(io, bare)
-        when 0x35705B8A
-          SearchStickerSets.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -455,7 +371,7 @@ module Proton::TL
 
     abstract class TypeSearchCounter < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -469,7 +385,7 @@ module Proton::TL
 
     abstract class TypeInactiveChats < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -483,14 +399,12 @@ module Proton::TL
 
     abstract class TypeVotesList < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x0823F649
           VotesList.tl_deserialize(io, bare)
-        when 0xB86E380E
-          GetPollVotes.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -499,14 +413,12 @@ module Proton::TL
 
     abstract class TypeMessageViews < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xB6C4F543
           MessageViews.tl_deserialize(io, bare)
-        when 0x5784D3E1
-          GetMessagesViews.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -515,14 +427,12 @@ module Proton::TL
 
     abstract class TypeDiscussionMessage < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xA6341782
           DiscussionMessage.tl_deserialize(io, bare)
-        when 0x446972FD
-          GetDiscussionMessage.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -531,14 +441,12 @@ module Proton::TL
 
     abstract class TypeHistoryImport < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x1662AF0B
           HistoryImport.tl_deserialize(io, bare)
-        when 0x34090C3B
-          InitHistoryImport.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -547,14 +455,12 @@ module Proton::TL
 
     abstract class TypeHistoryImportParsed < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x5E0FB7B9
           HistoryImportParsed.tl_deserialize(io, bare)
-        when 0x43FE19F3
-          CheckHistoryImport.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -563,14 +469,12 @@ module Proton::TL
 
     abstract class TypeAffectedFoundMessages < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xEF8D3E6C
           AffectedFoundMessages.tl_deserialize(io, bare)
-        when 0xF9CBE409
-          DeletePhoneCallHistory.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -579,14 +483,12 @@ module Proton::TL
 
     abstract class TypeExportedChatInvites < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xBDC62DCC
           ExportedChatInvites.tl_deserialize(io, bare)
-        when 0xA2B5A3F6
-          GetExportedChatInvites.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -595,7 +497,7 @@ module Proton::TL
 
     abstract class TypeExportedChatInvite < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -603,12 +505,6 @@ module Proton::TL
           ExportedChatInvite.tl_deserialize(io, bare)
         when 0x222600EF
           ExportedChatInviteReplaced.tl_deserialize(io, bare)
-        when 0x14B9BCD7
-          ExportChatInvite.tl_deserialize(io, bare)
-        when 0x73746F5C
-          GetExportedChatInvite.tl_deserialize(io, bare)
-        when 0x02E4FFBE
-          EditExportedChatInvite.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -617,14 +513,12 @@ module Proton::TL
 
     abstract class TypeChatInviteImporters < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x81B6B00A
           ChatInviteImporters.tl_deserialize(io, bare)
-        when 0x26FB7289
-          GetChatInviteImporters.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -633,14 +527,12 @@ module Proton::TL
 
     abstract class TypeChatAdminsWithInvites < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xB69B72D7
           ChatAdminsWithInvites.tl_deserialize(io, bare)
-        when 0x3920E6EF
-          GetAdminsWithInvites.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -649,14 +541,12 @@ module Proton::TL
 
     abstract class TypeCheckedHistoryImportPeer < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xA24DE717
           CheckedHistoryImportPeer.tl_deserialize(io, bare)
-        when 0x5DC60F03
-          CheckHistoryImportPeer.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -665,7 +555,7 @@ module Proton::TL
 
     abstract class TypeSponsoredMessages < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
@@ -677,62 +567,28 @@ module Proton::TL
       end
     end
 
-    abstract class TypeUpdates < TLObject
+    abstract class TypeSearchResultsCalendar < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x520C3870
-          SendMessage.tl_deserialize(io, bare)
-        when 0x3491EBA9
-          SendMedia.tl_deserialize(io, bare)
-        when 0xD9FEE60E
-          ForwardMessages.tl_deserialize(io, bare)
-        when 0x73783FFD
-          EditChatTitle.tl_deserialize(io, bare)
-        when 0x35DDD674
-          EditChatPhoto.tl_deserialize(io, bare)
-        when 0xF24753E3
-          AddChatUser.tl_deserialize(io, bare)
-        when 0xA2185CAB
-          DeleteChatUser.tl_deserialize(io, bare)
-        when 0x09CB126E
-          CreateChat.tl_deserialize(io, bare)
-        when 0x6C50051C
-          ImportChatInvite.tl_deserialize(io, bare)
-        when 0xE6DF7378
-          StartBot.tl_deserialize(io, bare)
-        when 0xA2875319
-          MigrateChat.tl_deserialize(io, bare)
-        when 0x220815B0
-          SendInlineBotResult.tl_deserialize(io, bare)
-        when 0x48F71778
-          EditMessage.tl_deserialize(io, bare)
-        when 0x6A3F8D65
-          GetAllDrafts.tl_deserialize(io, bare)
-        when 0x8EF8ECC0
-          SetGameScore.tl_deserialize(io, bare)
-        when 0xC97DF020
-          SendScreenshotNotification.tl_deserialize(io, bare)
-        when 0xCC0110CB
-          SendMultiMedia.tl_deserialize(io, bare)
-        when 0xD2AAF7EC
-          UpdatePinnedMessage.tl_deserialize(io, bare)
-        when 0x10EA6184
-          SendVote.tl_deserialize(io, bare)
-        when 0x73BB643B
-          GetPollResults.tl_deserialize(io, bare)
-        when 0xA5866B41
-          EditChatDefaultBannedRights.tl_deserialize(io, bare)
-        when 0xBD38850A
-          SendScheduledMessages.tl_deserialize(io, bare)
-        when 0x59AE2B16
-          DeleteScheduledMessages.tl_deserialize(io, bare)
-        when 0xB80E5FE4
-          SetHistoryTTL.tl_deserialize(io, bare)
-        when 0xE63BE13F
-          SetChatTheme.tl_deserialize(io, bare)
+        when 0x147EE23C
+          SearchResultsCalendar.tl_deserialize(io, bare)
+        else
+          raise "Unknown constructor id: #{constructor_id}"
+        end
+      end
+    end
+
+    abstract class TypeSearchResultsPositions < TLObject
+      def self.tl_deserialize(io : IO, bare = false)
+        constructor_id = UInt32.tl_deserialize(io)
+        io.seek(-4, :current)
+
+        case constructor_id
+        when 0x53B22BAF
+          SearchResultsPositions.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -741,12 +597,24 @@ module Proton::TL
 
     abstract class TypePeerSettings < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x3672E09C
-          GetPeerSettings.tl_deserialize(io, bare)
+        when 0x6880B94D
+          PeerSettings.tl_deserialize(io, bare)
+        else
+          raise "Unknown constructor id: #{constructor_id}"
+        end
+      end
+    end
+
+    abstract class TypeUpdates < TLObject
+      def self.tl_deserialize(io : IO, bare = false)
+        constructor_id = UInt32.tl_deserialize(io)
+        io.seek(-4, :current)
+
+        case constructor_id
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -755,14 +623,10 @@ module Proton::TL
 
     abstract class TypeEncryptedChat < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0xF64DAF43
-          RequestEncryption.tl_deserialize(io, bare)
-        when 0x3DBC0415
-          AcceptEncryption.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -771,16 +635,10 @@ module Proton::TL
 
     abstract class TypeMessageMedia < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x8B68B0CC
-          GetWebPagePreview.tl_deserialize(io, bare)
-        when 0x519BC2B1
-          UploadMedia.tl_deserialize(io, bare)
-        when 0x2A862092
-          UploadImportedMedia.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -789,12 +647,10 @@ module Proton::TL
 
     abstract class TypeChatInvite < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x3EADB1BB
-          CheckChatInvite.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -803,12 +659,10 @@ module Proton::TL
 
     abstract class TypeDocument < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x338E2464
-          GetDocumentByHash.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -817,12 +671,10 @@ module Proton::TL
 
     abstract class TypeWebPage < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x32CA8F91
-          GetWebPage.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -831,12 +683,10 @@ module Proton::TL
 
     abstract class TypeEncryptedFile < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x5057C497
-          UploadEncryptedFile.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -845,26 +695,10 @@ module Proton::TL
 
     abstract class TypeChatOnlines < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x6E2BE050
-          GetOnlines.tl_deserialize(io, bare)
-        else
-          raise "Unknown constructor id: #{constructor_id}"
-        end
-      end
-    end
-
-    abstract class TypeStatsURL < TLObject
-      def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
-        io.seek(-4, :current)
-
-        case constructor_id
-        when 0x812C2AE6
-          GetStatsURL.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -873,14 +707,10 @@ module Proton::TL
 
     abstract class TypeEmojiKeywordsDifference < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x35A0E062
-          GetEmojiKeywords.tl_deserialize(io, bare)
-        when 0x1508B6AF
-          GetEmojiKeywordsDifference.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -889,12 +719,10 @@ module Proton::TL
 
     abstract class TypeEmojiURL < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0xD5B10C26
-          GetEmojiURL.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -903,14 +731,10 @@ module Proton::TL
 
     abstract class TypeUrlAuthResult < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x198FB446
-          RequestUrlAuth.tl_deserialize(io, bare)
-        when 0xB12C7125
-          AcceptUrlAuth.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -918,7 +742,8 @@ module Proton::TL
     end
 
     class Dialogs < TypeDialogs
-      CONSTRUCTOR_ID = 0x15BA6C40
+      getter constructor_id : UInt32 = 0x15BA6C40_u32
+      class_getter constructor_id : UInt32 = 0x15BA6C40_u32
 
       getter dialogs : Array(Root::TypeDialog)
       getter messages : Array(Root::TypeMessage)
@@ -938,25 +763,27 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @dialogs.tl_serialize(io, false)
-        @messages.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @dialogs.tl_serialize(io)
+        @messages.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          dialogs: Array(Root::TypeDialog).tl_deserialize(io, false),
-          messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          dialogs: Array(Root::TypeDialog).tl_deserialize(io),
+          messages: Array(Root::TypeMessage).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class DialogsSlice < TypeDialogs
-      CONSTRUCTOR_ID = 0x71E094F3
+      getter constructor_id : UInt32 = 0x71E094F3_u32
+      class_getter constructor_id : UInt32 = 0x71E094F3_u32
 
       getter count : Int32
       getter dialogs : Array(Root::TypeDialog)
@@ -971,7 +798,7 @@ module Proton::TL
         chats : Array(Root::TypeChat),
         users : Array(Root::TypeUser)
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @dialogs = dialogs
         @messages = messages
         @chats = chats
@@ -979,50 +806,54 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
-        @dialogs.tl_serialize(io, false)
-        @messages.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
+        @dialogs.tl_serialize(io)
+        @messages.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
-          dialogs: Array(Root::TypeDialog).tl_deserialize(io, false),
-          messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          count: Int32.tl_deserialize(io),
+          dialogs: Array(Root::TypeDialog).tl_deserialize(io),
+          messages: Array(Root::TypeMessage).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class DialogsNotModified < TypeDialogs
-      CONSTRUCTOR_ID = 0xF0E3E596
+      getter constructor_id : UInt32 = 0xF0E3E596_u32
+      class_getter constructor_id : UInt32 = 0xF0E3E596_u32
 
       getter count : Int32
 
       def initialize(
         count : Int32
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
+          count: Int32.tl_deserialize(io),
         )
       end
     end
 
     class Messages < TypeMessages
-      CONSTRUCTOR_ID = 0x8C718E87
+      getter constructor_id : UInt32 = 0x8C718E87_u32
+      class_getter constructor_id : UInt32 = 0x8C718E87_u32
 
       getter messages : Array(Root::TypeMessage)
       getter chats : Array(Root::TypeChat)
@@ -1039,23 +870,25 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @messages.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @messages.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          messages: Array(Root::TypeMessage).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class MessagesSlice < TypeMessages
-      CONSTRUCTOR_ID = 0x3A54685E
+      getter constructor_id : UInt32 = 0x3A54685E_u32
+      class_getter constructor_id : UInt32 = 0x3A54685E_u32
 
       getter count : Int32
       getter messages : Array(Root::TypeMessage)
@@ -1074,46 +907,48 @@ module Proton::TL
         next_rate : Int32 | Nil = nil,
         offset_id_offset : Int32 | Nil = nil
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @messages = messages
         @chats = chats
         @users = users
         @inexact = inexact
-        @next_rate = next_rate
-        @offset_id_offset = offset_id_offset
+        @next_rate = TL::Utils.parse_int(next_rate, Int32)
+        @offset_id_offset = TL::Utils.parse_int(offset_id_offset, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!inexact.nil? ? 2 : 0) |
-            (!next_rate.nil? ? 1 : 0) |
-            (!offset_id_offset.nil? ? 4 : 0)
+          (!inexact.nil? ? 0x02 : 0) |
+            (!next_rate.nil? ? 0x01 : 0) |
+            (!offset_id_offset.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @count.tl_serialize(io, true)
-        @next_rate.tl_serialize(io, true) unless @next_rate.nil?
-        @offset_id_offset.tl_serialize(io, true) unless @offset_id_offset.nil?
-        @messages.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        @count.tl_serialize(io)
+        @next_rate.tl_serialize(io) unless @next_rate.nil?
+        @offset_id_offset.tl_serialize(io) unless @offset_id_offset.nil?
+        @messages.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          count: Int32.tl_deserialize(io, true),
-          messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          inexact: flags & 2 == 1,
-          next_rate: flags & 1 == 1 ? Int32.tl_deserialize(io, true) : nil,
-          offset_id_offset: flags & 4 == 1 ? Int32.tl_deserialize(io, true) : nil,
+          count: Int32.tl_deserialize(io),
+          messages: Array(Root::TypeMessage).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          inexact: flags & 0x02 > 0 || nil,
+          next_rate: flags & 0x01 > 0 ? Int32.tl_deserialize(io) : nil,
+          offset_id_offset: flags & 0x04 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
 
     class ChannelMessages < TypeMessages
-      CONSTRUCTOR_ID = 0x64479808
+      getter constructor_id : UInt32 = 0x64479808_u32
+      class_getter constructor_id : UInt32 = 0x64479808_u32
 
       getter pts : Int32
       getter count : Int32
@@ -1132,68 +967,72 @@ module Proton::TL
         inexact : Bool | Nil = nil,
         offset_id_offset : Int32 | Nil = nil
       )
-        @pts = pts
-        @count = count
+        @pts = TL::Utils.parse_int!(pts, Int32)
+        @count = TL::Utils.parse_int!(count, Int32)
         @messages = messages
         @chats = chats
         @users = users
         @inexact = inexact
-        @offset_id_offset = offset_id_offset
+        @offset_id_offset = TL::Utils.parse_int(offset_id_offset, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!inexact.nil? ? 2 : 0) |
-            (!offset_id_offset.nil? ? 4 : 0)
+          (!inexact.nil? ? 0x02 : 0) |
+            (!offset_id_offset.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @pts.tl_serialize(io, true)
-        @count.tl_serialize(io, true)
-        @offset_id_offset.tl_serialize(io, true) unless @offset_id_offset.nil?
-        @messages.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        @pts.tl_serialize(io)
+        @count.tl_serialize(io)
+        @offset_id_offset.tl_serialize(io) unless @offset_id_offset.nil?
+        @messages.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          pts: Int32.tl_deserialize(io, true),
-          count: Int32.tl_deserialize(io, true),
-          messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          inexact: flags & 2 == 1,
-          offset_id_offset: flags & 4 == 1 ? Int32.tl_deserialize(io, true) : nil,
+          pts: Int32.tl_deserialize(io),
+          count: Int32.tl_deserialize(io),
+          messages: Array(Root::TypeMessage).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          inexact: flags & 0x02 > 0 || nil,
+          offset_id_offset: flags & 0x04 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
 
     class MessagesNotModified < TypeMessages
-      CONSTRUCTOR_ID = 0x74535F21
+      getter constructor_id : UInt32 = 0x74535F21_u32
+      class_getter constructor_id : UInt32 = 0x74535F21_u32
 
       getter count : Int32
 
       def initialize(
         count : Int32
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
+          count: Int32.tl_deserialize(io),
         )
       end
     end
 
     class Chats < TypeChats
-      CONSTRUCTOR_ID = 0x64FF9FD5
+      getter constructor_id : UInt32 = 0x64FF9FD5_u32
+      class_getter constructor_id : UInt32 = 0x64FF9FD5_u32
 
       getter chats : Array(Root::TypeChat)
 
@@ -1204,19 +1043,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @chats.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @chats.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
         )
       end
     end
 
     class ChatsSlice < TypeChats
-      CONSTRUCTOR_ID = 0x9CD81144
+      getter constructor_id : UInt32 = 0x9CD81144_u32
+      class_getter constructor_id : UInt32 = 0x9CD81144_u32
 
       getter count : Int32
       getter chats : Array(Root::TypeChat)
@@ -1225,26 +1066,28 @@ module Proton::TL
         count : Int32,
         chats : Array(Root::TypeChat)
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @chats = chats
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
-        @chats.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
+        @chats.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
+          count: Int32.tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
         )
       end
     end
 
     class ChatFull < TypeChatFull
-      CONSTRUCTOR_ID = 0xE5D7D19C
+      getter constructor_id : UInt32 = 0xE5D7D19C_u32
+      class_getter constructor_id : UInt32 = 0xE5D7D19C_u32
 
       getter full_chat : Root::TypeChatFull
       getter chats : Array(Root::TypeChat)
@@ -1261,23 +1104,25 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @full_chat.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @full_chat.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          full_chat: Root::TypeChatFull.tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          full_chat: Root::TypeChatFull.tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class AffectedHistory < TypeAffectedHistory
-      CONSTRUCTOR_ID = 0xB45C69D1
+      getter constructor_id : UInt32 = 0xB45C69D1_u32
+      class_getter constructor_id : UInt32 = 0xB45C69D1_u32
 
       getter pts : Int32
       getter pts_count : Int32
@@ -1288,29 +1133,31 @@ module Proton::TL
         pts_count : Int32,
         offset : Int32
       )
-        @pts = pts
-        @pts_count = pts_count
-        @offset = offset
+        @pts = TL::Utils.parse_int!(pts, Int32)
+        @pts_count = TL::Utils.parse_int!(pts_count, Int32)
+        @offset = TL::Utils.parse_int!(offset, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @pts.tl_serialize(io, true)
-        @pts_count.tl_serialize(io, true)
-        @offset.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @pts.tl_serialize(io)
+        @pts_count.tl_serialize(io)
+        @offset.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          pts: Int32.tl_deserialize(io, true),
-          pts_count: Int32.tl_deserialize(io, true),
-          offset: Int32.tl_deserialize(io, true),
+          pts: Int32.tl_deserialize(io),
+          pts_count: Int32.tl_deserialize(io),
+          offset: Int32.tl_deserialize(io),
         )
       end
     end
 
     class DhConfigNotModified < TypeDhConfig
-      CONSTRUCTOR_ID = 0xC0E24635
+      getter constructor_id : UInt32 = 0xC0E24635_u32
+      class_getter constructor_id : UInt32 = 0xC0E24635_u32
 
       getter random : Bytes
 
@@ -1321,19 +1168,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @random.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @random.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          random: Bytes.tl_deserialize(io, true),
+          random: Bytes.tl_deserialize(io),
         )
       end
     end
 
     class DhConfig < TypeDhConfig
-      CONSTRUCTOR_ID = 0x2C221EDD
+      getter constructor_id : UInt32 = 0x2C221EDD_u32
+      class_getter constructor_id : UInt32 = 0x2C221EDD_u32
 
       getter g : Int32
       getter p : Bytes
@@ -1346,55 +1195,59 @@ module Proton::TL
         version : Int32,
         random : Bytes | String | IO
       )
-        @g = g
+        @g = TL::Utils.parse_int!(g, Int32)
         @p = TL::Utils.parse_bytes!(p)
-        @version = version
+        @version = TL::Utils.parse_int!(version, Int32)
         @random = TL::Utils.parse_bytes!(random)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @g.tl_serialize(io, true)
-        @p.tl_serialize(io, true)
-        @version.tl_serialize(io, true)
-        @random.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @g.tl_serialize(io)
+        @p.tl_serialize(io)
+        @version.tl_serialize(io)
+        @random.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          g: Int32.tl_deserialize(io, true),
-          p: Bytes.tl_deserialize(io, true),
-          version: Int32.tl_deserialize(io, true),
-          random: Bytes.tl_deserialize(io, true),
+          g: Int32.tl_deserialize(io),
+          p: Bytes.tl_deserialize(io),
+          version: Int32.tl_deserialize(io),
+          random: Bytes.tl_deserialize(io),
         )
       end
     end
 
     class SentEncryptedMessage < TypeSentEncryptedMessage
-      CONSTRUCTOR_ID = 0x560F8935
+      getter constructor_id : UInt32 = 0x560F8935_u32
+      class_getter constructor_id : UInt32 = 0x560F8935_u32
 
       getter date : Int32
 
       def initialize(
         date : Int32
       )
-        @date = date
+        @date = TL::Utils.parse_int!(date, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @date.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @date.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          date: Int32.tl_deserialize(io, true),
+          date: Int32.tl_deserialize(io),
         )
       end
     end
 
     class SentEncryptedFile < TypeSentEncryptedMessage
-      CONSTRUCTOR_ID = 0x9493FF32
+      getter constructor_id : UInt32 = 0x9493FF32_u32
+      class_getter constructor_id : UInt32 = 0x9493FF32_u32
 
       getter date : Int32
       getter file : Root::TypeEncryptedFile
@@ -1403,38 +1256,42 @@ module Proton::TL
         date : Int32,
         file : Root::TypeEncryptedFile
       )
-        @date = date
+        @date = TL::Utils.parse_int!(date, Int32)
         @file = file
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @date.tl_serialize(io, true)
-        @file.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @date.tl_serialize(io)
+        @file.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          date: Int32.tl_deserialize(io, true),
-          file: Root::TypeEncryptedFile.tl_deserialize(io, false),
+          date: Int32.tl_deserialize(io),
+          file: Root::TypeEncryptedFile.tl_deserialize(io),
         )
       end
     end
 
     class StickersNotModified < TypeStickers
-      CONSTRUCTOR_ID = 0xF1749A22
+      getter constructor_id : UInt32 = 0xF1749A22_u32
+      class_getter constructor_id : UInt32 = 0xF1749A22_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class Stickers < TypeStickers
-      CONSTRUCTOR_ID = 0x30A6EC7E
+      getter constructor_id : UInt32 = 0x30A6EC7E_u32
+      class_getter constructor_id : UInt32 = 0x30A6EC7E_u32
 
       getter hash : Int64
       getter stickers : Array(Root::TypeDocument)
@@ -1448,33 +1305,37 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
-        @stickers.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
+        @stickers.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          hash: Int64.tl_deserialize(io, true),
-          stickers: Array(Root::TypeDocument).tl_deserialize(io, false),
+          hash: Int64.tl_deserialize(io),
+          stickers: Array(Root::TypeDocument).tl_deserialize(io),
         )
       end
     end
 
     class AllStickersNotModified < TypeAllStickers
-      CONSTRUCTOR_ID = 0xE86602C3
+      getter constructor_id : UInt32 = 0xE86602C3_u32
+      class_getter constructor_id : UInt32 = 0xE86602C3_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class AllStickers < TypeAllStickers
-      CONSTRUCTOR_ID = 0xCDBBCEBB
+      getter constructor_id : UInt32 = 0xCDBBCEBB_u32
+      class_getter constructor_id : UInt32 = 0xCDBBCEBB_u32
 
       getter hash : Int64
       getter sets : Array(Root::TypeStickerSet)
@@ -1488,21 +1349,23 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
-        @sets.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
+        @sets.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          hash: Int64.tl_deserialize(io, true),
-          sets: Array(Root::TypeStickerSet).tl_deserialize(io, false),
+          hash: Int64.tl_deserialize(io),
+          sets: Array(Root::TypeStickerSet).tl_deserialize(io),
         )
       end
     end
 
     class AffectedMessages < TypeAffectedMessages
-      CONSTRUCTOR_ID = 0x84D19185
+      getter constructor_id : UInt32 = 0x84D19185_u32
+      class_getter constructor_id : UInt32 = 0x84D19185_u32
 
       getter pts : Int32
       getter pts_count : Int32
@@ -1511,26 +1374,28 @@ module Proton::TL
         pts : Int32,
         pts_count : Int32
       )
-        @pts = pts
-        @pts_count = pts_count
+        @pts = TL::Utils.parse_int!(pts, Int32)
+        @pts_count = TL::Utils.parse_int!(pts_count, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @pts.tl_serialize(io, true)
-        @pts_count.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @pts.tl_serialize(io)
+        @pts_count.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          pts: Int32.tl_deserialize(io, true),
-          pts_count: Int32.tl_deserialize(io, true),
+          pts: Int32.tl_deserialize(io),
+          pts_count: Int32.tl_deserialize(io),
         )
       end
     end
 
     class StickerSet < TypeStickerSet
-      CONSTRUCTOR_ID = 0xB60A24A6
+      getter constructor_id : UInt32 = 0xB60A24A6_u32
+      class_getter constructor_id : UInt32 = 0xB60A24A6_u32
 
       getter set : Root::TypeStickerSet
       getter packs : Array(Root::TypeStickerPack)
@@ -1547,35 +1412,53 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @set.tl_serialize(io, false)
-        @packs.tl_serialize(io, false)
-        @documents.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @set.tl_serialize(io)
+        @packs.tl_serialize(io)
+        @documents.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          set: Root::TypeStickerSet.tl_deserialize(io, false),
-          packs: Array(Root::TypeStickerPack).tl_deserialize(io, false),
-          documents: Array(Root::TypeDocument).tl_deserialize(io, false),
+          set: Root::TypeStickerSet.tl_deserialize(io),
+          packs: Array(Root::TypeStickerPack).tl_deserialize(io),
+          documents: Array(Root::TypeDocument).tl_deserialize(io),
         )
       end
     end
 
-    class SavedGifsNotModified < TypeSavedGifs
-      CONSTRUCTOR_ID = 0xE8025CA2
+    class StickerSetNotModified < TypeStickerSet
+      getter constructor_id : UInt32 = 0xD3F924EB_u32
+      class_getter constructor_id : UInt32 = 0xD3F924EB_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new()
+      end
+    end
+
+    class SavedGifsNotModified < TypeSavedGifs
+      getter constructor_id : UInt32 = 0xE8025CA2_u32
+      class_getter constructor_id : UInt32 = 0xE8025CA2_u32
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+      end
+
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class SavedGifs < TypeSavedGifs
-      CONSTRUCTOR_ID = 0x84A02A0D
+      getter constructor_id : UInt32 = 0x84A02A0D_u32
+      class_getter constructor_id : UInt32 = 0x84A02A0D_u32
 
       getter hash : Int64
       getter gifs : Array(Root::TypeDocument)
@@ -1589,21 +1472,23 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
-        @gifs.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
+        @gifs.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          hash: Int64.tl_deserialize(io, true),
-          gifs: Array(Root::TypeDocument).tl_deserialize(io, false),
+          hash: Int64.tl_deserialize(io),
+          gifs: Array(Root::TypeDocument).tl_deserialize(io),
         )
       end
     end
 
     class BotResults < TypeBotResults
-      CONSTRUCTOR_ID = 0x947CA848
+      getter constructor_id : UInt32 = 0x947CA848_u32
+      class_getter constructor_id : UInt32 = 0x947CA848_u32
 
       getter query_id : Int64
       getter results : Array(Root::TypeBotInlineResult)
@@ -1624,44 +1509,46 @@ module Proton::TL
       )
         @query_id = query_id
         @results = results
-        @cache_time = cache_time
+        @cache_time = TL::Utils.parse_int!(cache_time, Int32)
         @users = users
         @gallery = gallery
-        @next_offset = next_offset
+        @next_offset = TL::Utils.parse_bytes(next_offset)
         @switch_pm = switch_pm
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!gallery.nil? ? 1 : 0) |
-            (!next_offset.nil? ? 2 : 0) |
-            (!switch_pm.nil? ? 4 : 0)
+          (!gallery.nil? ? 0x01 : 0) |
+            (!next_offset.nil? ? 0x02 : 0) |
+            (!switch_pm.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @query_id.tl_serialize(io, true)
-        @next_offset.tl_serialize(io, true) unless @next_offset.nil?
-        @switch_pm.tl_serialize(io, false) unless @switch_pm.nil?
-        @results.tl_serialize(io, false)
-        @cache_time.tl_serialize(io, true)
-        @users.tl_serialize(io, false)
+        @query_id.tl_serialize(io)
+        @next_offset.tl_serialize(io) unless @next_offset.nil?
+        @switch_pm.tl_serialize(io) unless @switch_pm.nil?
+        @results.tl_serialize(io)
+        @cache_time.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          query_id: Int64.tl_deserialize(io, true),
-          results: Array(Root::TypeBotInlineResult).tl_deserialize(io, false),
-          cache_time: Int32.tl_deserialize(io, true),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          gallery: flags & 1 == 1,
-          next_offset: flags & 2 == 1 ? Bytes.tl_deserialize(io, true) : nil,
-          switch_pm: flags & 4 == 1 ? Root::TypeInlineBotSwitchPM.tl_deserialize(io, false) : nil,
+          query_id: Int64.tl_deserialize(io),
+          results: Array(Root::TypeBotInlineResult).tl_deserialize(io),
+          cache_time: Int32.tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          gallery: flags & 0x01 > 0 || nil,
+          next_offset: flags & 0x02 > 0 ? Bytes.tl_deserialize(io) : nil,
+          switch_pm: flags & 0x04 > 0 ? Root::TypeInlineBotSwitchPM.tl_deserialize(io) : nil,
         )
       end
     end
 
     class BotCallbackAnswer < TypeBotCallbackAnswer
-      CONSTRUCTOR_ID = 0x36585EA4
+      getter constructor_id : UInt32 = 0x36585EA4_u32
+      class_getter constructor_id : UInt32 = 0x36585EA4_u32
 
       getter cache_time : Int32
       getter alert : Bool | Nil
@@ -1678,43 +1565,45 @@ module Proton::TL
         message : Bytes | Nil = nil,
         url : Bytes | Nil = nil
       )
-        @cache_time = cache_time
+        @cache_time = TL::Utils.parse_int!(cache_time, Int32)
         @alert = alert
         @has_url = has_url
         @native_ui = native_ui
-        @message = message
-        @url = url
+        @message = TL::Utils.parse_bytes(message)
+        @url = TL::Utils.parse_bytes(url)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!alert.nil? ? 2 : 0) |
-            (!has_url.nil? ? 8 : 0) |
-            (!native_ui.nil? ? 16 : 0) |
-            (!message.nil? ? 1 : 0) |
-            (!url.nil? ? 4 : 0)
+          (!alert.nil? ? 0x02 : 0) |
+            (!has_url.nil? ? 0x08 : 0) |
+            (!native_ui.nil? ? 0x10 : 0) |
+            (!message.nil? ? 0x01 : 0) |
+            (!url.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @message.tl_serialize(io, true) unless @message.nil?
-        @url.tl_serialize(io, true) unless @url.nil?
-        @cache_time.tl_serialize(io, true)
+        @message.tl_serialize(io) unless @message.nil?
+        @url.tl_serialize(io) unless @url.nil?
+        @cache_time.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          cache_time: Int32.tl_deserialize(io, true),
-          alert: flags & 2 == 1,
-          has_url: flags & 8 == 1,
-          native_ui: flags & 16 == 1,
-          message: flags & 1 == 1 ? Bytes.tl_deserialize(io, true) : nil,
-          url: flags & 4 == 1 ? Bytes.tl_deserialize(io, true) : nil,
+          cache_time: Int32.tl_deserialize(io),
+          alert: flags & 0x02 > 0 || nil,
+          has_url: flags & 0x08 > 0 || nil,
+          native_ui: flags & 0x10 > 0 || nil,
+          message: flags & 0x01 > 0 ? Bytes.tl_deserialize(io) : nil,
+          url: flags & 0x04 > 0 ? Bytes.tl_deserialize(io) : nil,
         )
       end
     end
 
     class MessageEditData < TypeMessageEditData
-      CONSTRUCTOR_ID = 0x26B5DDE6
+      getter constructor_id : UInt32 = 0x26B5DDE6_u32
+      class_getter constructor_id : UInt32 = 0x26B5DDE6_u32
 
       getter caption : Bool | Nil
 
@@ -1725,22 +1614,24 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!caption.nil? ? 1 : 0)
+          (!caption.nil? ? 0x01 : 0)
         ).tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          caption: flags & 1 == 1,
+          caption: flags & 0x01 > 0 || nil,
         )
       end
     end
 
     class PeerDialogs < TypePeerDialogs
-      CONSTRUCTOR_ID = 0x3371C354
+      getter constructor_id : UInt32 = 0x3371C354_u32
+      class_getter constructor_id : UInt32 = 0x3371C354_u32
 
       getter dialogs : Array(Root::TypeDialog)
       getter messages : Array(Root::TypeMessage)
@@ -1763,50 +1654,54 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @dialogs.tl_serialize(io, false)
-        @messages.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
-        @state.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @dialogs.tl_serialize(io)
+        @messages.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
+        @state.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          dialogs: Array(Root::TypeDialog).tl_deserialize(io, false),
-          messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          state: Updates::TypeState.tl_deserialize(io, false),
+          dialogs: Array(Root::TypeDialog).tl_deserialize(io),
+          messages: Array(Root::TypeMessage).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          state: Updates::TypeState.tl_deserialize(io),
         )
       end
     end
 
     class FeaturedStickersNotModified < TypeFeaturedStickers
-      CONSTRUCTOR_ID = 0xC6DC0C66
+      getter constructor_id : UInt32 = 0xC6DC0C66_u32
+      class_getter constructor_id : UInt32 = 0xC6DC0C66_u32
 
       getter count : Int32
 
       def initialize(
         count : Int32
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
+          count: Int32.tl_deserialize(io),
         )
       end
     end
 
     class FeaturedStickers < TypeFeaturedStickers
-      CONSTRUCTOR_ID = 0x84C02310
+      getter constructor_id : UInt32 = 0x84C02310_u32
+      class_getter constructor_id : UInt32 = 0x84C02310_u32
 
       getter hash : Int64
       getter count : Int32
@@ -1820,43 +1715,47 @@ module Proton::TL
         unread : Array(Int64)
       )
         @hash = hash
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @sets = sets
         @unread = unread
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
-        @count.tl_serialize(io, true)
-        @sets.tl_serialize(io, false)
-        @unread.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
+        @count.tl_serialize(io)
+        @sets.tl_serialize(io)
+        @unread.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          hash: Int64.tl_deserialize(io, true),
-          count: Int32.tl_deserialize(io, true),
-          sets: Array(Root::TypeStickerSetCovered).tl_deserialize(io, false),
-          unread: Array(Int64).tl_deserialize(io, false),
+          hash: Int64.tl_deserialize(io),
+          count: Int32.tl_deserialize(io),
+          sets: Array(Root::TypeStickerSetCovered).tl_deserialize(io),
+          unread: Array(Int64).tl_deserialize(io),
         )
       end
     end
 
     class RecentStickersNotModified < TypeRecentStickers
-      CONSTRUCTOR_ID = 0x0B17F890
+      getter constructor_id : UInt32 = 0x0B17F890_u32
+      class_getter constructor_id : UInt32 = 0x0B17F890_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class RecentStickers < TypeRecentStickers
-      CONSTRUCTOR_ID = 0x88D37C56
+      getter constructor_id : UInt32 = 0x88D37C56_u32
+      class_getter constructor_id : UInt32 = 0x88D37C56_u32
 
       getter hash : Int64
       getter packs : Array(Root::TypeStickerPack)
@@ -1876,25 +1775,27 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
-        @packs.tl_serialize(io, false)
-        @stickers.tl_serialize(io, false)
-        @dates.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
+        @packs.tl_serialize(io)
+        @stickers.tl_serialize(io)
+        @dates.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          hash: Int64.tl_deserialize(io, true),
-          packs: Array(Root::TypeStickerPack).tl_deserialize(io, false),
-          stickers: Array(Root::TypeDocument).tl_deserialize(io, false),
-          dates: Array(Int32).tl_deserialize(io, false),
+          hash: Int64.tl_deserialize(io),
+          packs: Array(Root::TypeStickerPack).tl_deserialize(io),
+          stickers: Array(Root::TypeDocument).tl_deserialize(io),
+          dates: Array(Int32).tl_deserialize(io),
         )
       end
     end
 
     class ArchivedStickers < TypeArchivedStickers
-      CONSTRUCTOR_ID = 0x4FCBA9C8
+      getter constructor_id : UInt32 = 0x4FCBA9C8_u32
+      class_getter constructor_id : UInt32 = 0x4FCBA9C8_u32
 
       getter count : Int32
       getter sets : Array(Root::TypeStickerSetCovered)
@@ -1903,38 +1804,42 @@ module Proton::TL
         count : Int32,
         sets : Array(Root::TypeStickerSetCovered)
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @sets = sets
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
-        @sets.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
+        @sets.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
-          sets: Array(Root::TypeStickerSetCovered).tl_deserialize(io, false),
+          count: Int32.tl_deserialize(io),
+          sets: Array(Root::TypeStickerSetCovered).tl_deserialize(io),
         )
       end
     end
 
     class StickerSetInstallResultSuccess < TypeStickerSetInstallResult
-      CONSTRUCTOR_ID = 0x38641628
+      getter constructor_id : UInt32 = 0x38641628_u32
+      class_getter constructor_id : UInt32 = 0x38641628_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class StickerSetInstallResultArchive < TypeStickerSetInstallResult
-      CONSTRUCTOR_ID = 0x35E410A8
+      getter constructor_id : UInt32 = 0x35E410A8_u32
+      class_getter constructor_id : UInt32 = 0x35E410A8_u32
 
       getter sets : Array(Root::TypeStickerSetCovered)
 
@@ -1945,19 +1850,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @sets.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @sets.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          sets: Array(Root::TypeStickerSetCovered).tl_deserialize(io, false),
+          sets: Array(Root::TypeStickerSetCovered).tl_deserialize(io),
         )
       end
     end
 
     class HighScores < TypeHighScores
-      CONSTRUCTOR_ID = 0x9A3BFD99
+      getter constructor_id : UInt32 = 0x9A3BFD99_u32
+      class_getter constructor_id : UInt32 = 0x9A3BFD99_u32
 
       getter scores : Array(Root::TypeHighScore)
       getter users : Array(Root::TypeUser)
@@ -1971,33 +1878,37 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @scores.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @scores.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          scores: Array(Root::TypeHighScore).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          scores: Array(Root::TypeHighScore).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class FavedStickersNotModified < TypeFavedStickers
-      CONSTRUCTOR_ID = 0x9E8FA6D3
+      getter constructor_id : UInt32 = 0x9E8FA6D3_u32
+      class_getter constructor_id : UInt32 = 0x9E8FA6D3_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FavedStickers < TypeFavedStickers
-      CONSTRUCTOR_ID = 0x2CB51097
+      getter constructor_id : UInt32 = 0x2CB51097_u32
+      class_getter constructor_id : UInt32 = 0x2CB51097_u32
 
       getter hash : Int64
       getter packs : Array(Root::TypeStickerPack)
@@ -2014,35 +1925,39 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
-        @packs.tl_serialize(io, false)
-        @stickers.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
+        @packs.tl_serialize(io)
+        @stickers.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          hash: Int64.tl_deserialize(io, true),
-          packs: Array(Root::TypeStickerPack).tl_deserialize(io, false),
-          stickers: Array(Root::TypeDocument).tl_deserialize(io, false),
+          hash: Int64.tl_deserialize(io),
+          packs: Array(Root::TypeStickerPack).tl_deserialize(io),
+          stickers: Array(Root::TypeDocument).tl_deserialize(io),
         )
       end
     end
 
     class FoundStickerSetsNotModified < TypeFoundStickerSets
-      CONSTRUCTOR_ID = 0x0D54B65D
+      getter constructor_id : UInt32 = 0x0D54B65D_u32
+      class_getter constructor_id : UInt32 = 0x0D54B65D_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new()
       end
     end
 
     class FoundStickerSets < TypeFoundStickerSets
-      CONSTRUCTOR_ID = 0x8AF09DD2
+      getter constructor_id : UInt32 = 0x8AF09DD2_u32
+      class_getter constructor_id : UInt32 = 0x8AF09DD2_u32
 
       getter hash : Int64
       getter sets : Array(Root::TypeStickerSetCovered)
@@ -2056,21 +1971,23 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
-        @sets.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
+        @sets.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          hash: Int64.tl_deserialize(io, true),
-          sets: Array(Root::TypeStickerSetCovered).tl_deserialize(io, false),
+          hash: Int64.tl_deserialize(io),
+          sets: Array(Root::TypeStickerSetCovered).tl_deserialize(io),
         )
       end
     end
 
     class SearchCounter < TypeSearchCounter
-      CONSTRUCTOR_ID = 0xE844EBFF
+      getter constructor_id : UInt32 = 0xE844EBFF_u32
+      class_getter constructor_id : UInt32 = 0xE844EBFF_u32
 
       getter filter : Root::TypeMessagesFilter
       getter count : Int32
@@ -2082,31 +1999,33 @@ module Proton::TL
         inexact : Bool | Nil = nil
       )
         @filter = filter
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @inexact = inexact
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!inexact.nil? ? 2 : 0)
+          (!inexact.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @filter.tl_serialize(io, false)
-        @count.tl_serialize(io, true)
+        @filter.tl_serialize(io)
+        @count.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          filter: Root::TypeMessagesFilter.tl_deserialize(io, false),
-          count: Int32.tl_deserialize(io, true),
-          inexact: flags & 2 == 1,
+          filter: Root::TypeMessagesFilter.tl_deserialize(io),
+          count: Int32.tl_deserialize(io),
+          inexact: flags & 0x02 > 0 || nil,
         )
       end
     end
 
     class InactiveChats < TypeInactiveChats
-      CONSTRUCTOR_ID = 0xA927FEC5
+      getter constructor_id : UInt32 = 0xA927FEC5_u32
+      class_getter constructor_id : UInt32 = 0xA927FEC5_u32
 
       getter dates : Array(Int32)
       getter chats : Array(Root::TypeChat)
@@ -2123,23 +2042,25 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @dates.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @dates.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          dates: Array(Int32).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          dates: Array(Int32).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class VotesList < TypeVotesList
-      CONSTRUCTOR_ID = 0x0823F649
+      getter constructor_id : UInt32 = 0x0823F649_u32
+      class_getter constructor_id : UInt32 = 0x0823F649_u32
 
       getter count : Int32
       getter votes : Array(Root::TypeMessageUserVote)
@@ -2152,36 +2073,38 @@ module Proton::TL
         users : Array(Root::TypeUser),
         next_offset : Bytes | Nil = nil
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @votes = votes
         @users = users
-        @next_offset = next_offset
+        @next_offset = TL::Utils.parse_bytes(next_offset)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!next_offset.nil? ? 1 : 0)
+          (!next_offset.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @count.tl_serialize(io, true)
-        @votes.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
-        @next_offset.tl_serialize(io, true) unless @next_offset.nil?
+        @count.tl_serialize(io)
+        @votes.tl_serialize(io)
+        @users.tl_serialize(io)
+        @next_offset.tl_serialize(io) unless @next_offset.nil?
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          count: Int32.tl_deserialize(io, true),
-          votes: Array(Root::TypeMessageUserVote).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          next_offset: flags & 1 == 1 ? Bytes.tl_deserialize(io, true) : nil,
+          count: Int32.tl_deserialize(io),
+          votes: Array(Root::TypeMessageUserVote).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          next_offset: flags & 0x01 > 0 ? Bytes.tl_deserialize(io) : nil,
         )
       end
     end
 
     class MessageViews < TypeMessageViews
-      CONSTRUCTOR_ID = 0xB6C4F543
+      getter constructor_id : UInt32 = 0xB6C4F543_u32
+      class_getter constructor_id : UInt32 = 0xB6C4F543_u32
 
       getter views : Array(Root::TypeMessageViews)
       getter chats : Array(Root::TypeChat)
@@ -2198,23 +2121,25 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @views.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @views.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          views: Array(Root::TypeMessageViews).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          views: Array(Root::TypeMessageViews).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class DiscussionMessage < TypeDiscussionMessage
-      CONSTRUCTOR_ID = 0xA6341782
+      getter constructor_id : UInt32 = 0xA6341782_u32
+      class_getter constructor_id : UInt32 = 0xA6341782_u32
 
       getter messages : Array(Root::TypeMessage)
       getter unread_count : Int32
@@ -2234,46 +2159,48 @@ module Proton::TL
         read_outbox_max_id : Int32 | Nil = nil
       )
         @messages = messages
-        @unread_count = unread_count
+        @unread_count = TL::Utils.parse_int!(unread_count, Int32)
         @chats = chats
         @users = users
-        @max_id = max_id
-        @read_inbox_max_id = read_inbox_max_id
-        @read_outbox_max_id = read_outbox_max_id
+        @max_id = TL::Utils.parse_int(max_id, Int32)
+        @read_inbox_max_id = TL::Utils.parse_int(read_inbox_max_id, Int32)
+        @read_outbox_max_id = TL::Utils.parse_int(read_outbox_max_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!max_id.nil? ? 1 : 0) |
-            (!read_inbox_max_id.nil? ? 2 : 0) |
-            (!read_outbox_max_id.nil? ? 4 : 0)
+          (!max_id.nil? ? 0x01 : 0) |
+            (!read_inbox_max_id.nil? ? 0x02 : 0) |
+            (!read_outbox_max_id.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @messages.tl_serialize(io, false)
-        @max_id.tl_serialize(io, true) unless @max_id.nil?
-        @read_inbox_max_id.tl_serialize(io, true) unless @read_inbox_max_id.nil?
-        @read_outbox_max_id.tl_serialize(io, true) unless @read_outbox_max_id.nil?
-        @unread_count.tl_serialize(io, true)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        @messages.tl_serialize(io)
+        @max_id.tl_serialize(io) unless @max_id.nil?
+        @read_inbox_max_id.tl_serialize(io) unless @read_inbox_max_id.nil?
+        @read_outbox_max_id.tl_serialize(io) unless @read_outbox_max_id.nil?
+        @unread_count.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          messages: Array(Root::TypeMessage).tl_deserialize(io, false),
-          unread_count: Int32.tl_deserialize(io, true),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
-          max_id: flags & 1 == 1 ? Int32.tl_deserialize(io, true) : nil,
-          read_inbox_max_id: flags & 2 == 1 ? Int32.tl_deserialize(io, true) : nil,
-          read_outbox_max_id: flags & 4 == 1 ? Int32.tl_deserialize(io, true) : nil,
+          messages: Array(Root::TypeMessage).tl_deserialize(io),
+          unread_count: Int32.tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          max_id: flags & 0x01 > 0 ? Int32.tl_deserialize(io) : nil,
+          read_inbox_max_id: flags & 0x02 > 0 ? Int32.tl_deserialize(io) : nil,
+          read_outbox_max_id: flags & 0x04 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
 
     class HistoryImport < TypeHistoryImport
-      CONSTRUCTOR_ID = 0x1662AF0B
+      getter constructor_id : UInt32 = 0x1662AF0B_u32
+      class_getter constructor_id : UInt32 = 0x1662AF0B_u32
 
       getter id : Int64
 
@@ -2284,19 +2211,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          id: Int64.tl_deserialize(io, true),
+          id: Int64.tl_deserialize(io),
         )
       end
     end
 
     class HistoryImportParsed < TypeHistoryImportParsed
-      CONSTRUCTOR_ID = 0x5E0FB7B9
+      getter constructor_id : UInt32 = 0x5E0FB7B9_u32
+      class_getter constructor_id : UInt32 = 0x5E0FB7B9_u32
 
       getter pm : Bool | Nil
       getter group : Bool | Nil
@@ -2309,31 +2238,33 @@ module Proton::TL
       )
         @pm = pm
         @group = group
-        @title = title
+        @title = TL::Utils.parse_bytes(title)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!pm.nil? ? 1 : 0) |
-            (!group.nil? ? 2 : 0) |
-            (!title.nil? ? 4 : 0)
+          (!pm.nil? ? 0x01 : 0) |
+            (!group.nil? ? 0x02 : 0) |
+            (!title.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @title.tl_serialize(io, true) unless @title.nil?
+        @title.tl_serialize(io) unless @title.nil?
       end
 
       def self.tl_deserialize(io : IO, bare = false)
-        flags = Int32.tl_deserialize(io)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
         new(
-          pm: flags & 1 == 1,
-          group: flags & 2 == 1,
-          title: flags & 4 == 1 ? Bytes.tl_deserialize(io, true) : nil,
+          pm: flags & 0x01 > 0 || nil,
+          group: flags & 0x02 > 0 || nil,
+          title: flags & 0x04 > 0 ? Bytes.tl_deserialize(io) : nil,
         )
       end
     end
 
     class AffectedFoundMessages < TypeAffectedFoundMessages
-      CONSTRUCTOR_ID = 0xEF8D3E6C
+      getter constructor_id : UInt32 = 0xEF8D3E6C_u32
+      class_getter constructor_id : UInt32 = 0xEF8D3E6C_u32
 
       getter pts : Int32
       getter pts_count : Int32
@@ -2346,32 +2277,34 @@ module Proton::TL
         offset : Int32,
         messages : Array(Int32)
       )
-        @pts = pts
-        @pts_count = pts_count
-        @offset = offset
+        @pts = TL::Utils.parse_int!(pts, Int32)
+        @pts_count = TL::Utils.parse_int!(pts_count, Int32)
+        @offset = TL::Utils.parse_int!(offset, Int32)
         @messages = messages
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @pts.tl_serialize(io, true)
-        @pts_count.tl_serialize(io, true)
-        @offset.tl_serialize(io, true)
-        @messages.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @pts.tl_serialize(io)
+        @pts_count.tl_serialize(io)
+        @offset.tl_serialize(io)
+        @messages.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          pts: Int32.tl_deserialize(io, true),
-          pts_count: Int32.tl_deserialize(io, true),
-          offset: Int32.tl_deserialize(io, true),
-          messages: Array(Int32).tl_deserialize(io, false),
+          pts: Int32.tl_deserialize(io),
+          pts_count: Int32.tl_deserialize(io),
+          offset: Int32.tl_deserialize(io),
+          messages: Array(Int32).tl_deserialize(io),
         )
       end
     end
 
     class ExportedChatInvites < TypeExportedChatInvites
-      CONSTRUCTOR_ID = 0xBDC62DCC
+      getter constructor_id : UInt32 = 0xBDC62DCC_u32
+      class_getter constructor_id : UInt32 = 0xBDC62DCC_u32
 
       getter count : Int32
       getter invites : Array(Root::TypeExportedChatInvite)
@@ -2382,29 +2315,31 @@ module Proton::TL
         invites : Array(Root::TypeExportedChatInvite),
         users : Array(Root::TypeUser)
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @invites = invites
         @users = users
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
-        @invites.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
+        @invites.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
-          invites: Array(Root::TypeExportedChatInvite).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          count: Int32.tl_deserialize(io),
+          invites: Array(Root::TypeExportedChatInvite).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class ExportedChatInvite < TypeExportedChatInvite
-      CONSTRUCTOR_ID = 0x1871BE50
+      getter constructor_id : UInt32 = 0x1871BE50_u32
+      class_getter constructor_id : UInt32 = 0x1871BE50_u32
 
       getter invite : Root::TypeExportedChatInvite
       getter users : Array(Root::TypeUser)
@@ -2418,21 +2353,23 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @invite.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @invite.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          invite: Root::TypeExportedChatInvite.tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          invite: Root::TypeExportedChatInvite.tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class ExportedChatInviteReplaced < TypeExportedChatInvite
-      CONSTRUCTOR_ID = 0x222600EF
+      getter constructor_id : UInt32 = 0x222600EF_u32
+      class_getter constructor_id : UInt32 = 0x222600EF_u32
 
       getter invite : Root::TypeExportedChatInvite
       getter new_invite : Root::TypeExportedChatInvite
@@ -2449,23 +2386,25 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @invite.tl_serialize(io, false)
-        @new_invite.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @invite.tl_serialize(io)
+        @new_invite.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          invite: Root::TypeExportedChatInvite.tl_deserialize(io, false),
-          new_invite: Root::TypeExportedChatInvite.tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          invite: Root::TypeExportedChatInvite.tl_deserialize(io),
+          new_invite: Root::TypeExportedChatInvite.tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class ChatInviteImporters < TypeChatInviteImporters
-      CONSTRUCTOR_ID = 0x81B6B00A
+      getter constructor_id : UInt32 = 0x81B6B00A_u32
+      class_getter constructor_id : UInt32 = 0x81B6B00A_u32
 
       getter count : Int32
       getter importers : Array(Root::TypeChatInviteImporter)
@@ -2476,29 +2415,31 @@ module Proton::TL
         importers : Array(Root::TypeChatInviteImporter),
         users : Array(Root::TypeUser)
       )
-        @count = count
+        @count = TL::Utils.parse_int!(count, Int32)
         @importers = importers
         @users = users
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @count.tl_serialize(io, true)
-        @importers.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
+        @importers.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          count: Int32.tl_deserialize(io, true),
-          importers: Array(Root::TypeChatInviteImporter).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          count: Int32.tl_deserialize(io),
+          importers: Array(Root::TypeChatInviteImporter).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class ChatAdminsWithInvites < TypeChatAdminsWithInvites
-      CONSTRUCTOR_ID = 0xB69B72D7
+      getter constructor_id : UInt32 = 0xB69B72D7_u32
+      class_getter constructor_id : UInt32 = 0xB69B72D7_u32
 
       getter admins : Array(Root::TypeChatAdminWithInvites)
       getter users : Array(Root::TypeUser)
@@ -2512,44 +2453,48 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @admins.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @admins.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          admins: Array(Root::TypeChatAdminWithInvites).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          admins: Array(Root::TypeChatAdminWithInvites).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class CheckedHistoryImportPeer < TypeCheckedHistoryImportPeer
-      CONSTRUCTOR_ID = 0xA24DE717
+      getter constructor_id : UInt32 = 0xA24DE717_u32
+      class_getter constructor_id : UInt32 = 0xA24DE717_u32
 
       getter confirm_text : Bytes
 
       def initialize(
         confirm_text : Bytes | String | IO
       )
-        @confirm_text = confirm_text
+        @confirm_text = TL::Utils.parse_bytes!(confirm_text)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @confirm_text.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @confirm_text.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          confirm_text: Bytes.tl_deserialize(io, true),
+          confirm_text: Bytes.tl_deserialize(io),
         )
       end
     end
 
     class SponsoredMessages < TypeSponsoredMessages
-      CONSTRUCTOR_ID = 0x65A4C7D5
+      getter constructor_id : UInt32 = 0x65A4C7D5_u32
+      class_getter constructor_id : UInt32 = 0x65A4C7D5_u32
 
       getter messages : Array(Root::TypeSponsoredMessage)
       getter chats : Array(Root::TypeChat)
@@ -2566,23 +2511,159 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @messages.tl_serialize(io, false)
-        @chats.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @messages.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          messages: Array(Root::TypeSponsoredMessage).tl_deserialize(io, false),
-          chats: Array(Root::TypeChat).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          messages: Array(Root::TypeSponsoredMessage).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+        )
+      end
+    end
+
+    class SearchResultsCalendar < TypeSearchResultsCalendar
+      getter constructor_id : UInt32 = 0x147EE23C_u32
+      class_getter constructor_id : UInt32 = 0x147EE23C_u32
+
+      getter count : Int32
+      getter min_date : Int32
+      getter min_msg_id : Int32
+      getter periods : Array(Root::TypeSearchResultsCalendarPeriod)
+      getter messages : Array(Root::TypeMessage)
+      getter chats : Array(Root::TypeChat)
+      getter users : Array(Root::TypeUser)
+      getter inexact : Bool | Nil
+      getter offset_id_offset : Int32 | Nil
+
+      def initialize(
+        count : Int32,
+        min_date : Int32,
+        min_msg_id : Int32,
+        periods : Array(Root::TypeSearchResultsCalendarPeriod),
+        messages : Array(Root::TypeMessage),
+        chats : Array(Root::TypeChat),
+        users : Array(Root::TypeUser),
+        inexact : Bool | Nil = nil,
+        offset_id_offset : Int32 | Nil = nil
+      )
+        @count = TL::Utils.parse_int!(count, Int32)
+        @min_date = TL::Utils.parse_int!(min_date, Int32)
+        @min_msg_id = TL::Utils.parse_int!(min_msg_id, Int32)
+        @periods = periods
+        @messages = messages
+        @chats = chats
+        @users = users
+        @inexact = inexact
+        @offset_id_offset = TL::Utils.parse_int(offset_id_offset, Int32)
+      end
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+        (
+          (!inexact.nil? ? 0x01 : 0) |
+            (!offset_id_offset.nil? ? 0x02 : 0)
+        ).tl_serialize(io)
+        @count.tl_serialize(io)
+        @min_date.tl_serialize(io)
+        @min_msg_id.tl_serialize(io)
+        @offset_id_offset.tl_serialize(io) unless @offset_id_offset.nil?
+        @periods.tl_serialize(io)
+        @messages.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
+      end
+
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          count: Int32.tl_deserialize(io),
+          min_date: Int32.tl_deserialize(io),
+          min_msg_id: Int32.tl_deserialize(io),
+          periods: Array(Root::TypeSearchResultsCalendarPeriod).tl_deserialize(io),
+          messages: Array(Root::TypeMessage).tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
+          inexact: flags & 0x01 > 0 || nil,
+          offset_id_offset: flags & 0x02 > 0 ? Int32.tl_deserialize(io) : nil,
+        )
+      end
+    end
+
+    class SearchResultsPositions < TypeSearchResultsPositions
+      getter constructor_id : UInt32 = 0x53B22BAF_u32
+      class_getter constructor_id : UInt32 = 0x53B22BAF_u32
+
+      getter count : Int32
+      getter positions : Array(Root::TypeSearchResultsPosition)
+
+      def initialize(
+        count : Int32,
+        positions : Array(Root::TypeSearchResultsPosition)
+      )
+        @count = TL::Utils.parse_int!(count, Int32)
+        @positions = positions
+      end
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+        @count.tl_serialize(io)
+        @positions.tl_serialize(io)
+      end
+
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          count: Int32.tl_deserialize(io),
+          positions: Array(Root::TypeSearchResultsPosition).tl_deserialize(io),
+        )
+      end
+    end
+
+    class PeerSettings < TypePeerSettings
+      getter constructor_id : UInt32 = 0x6880B94D_u32
+      class_getter constructor_id : UInt32 = 0x6880B94D_u32
+
+      getter settings : Root::TypePeerSettings
+      getter chats : Array(Root::TypeChat)
+      getter users : Array(Root::TypeUser)
+
+      def initialize(
+        settings : Root::TypePeerSettings,
+        chats : Array(Root::TypeChat),
+        users : Array(Root::TypeUser)
+      )
+        @settings = settings
+        @chats = chats
+        @users = users
+      end
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+        @settings.tl_serialize(io)
+        @chats.tl_serialize(io)
+        @users.tl_serialize(io)
+      end
+
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          settings: Root::TypePeerSettings.tl_deserialize(io),
+          chats: Array(Root::TypeChat).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class GetMessages < TLRequest
-      CONSTRUCTOR_ID = 0x63C66506
+      getter constructor_id : UInt32 = 0x63C66506_u32
+      class_getter constructor_id : UInt32 = 0x63C66506_u32
 
       getter id : Array(Root::TypeInputMessage)
 
@@ -2593,17 +2674,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class GetDialogs < TLRequest
-      CONSTRUCTOR_ID = 0xA0F4CB4F
+      getter constructor_id : UInt32 = 0xA0F4CB4F_u32
+      class_getter constructor_id : UInt32 = 0xA0F4CB4F_u32
 
       getter offset_date : Int32
       getter offset_id : Int32
@@ -2622,36 +2704,37 @@ module Proton::TL
         exclude_pinned : Bool | Nil = nil,
         folder_id : Int32 | Nil = nil
       )
-        @offset_date = offset_date
-        @offset_id = offset_id
+        @offset_date = TL::Utils.parse_int!(offset_date, Int32)
+        @offset_id = TL::Utils.parse_int!(offset_id, Int32)
         @offset_peer = offset_peer
-        @limit = limit
+        @limit = TL::Utils.parse_int!(limit, Int32)
         @hash = hash
         @exclude_pinned = exclude_pinned
-        @folder_id = folder_id
+        @folder_id = TL::Utils.parse_int(folder_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!exclude_pinned.nil? ? 1 : 0) |
-            (!folder_id.nil? ? 2 : 0)
+          (!exclude_pinned.nil? ? 0x01 : 0) |
+            (!folder_id.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @folder_id.tl_serialize(io, true) unless @folder_id.nil?
-        @offset_date.tl_serialize(io, true)
-        @offset_id.tl_serialize(io, true)
-        @offset_peer.tl_serialize(io, false)
-        @limit.tl_serialize(io, true)
-        @hash.tl_serialize(io, true)
+        @folder_id.tl_serialize(io) unless @folder_id.nil?
+        @offset_date.tl_serialize(io)
+        @offset_id.tl_serialize(io)
+        @offset_peer.tl_serialize(io)
+        @limit.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeDialogs
       end
     end
 
     class GetHistory < TLRequest
-      CONSTRUCTOR_ID = 0x4423E6C5
+      getter constructor_id : UInt32 = 0x4423E6C5_u32
+      class_getter constructor_id : UInt32 = 0x4423E6C5_u32
 
       getter peer : Root::TypeInputPeer
       getter offset_id : Int32
@@ -2673,34 +2756,35 @@ module Proton::TL
         hash : Int64
       )
         @peer = peer
-        @offset_id = offset_id
-        @offset_date = offset_date
-        @add_offset = add_offset
-        @limit = limit
-        @max_id = max_id
-        @min_id = min_id
+        @offset_id = TL::Utils.parse_int!(offset_id, Int32)
+        @offset_date = TL::Utils.parse_int!(offset_date, Int32)
+        @add_offset = TL::Utils.parse_int!(add_offset, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
+        @max_id = TL::Utils.parse_int!(max_id, Int32)
+        @min_id = TL::Utils.parse_int!(min_id, Int32)
         @hash = hash
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @offset_id.tl_serialize(io, true)
-        @offset_date.tl_serialize(io, true)
-        @add_offset.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
-        @max_id.tl_serialize(io, true)
-        @min_id.tl_serialize(io, true)
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @offset_id.tl_serialize(io)
+        @offset_date.tl_serialize(io)
+        @add_offset.tl_serialize(io)
+        @limit.tl_serialize(io)
+        @max_id.tl_serialize(io)
+        @min_id.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class Search < TLRequest
-      CONSTRUCTOR_ID = 0xA0FDA762
+      getter constructor_id : UInt32 = 0xA0FDA762_u32
+      class_getter constructor_id : UInt32 = 0xA0FDA762_u32
 
       getter peer : Root::TypeInputPeer
       getter q : Bytes
@@ -2732,48 +2816,49 @@ module Proton::TL
         top_msg_id : Int32 | Nil = nil
       )
         @peer = peer
-        @q = q
+        @q = TL::Utils.parse_bytes!(q)
         @filter = filter
-        @min_date = min_date
-        @max_date = max_date
-        @offset_id = offset_id
-        @add_offset = add_offset
-        @limit = limit
-        @max_id = max_id
-        @min_id = min_id
+        @min_date = TL::Utils.parse_int!(min_date, Int32)
+        @max_date = TL::Utils.parse_int!(max_date, Int32)
+        @offset_id = TL::Utils.parse_int!(offset_id, Int32)
+        @add_offset = TL::Utils.parse_int!(add_offset, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
+        @max_id = TL::Utils.parse_int!(max_id, Int32)
+        @min_id = TL::Utils.parse_int!(min_id, Int32)
         @hash = hash
         @from_id = from_id
-        @top_msg_id = top_msg_id
+        @top_msg_id = TL::Utils.parse_int(top_msg_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!from_id.nil? ? 1 : 0) |
-            (!top_msg_id.nil? ? 2 : 0)
+          (!from_id.nil? ? 0x01 : 0) |
+            (!top_msg_id.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @q.tl_serialize(io, true)
-        @from_id.tl_serialize(io, false) unless @from_id.nil?
-        @top_msg_id.tl_serialize(io, true) unless @top_msg_id.nil?
-        @filter.tl_serialize(io, false)
-        @min_date.tl_serialize(io, true)
-        @max_date.tl_serialize(io, true)
-        @offset_id.tl_serialize(io, true)
-        @add_offset.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
-        @max_id.tl_serialize(io, true)
-        @min_id.tl_serialize(io, true)
-        @hash.tl_serialize(io, true)
+        @peer.tl_serialize(io)
+        @q.tl_serialize(io)
+        @from_id.tl_serialize(io) unless @from_id.nil?
+        @top_msg_id.tl_serialize(io) unless @top_msg_id.nil?
+        @filter.tl_serialize(io)
+        @min_date.tl_serialize(io)
+        @max_date.tl_serialize(io)
+        @offset_id.tl_serialize(io)
+        @add_offset.tl_serialize(io)
+        @limit.tl_serialize(io)
+        @max_id.tl_serialize(io)
+        @min_id.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class ReadHistory < TLRequest
-      CONSTRUCTOR_ID = 0x0E306D3A
+      getter constructor_id : UInt32 = 0x0E306D3A_u32
+      class_getter constructor_id : UInt32 = 0x0E306D3A_u32
 
       getter peer : Root::TypeInputPeer
       getter max_id : Int32
@@ -2783,57 +2868,69 @@ module Proton::TL
         max_id : Int32
       )
         @peer = peer
-        @max_id = max_id
+        @max_id = TL::Utils.parse_int!(max_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @max_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @max_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeAffectedMessages
       end
     end
 
     class DeleteHistory < TLRequest
-      CONSTRUCTOR_ID = 0x1C015B09
+      getter constructor_id : UInt32 = 0xB08F922A_u32
+      class_getter constructor_id : UInt32 = 0xB08F922A_u32
 
       getter peer : Root::TypeInputPeer
       getter max_id : Int32
       getter just_clear : Bool | Nil
       getter revoke : Bool | Nil
+      getter min_date : Int32 | Nil
+      getter max_date : Int32 | Nil
 
       def initialize(
         peer : Root::TypeInputPeer,
         max_id : Int32,
         just_clear : Bool | Nil = nil,
-        revoke : Bool | Nil = nil
+        revoke : Bool | Nil = nil,
+        min_date : Int32 | Nil = nil,
+        max_date : Int32 | Nil = nil
       )
         @peer = peer
-        @max_id = max_id
+        @max_id = TL::Utils.parse_int!(max_id, Int32)
         @just_clear = just_clear
         @revoke = revoke
+        @min_date = TL::Utils.parse_int(min_date, Int32)
+        @max_date = TL::Utils.parse_int(max_date, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!just_clear.nil? ? 1 : 0) |
-            (!revoke.nil? ? 2 : 0)
+          (!just_clear.nil? ? 0x01 : 0) |
+            (!revoke.nil? ? 0x02 : 0) |
+            (!min_date.nil? ? 0x04 : 0) |
+            (!max_date.nil? ? 0x08 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @max_id.tl_serialize(io, true)
+        @peer.tl_serialize(io)
+        @max_id.tl_serialize(io)
+        @min_date.tl_serialize(io) unless @min_date.nil?
+        @max_date.tl_serialize(io) unless @max_date.nil?
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeAffectedHistory
       end
     end
 
     class DeleteMessages < TLRequest
-      CONSTRUCTOR_ID = 0xE58E95D2
+      getter constructor_id : UInt32 = 0xE58E95D2_u32
+      class_getter constructor_id : UInt32 = 0xE58E95D2_u32
 
       getter id : Array(Int32)
       getter revoke : Bool | Nil
@@ -2847,41 +2944,43 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!revoke.nil? ? 1 : 0)
+          (!revoke.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @id.tl_serialize(io, false)
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeAffectedMessages
       end
     end
 
     class ReceivedMessages < TLRequest
-      CONSTRUCTOR_ID = 0x05A954C0
+      getter constructor_id : UInt32 = 0x05A954C0_u32
+      class_getter constructor_id : UInt32 = 0x05A954C0_u32
 
       getter max_id : Int32
 
       def initialize(
         max_id : Int32
       )
-        @max_id = max_id
+        @max_id = TL::Utils.parse_int!(max_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @max_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @max_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeReceivedNotifyMessage)
       end
     end
 
     class SetTyping < TLRequest
-      CONSTRUCTOR_ID = 0x58943EE2
+      getter constructor_id : UInt32 = 0x58943EE2_u32
+      class_getter constructor_id : UInt32 = 0x58943EE2_u32
 
       getter peer : Root::TypeInputPeer
       getter action : Root::TypeSendMessageAction
@@ -2894,26 +2993,27 @@ module Proton::TL
       )
         @peer = peer
         @action = action
-        @top_msg_id = top_msg_id
+        @top_msg_id = TL::Utils.parse_int(top_msg_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!top_msg_id.nil? ? 1 : 0)
+          (!top_msg_id.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @top_msg_id.tl_serialize(io, true) unless @top_msg_id.nil?
-        @action.tl_serialize(io, false)
+        @peer.tl_serialize(io)
+        @top_msg_id.tl_serialize(io) unless @top_msg_id.nil?
+        @action.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class SendMessage < TLRequest
-      CONSTRUCTOR_ID = 0x520C3870
+      getter constructor_id : UInt32 = 0x0D9D75A4_u32
+      class_getter constructor_id : UInt32 = 0x0D9D75A4_u32
 
       getter peer : Root::TypeInputPeer
       getter message : Bytes
@@ -2926,6 +3026,7 @@ module Proton::TL
       getter reply_markup : Root::TypeReplyMarkup | Nil
       getter entities : Array(Root::TypeMessageEntity) | Nil
       getter schedule_date : Int32 | Nil
+      getter send_as : Root::TypeInputPeer | Nil
 
       def initialize(
         peer : Root::TypeInputPeer,
@@ -2938,49 +3039,54 @@ module Proton::TL
         reply_to_msg_id : Int32 | Nil = nil,
         reply_markup : Root::TypeReplyMarkup | Nil = nil,
         entities : Array(Root::TypeMessageEntity) | Nil = nil,
-        schedule_date : Int32 | Nil = nil
+        schedule_date : Int32 | Nil = nil,
+        send_as : Root::TypeInputPeer | Nil = nil
       )
         @peer = peer
-        @message = message
+        @message = TL::Utils.parse_bytes!(message)
         @random_id = random_id
         @no_webpage = no_webpage
         @silent = silent
         @background = background
         @clear_draft = clear_draft
-        @reply_to_msg_id = reply_to_msg_id
+        @reply_to_msg_id = TL::Utils.parse_int(reply_to_msg_id, Int32)
         @reply_markup = reply_markup
         @entities = entities
-        @schedule_date = schedule_date
+        @schedule_date = TL::Utils.parse_int(schedule_date, Int32)
+        @send_as = send_as
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!no_webpage.nil? ? 2 : 0) |
-            (!silent.nil? ? 32 : 0) |
-            (!background.nil? ? 64 : 0) |
-            (!clear_draft.nil? ? 128 : 0) |
-            (!reply_to_msg_id.nil? ? 1 : 0) |
-            (!reply_markup.nil? ? 4 : 0) |
-            (!entities.nil? ? 8 : 0) |
-            (!schedule_date.nil? ? 1024 : 0)
+          (!no_webpage.nil? ? 0x02 : 0) |
+            (!silent.nil? ? 0x20 : 0) |
+            (!background.nil? ? 0x40 : 0) |
+            (!clear_draft.nil? ? 0x80 : 0) |
+            (!reply_to_msg_id.nil? ? 0x01 : 0) |
+            (!reply_markup.nil? ? 0x04 : 0) |
+            (!entities.nil? ? 0x08 : 0) |
+            (!schedule_date.nil? ? 0x400 : 0) |
+            (!send_as.nil? ? 0x2000 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @reply_to_msg_id.tl_serialize(io, true) unless @reply_to_msg_id.nil?
-        @message.tl_serialize(io, true)
-        @random_id.tl_serialize(io, true)
-        @reply_markup.tl_serialize(io, false) unless @reply_markup.nil?
-        @entities.tl_serialize(io, false) unless @entities.nil?
-        @schedule_date.tl_serialize(io, true) unless @schedule_date.nil?
+        @peer.tl_serialize(io)
+        @reply_to_msg_id.tl_serialize(io) unless @reply_to_msg_id.nil?
+        @message.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @reply_markup.tl_serialize(io) unless @reply_markup.nil?
+        @entities.tl_serialize(io) unless @entities.nil?
+        @schedule_date.tl_serialize(io) unless @schedule_date.nil?
+        @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class SendMedia < TLRequest
-      CONSTRUCTOR_ID = 0x3491EBA9
+      getter constructor_id : UInt32 = 0xE25FF8E0_u32
+      class_getter constructor_id : UInt32 = 0xE25FF8E0_u32
 
       getter peer : Root::TypeInputPeer
       getter media : Root::TypeInputMedia
@@ -2993,6 +3099,7 @@ module Proton::TL
       getter reply_markup : Root::TypeReplyMarkup | Nil
       getter entities : Array(Root::TypeMessageEntity) | Nil
       getter schedule_date : Int32 | Nil
+      getter send_as : Root::TypeInputPeer | Nil
 
       def initialize(
         peer : Root::TypeInputPeer,
@@ -3005,49 +3112,54 @@ module Proton::TL
         reply_to_msg_id : Int32 | Nil = nil,
         reply_markup : Root::TypeReplyMarkup | Nil = nil,
         entities : Array(Root::TypeMessageEntity) | Nil = nil,
-        schedule_date : Int32 | Nil = nil
+        schedule_date : Int32 | Nil = nil,
+        send_as : Root::TypeInputPeer | Nil = nil
       )
         @peer = peer
         @media = media
-        @message = message
+        @message = TL::Utils.parse_bytes!(message)
         @random_id = random_id
         @silent = silent
         @background = background
         @clear_draft = clear_draft
-        @reply_to_msg_id = reply_to_msg_id
+        @reply_to_msg_id = TL::Utils.parse_int(reply_to_msg_id, Int32)
         @reply_markup = reply_markup
         @entities = entities
-        @schedule_date = schedule_date
+        @schedule_date = TL::Utils.parse_int(schedule_date, Int32)
+        @send_as = send_as
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!silent.nil? ? 32 : 0) |
-            (!background.nil? ? 64 : 0) |
-            (!clear_draft.nil? ? 128 : 0) |
-            (!reply_to_msg_id.nil? ? 1 : 0) |
-            (!reply_markup.nil? ? 4 : 0) |
-            (!entities.nil? ? 8 : 0) |
-            (!schedule_date.nil? ? 1024 : 0)
+          (!silent.nil? ? 0x20 : 0) |
+            (!background.nil? ? 0x40 : 0) |
+            (!clear_draft.nil? ? 0x80 : 0) |
+            (!reply_to_msg_id.nil? ? 0x01 : 0) |
+            (!reply_markup.nil? ? 0x04 : 0) |
+            (!entities.nil? ? 0x08 : 0) |
+            (!schedule_date.nil? ? 0x400 : 0) |
+            (!send_as.nil? ? 0x2000 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @reply_to_msg_id.tl_serialize(io, true) unless @reply_to_msg_id.nil?
-        @media.tl_serialize(io, false)
-        @message.tl_serialize(io, true)
-        @random_id.tl_serialize(io, true)
-        @reply_markup.tl_serialize(io, false) unless @reply_markup.nil?
-        @entities.tl_serialize(io, false) unless @entities.nil?
-        @schedule_date.tl_serialize(io, true) unless @schedule_date.nil?
+        @peer.tl_serialize(io)
+        @reply_to_msg_id.tl_serialize(io) unless @reply_to_msg_id.nil?
+        @media.tl_serialize(io)
+        @message.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @reply_markup.tl_serialize(io) unless @reply_markup.nil?
+        @entities.tl_serialize(io) unless @entities.nil?
+        @schedule_date.tl_serialize(io) unless @schedule_date.nil?
+        @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class ForwardMessages < TLRequest
-      CONSTRUCTOR_ID = 0xD9FEE60E
+      getter constructor_id : UInt32 = 0xCC30290B_u32
+      class_getter constructor_id : UInt32 = 0xCC30290B_u32
 
       getter from_peer : Root::TypeInputPeer
       getter id : Array(Int32)
@@ -3059,6 +3171,7 @@ module Proton::TL
       getter drop_author : Bool | Nil
       getter drop_media_captions : Bool | Nil
       getter schedule_date : Int32 | Nil
+      getter send_as : Root::TypeInputPeer | Nil
 
       def initialize(
         from_peer : Root::TypeInputPeer,
@@ -3070,7 +3183,8 @@ module Proton::TL
         with_my_score : Bool | Nil = nil,
         drop_author : Bool | Nil = nil,
         drop_media_captions : Bool | Nil = nil,
-        schedule_date : Int32 | Nil = nil
+        schedule_date : Int32 | Nil = nil,
+        send_as : Root::TypeInputPeer | Nil = nil
       )
         @from_peer = from_peer
         @id = id
@@ -3081,33 +3195,37 @@ module Proton::TL
         @with_my_score = with_my_score
         @drop_author = drop_author
         @drop_media_captions = drop_media_captions
-        @schedule_date = schedule_date
+        @schedule_date = TL::Utils.parse_int(schedule_date, Int32)
+        @send_as = send_as
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!silent.nil? ? 32 : 0) |
-            (!background.nil? ? 64 : 0) |
-            (!with_my_score.nil? ? 256 : 0) |
-            (!drop_author.nil? ? 2048 : 0) |
-            (!drop_media_captions.nil? ? 4096 : 0) |
-            (!schedule_date.nil? ? 1024 : 0)
+          (!silent.nil? ? 0x20 : 0) |
+            (!background.nil? ? 0x40 : 0) |
+            (!with_my_score.nil? ? 0x100 : 0) |
+            (!drop_author.nil? ? 0x800 : 0) |
+            (!drop_media_captions.nil? ? 0x1000 : 0) |
+            (!schedule_date.nil? ? 0x400 : 0) |
+            (!send_as.nil? ? 0x2000 : 0)
         ).tl_serialize(io)
-        @from_peer.tl_serialize(io, false)
-        @id.tl_serialize(io, false)
-        @random_id.tl_serialize(io, false)
-        @to_peer.tl_serialize(io, false)
-        @schedule_date.tl_serialize(io, true) unless @schedule_date.nil?
+        @from_peer.tl_serialize(io)
+        @id.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @to_peer.tl_serialize(io)
+        @schedule_date.tl_serialize(io) unless @schedule_date.nil?
+        @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class ReportSpam < TLRequest
-      CONSTRUCTOR_ID = 0xCF1592DB
+      getter constructor_id : UInt32 = 0xCF1592DB_u32
+      class_getter constructor_id : UInt32 = 0xCF1592DB_u32
 
       getter peer : Root::TypeInputPeer
 
@@ -3118,17 +3236,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetPeerSettings < TLRequest
-      CONSTRUCTOR_ID = 0x3672E09C
+      getter constructor_id : UInt32 = 0xEFD9A6A2_u32
+      class_getter constructor_id : UInt32 = 0xEFD9A6A2_u32
 
       getter peer : Root::TypeInputPeer
 
@@ -3139,17 +3258,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
-        Root::TypePeerSettings
+      def self.return_type
+        Messages::TypePeerSettings
       end
     end
 
     class Report < TLRequest
-      CONSTRUCTOR_ID = 0x8953AB4E
+      getter constructor_id : UInt32 = 0x8953AB4E_u32
+      class_getter constructor_id : UInt32 = 0x8953AB4E_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Array(Int32)
@@ -3165,24 +3285,25 @@ module Proton::TL
         @peer = peer
         @id = id
         @reason = reason
-        @message = message
+        @message = TL::Utils.parse_bytes!(message)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, false)
-        @reason.tl_serialize(io, false)
-        @message.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
+        @reason.tl_serialize(io)
+        @message.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetChats < TLRequest
-      CONSTRUCTOR_ID = 0x49E9528F
+      getter constructor_id : UInt32 = 0x49E9528F_u32
+      class_getter constructor_id : UInt32 = 0x49E9528F_u32
 
       getter id : Array(Int64)
 
@@ -3193,17 +3314,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeChats
       end
     end
 
     class GetFullChat < TLRequest
-      CONSTRUCTOR_ID = 0xAEB00B34
+      getter constructor_id : UInt32 = 0xAEB00B34_u32
+      class_getter constructor_id : UInt32 = 0xAEB00B34_u32
 
       getter chat_id : Int64
 
@@ -3214,17 +3336,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @chat_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @chat_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeChatFull
       end
     end
 
     class EditChatTitle < TLRequest
-      CONSTRUCTOR_ID = 0x73783FFD
+      getter constructor_id : UInt32 = 0x73783FFD_u32
+      class_getter constructor_id : UInt32 = 0x73783FFD_u32
 
       getter chat_id : Int64
       getter title : Bytes
@@ -3234,22 +3357,23 @@ module Proton::TL
         title : Bytes | String | IO
       )
         @chat_id = chat_id
-        @title = title
+        @title = TL::Utils.parse_bytes!(title)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @chat_id.tl_serialize(io, true)
-        @title.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @chat_id.tl_serialize(io)
+        @title.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class EditChatPhoto < TLRequest
-      CONSTRUCTOR_ID = 0x35DDD674
+      getter constructor_id : UInt32 = 0x35DDD674_u32
+      class_getter constructor_id : UInt32 = 0x35DDD674_u32
 
       getter chat_id : Int64
       getter photo : Root::TypeInputChatPhoto
@@ -3263,18 +3387,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @chat_id.tl_serialize(io, true)
-        @photo.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @chat_id.tl_serialize(io)
+        @photo.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class AddChatUser < TLRequest
-      CONSTRUCTOR_ID = 0xF24753E3
+      getter constructor_id : UInt32 = 0xF24753E3_u32
+      class_getter constructor_id : UInt32 = 0xF24753E3_u32
 
       getter chat_id : Int64
       getter user_id : Root::TypeInputUser
@@ -3287,23 +3412,24 @@ module Proton::TL
       )
         @chat_id = chat_id
         @user_id = user_id
-        @fwd_limit = fwd_limit
+        @fwd_limit = TL::Utils.parse_int!(fwd_limit, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @chat_id.tl_serialize(io, true)
-        @user_id.tl_serialize(io, false)
-        @fwd_limit.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @chat_id.tl_serialize(io)
+        @user_id.tl_serialize(io)
+        @fwd_limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class DeleteChatUser < TLRequest
-      CONSTRUCTOR_ID = 0xA2185CAB
+      getter constructor_id : UInt32 = 0xA2185CAB_u32
+      class_getter constructor_id : UInt32 = 0xA2185CAB_u32
 
       getter chat_id : Int64
       getter user_id : Root::TypeInputUser
@@ -3320,21 +3446,22 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!revoke_history.nil? ? 1 : 0)
+          (!revoke_history.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @chat_id.tl_serialize(io, true)
-        @user_id.tl_serialize(io, false)
+        @chat_id.tl_serialize(io)
+        @user_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class CreateChat < TLRequest
-      CONSTRUCTOR_ID = 0x09CB126E
+      getter constructor_id : UInt32 = 0x09CB126E_u32
+      class_getter constructor_id : UInt32 = 0x09CB126E_u32
 
       getter users : Array(Root::TypeInputUser)
       getter title : Bytes
@@ -3344,22 +3471,23 @@ module Proton::TL
         title : Bytes | String | IO
       )
         @users = users
-        @title = title
+        @title = TL::Utils.parse_bytes!(title)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @users.tl_serialize(io, false)
-        @title.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @users.tl_serialize(io)
+        @title.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetDhConfig < TLRequest
-      CONSTRUCTOR_ID = 0x26CF8950
+      getter constructor_id : UInt32 = 0x26CF8950_u32
+      class_getter constructor_id : UInt32 = 0x26CF8950_u32
 
       getter version : Int32
       getter random_length : Int32
@@ -3368,23 +3496,24 @@ module Proton::TL
         version : Int32,
         random_length : Int32
       )
-        @version = version
-        @random_length = random_length
+        @version = TL::Utils.parse_int!(version, Int32)
+        @random_length = TL::Utils.parse_int!(random_length, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @version.tl_serialize(io, true)
-        @random_length.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @version.tl_serialize(io)
+        @random_length.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeDhConfig
       end
     end
 
     class RequestEncryption < TLRequest
-      CONSTRUCTOR_ID = 0xF64DAF43
+      getter constructor_id : UInt32 = 0xF64DAF43_u32
+      class_getter constructor_id : UInt32 = 0xF64DAF43_u32
 
       getter user_id : Root::TypeInputUser
       getter random_id : Int32
@@ -3396,24 +3525,25 @@ module Proton::TL
         g_a : Bytes | String | IO
       )
         @user_id = user_id
-        @random_id = random_id
+        @random_id = TL::Utils.parse_int!(random_id, Int32)
         @g_a = TL::Utils.parse_bytes!(g_a)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @user_id.tl_serialize(io, false)
-        @random_id.tl_serialize(io, true)
-        @g_a.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @user_id.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @g_a.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeEncryptedChat
       end
     end
 
     class AcceptEncryption < TLRequest
-      CONSTRUCTOR_ID = 0x3DBC0415
+      getter constructor_id : UInt32 = 0x3DBC0415_u32
+      class_getter constructor_id : UInt32 = 0x3DBC0415_u32
 
       getter peer : Root::TypeInputEncryptedChat
       getter g_b : Bytes
@@ -3430,19 +3560,20 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @g_b.tl_serialize(io, true)
-        @key_fingerprint.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @g_b.tl_serialize(io)
+        @key_fingerprint.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeEncryptedChat
       end
     end
 
     class DiscardEncryption < TLRequest
-      CONSTRUCTOR_ID = 0xF393AEA0
+      getter constructor_id : UInt32 = 0xF393AEA0_u32
+      class_getter constructor_id : UInt32 = 0xF393AEA0_u32
 
       getter chat_id : Int32
       getter delete_history : Bool | Nil
@@ -3451,25 +3582,26 @@ module Proton::TL
         chat_id : Int32,
         delete_history : Bool | Nil = nil
       )
-        @chat_id = chat_id
+        @chat_id = TL::Utils.parse_int!(chat_id, Int32)
         @delete_history = delete_history
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!delete_history.nil? ? 1 : 0)
+          (!delete_history.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @chat_id.tl_serialize(io, true)
+        @chat_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class SetEncryptedTyping < TLRequest
-      CONSTRUCTOR_ID = 0x791451ED
+      getter constructor_id : UInt32 = 0x791451ED_u32
+      class_getter constructor_id : UInt32 = 0x791451ED_u32
 
       getter peer : Root::TypeInputEncryptedChat
       getter typing : Bool
@@ -3483,18 +3615,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @typing.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @typing.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class ReadEncryptedHistory < TLRequest
-      CONSTRUCTOR_ID = 0x7F4B690A
+      getter constructor_id : UInt32 = 0x7F4B690A_u32
+      class_getter constructor_id : UInt32 = 0x7F4B690A_u32
 
       getter peer : Root::TypeInputEncryptedChat
       getter max_date : Int32
@@ -3504,22 +3637,23 @@ module Proton::TL
         max_date : Int32
       )
         @peer = peer
-        @max_date = max_date
+        @max_date = TL::Utils.parse_int!(max_date, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @max_date.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @max_date.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class SendEncrypted < TLRequest
-      CONSTRUCTOR_ID = 0x44FA7A15
+      getter constructor_id : UInt32 = 0x44FA7A15_u32
+      class_getter constructor_id : UInt32 = 0x44FA7A15_u32
 
       getter peer : Root::TypeInputEncryptedChat
       getter random_id : Int64
@@ -3539,22 +3673,23 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!silent.nil? ? 1 : 0)
+          (!silent.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @random_id.tl_serialize(io, true)
-        @data.tl_serialize(io, true)
+        @peer.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @data.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeSentEncryptedMessage
       end
     end
 
     class SendEncryptedFile < TLRequest
-      CONSTRUCTOR_ID = 0x5559481D
+      getter constructor_id : UInt32 = 0x5559481D_u32
+      class_getter constructor_id : UInt32 = 0x5559481D_u32
 
       getter peer : Root::TypeInputEncryptedChat
       getter random_id : Int64
@@ -3577,23 +3712,24 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!silent.nil? ? 1 : 0)
+          (!silent.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @random_id.tl_serialize(io, true)
-        @data.tl_serialize(io, true)
-        @file.tl_serialize(io, false)
+        @peer.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @data.tl_serialize(io)
+        @file.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeSentEncryptedMessage
       end
     end
 
     class SendEncryptedService < TLRequest
-      CONSTRUCTOR_ID = 0x32D439A4
+      getter constructor_id : UInt32 = 0x32D439A4_u32
+      class_getter constructor_id : UInt32 = 0x32D439A4_u32
 
       getter peer : Root::TypeInputEncryptedChat
       getter random_id : Int64
@@ -3610,40 +3746,42 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @random_id.tl_serialize(io, true)
-        @data.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @data.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeSentEncryptedMessage
       end
     end
 
     class ReceivedQueue < TLRequest
-      CONSTRUCTOR_ID = 0x55A5BB66
+      getter constructor_id : UInt32 = 0x55A5BB66_u32
+      class_getter constructor_id : UInt32 = 0x55A5BB66_u32
 
       getter max_qts : Int32
 
       def initialize(
         max_qts : Int32
       )
-        @max_qts = max_qts
+        @max_qts = TL::Utils.parse_int!(max_qts, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @max_qts.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @max_qts.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Int64)
       end
     end
 
     class ReportEncryptedSpam < TLRequest
-      CONSTRUCTOR_ID = 0x4B0C8C0F
+      getter constructor_id : UInt32 = 0x4B0C8C0F_u32
+      class_getter constructor_id : UInt32 = 0x4B0C8C0F_u32
 
       getter peer : Root::TypeInputEncryptedChat
 
@@ -3654,17 +3792,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class ReadMessageContents < TLRequest
-      CONSTRUCTOR_ID = 0x36A73F77
+      getter constructor_id : UInt32 = 0x36A73F77_u32
+      class_getter constructor_id : UInt32 = 0x36A73F77_u32
 
       getter id : Array(Int32)
 
@@ -3675,17 +3814,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeAffectedMessages
       end
     end
 
     class GetStickers < TLRequest
-      CONSTRUCTOR_ID = 0xD5A5D3A1
+      getter constructor_id : UInt32 = 0xD5A5D3A1_u32
+      class_getter constructor_id : UInt32 = 0xD5A5D3A1_u32
 
       getter emoticon : Bytes
       getter hash : Int64
@@ -3694,23 +3834,24 @@ module Proton::TL
         emoticon : Bytes | String | IO,
         hash : Int64
       )
-        @emoticon = emoticon
+        @emoticon = TL::Utils.parse_bytes!(emoticon)
         @hash = hash
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @emoticon.tl_serialize(io, true)
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @emoticon.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeStickers
       end
     end
 
     class GetAllStickers < TLRequest
-      CONSTRUCTOR_ID = 0xB8A0A1A8
+      getter constructor_id : UInt32 = 0xB8A0A1A8_u32
+      class_getter constructor_id : UInt32 = 0xB8A0A1A8_u32
 
       getter hash : Int64
 
@@ -3721,17 +3862,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeAllStickers
       end
     end
 
     class GetWebPagePreview < TLRequest
-      CONSTRUCTOR_ID = 0x8B68B0CC
+      getter constructor_id : UInt32 = 0x8B68B0CC_u32
+      class_getter constructor_id : UInt32 = 0x8B68B0CC_u32
 
       getter message : Bytes
       getter entities : Array(Root::TypeMessageEntity) | Nil
@@ -3740,126 +3882,144 @@ module Proton::TL
         message : Bytes | String | IO,
         entities : Array(Root::TypeMessageEntity) | Nil = nil
       )
-        @message = message
+        @message = TL::Utils.parse_bytes!(message)
         @entities = entities
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!entities.nil? ? 8 : 0)
+          (!entities.nil? ? 0x08 : 0)
         ).tl_serialize(io)
-        @message.tl_serialize(io, true)
-        @entities.tl_serialize(io, false) unless @entities.nil?
+        @message.tl_serialize(io)
+        @entities.tl_serialize(io) unless @entities.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeMessageMedia
       end
     end
 
     class ExportChatInvite < TLRequest
-      CONSTRUCTOR_ID = 0x14B9BCD7
+      getter constructor_id : UInt32 = 0xA02CE5D5_u32
+      class_getter constructor_id : UInt32 = 0xA02CE5D5_u32
 
       getter peer : Root::TypeInputPeer
       getter legacy_revoke_permanent : Bool | Nil
+      getter request_needed : Bool | Nil
       getter expire_date : Int32 | Nil
       getter usage_limit : Int32 | Nil
+      getter title : Bytes | Nil
 
       def initialize(
         peer : Root::TypeInputPeer,
         legacy_revoke_permanent : Bool | Nil = nil,
+        request_needed : Bool | Nil = nil,
         expire_date : Int32 | Nil = nil,
-        usage_limit : Int32 | Nil = nil
+        usage_limit : Int32 | Nil = nil,
+        title : Bytes | Nil = nil
       )
         @peer = peer
         @legacy_revoke_permanent = legacy_revoke_permanent
-        @expire_date = expire_date
-        @usage_limit = usage_limit
+        @request_needed = request_needed
+        @expire_date = TL::Utils.parse_int(expire_date, Int32)
+        @usage_limit = TL::Utils.parse_int(usage_limit, Int32)
+        @title = TL::Utils.parse_bytes(title)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!legacy_revoke_permanent.nil? ? 4 : 0) |
-            (!expire_date.nil? ? 1 : 0) |
-            (!usage_limit.nil? ? 2 : 0)
+          (!legacy_revoke_permanent.nil? ? 0x04 : 0) |
+            (!request_needed.nil? ? 0x08 : 0) |
+            (!expire_date.nil? ? 0x01 : 0) |
+            (!usage_limit.nil? ? 0x02 : 0) |
+            (!title.nil? ? 0x10 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @expire_date.tl_serialize(io, true) unless @expire_date.nil?
-        @usage_limit.tl_serialize(io, true) unless @usage_limit.nil?
+        @peer.tl_serialize(io)
+        @expire_date.tl_serialize(io) unless @expire_date.nil?
+        @usage_limit.tl_serialize(io) unless @usage_limit.nil?
+        @title.tl_serialize(io) unless @title.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeExportedChatInvite
       end
     end
 
     class CheckChatInvite < TLRequest
-      CONSTRUCTOR_ID = 0x3EADB1BB
+      getter constructor_id : UInt32 = 0x3EADB1BB_u32
+      class_getter constructor_id : UInt32 = 0x3EADB1BB_u32
 
       getter hash : Bytes
 
       def initialize(
         hash : Bytes | String | IO
       )
-        @hash = hash
+        @hash = TL::Utils.parse_bytes!(hash)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeChatInvite
       end
     end
 
     class ImportChatInvite < TLRequest
-      CONSTRUCTOR_ID = 0x6C50051C
+      getter constructor_id : UInt32 = 0x6C50051C_u32
+      class_getter constructor_id : UInt32 = 0x6C50051C_u32
 
       getter hash : Bytes
 
       def initialize(
         hash : Bytes | String | IO
       )
-        @hash = hash
+        @hash = TL::Utils.parse_bytes!(hash)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetStickerSet < TLRequest
-      CONSTRUCTOR_ID = 0x2619A90E
+      getter constructor_id : UInt32 = 0xC8A0EC74_u32
+      class_getter constructor_id : UInt32 = 0xC8A0EC74_u32
 
       getter stickerset : Root::TypeInputStickerSet
+      getter hash : Int32
 
       def initialize(
-        stickerset : Root::TypeInputStickerSet
+        stickerset : Root::TypeInputStickerSet,
+        hash : Int32
       )
         @stickerset = stickerset
+        @hash = TL::Utils.parse_int!(hash, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @stickerset.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @stickerset.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeStickerSet
       end
     end
 
     class InstallStickerSet < TLRequest
-      CONSTRUCTOR_ID = 0xC78FE460
+      getter constructor_id : UInt32 = 0xC78FE460_u32
+      class_getter constructor_id : UInt32 = 0xC78FE460_u32
 
       getter stickerset : Root::TypeInputStickerSet
       getter archived : Bool
@@ -3873,18 +4033,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @stickerset.tl_serialize(io, false)
-        @archived.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @stickerset.tl_serialize(io)
+        @archived.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeStickerSetInstallResult
       end
     end
 
     class UninstallStickerSet < TLRequest
-      CONSTRUCTOR_ID = 0xF96E55DE
+      getter constructor_id : UInt32 = 0xF96E55DE_u32
+      class_getter constructor_id : UInt32 = 0xF96E55DE_u32
 
       getter stickerset : Root::TypeInputStickerSet
 
@@ -3895,17 +4056,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @stickerset.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @stickerset.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class StartBot < TLRequest
-      CONSTRUCTOR_ID = 0xE6DF7378
+      getter constructor_id : UInt32 = 0xE6DF7378_u32
+      class_getter constructor_id : UInt32 = 0xE6DF7378_u32
 
       getter bot : Root::TypeInputUser
       getter peer : Root::TypeInputPeer
@@ -3921,24 +4083,25 @@ module Proton::TL
         @bot = bot
         @peer = peer
         @random_id = random_id
-        @start_param = start_param
+        @start_param = TL::Utils.parse_bytes!(start_param)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @bot.tl_serialize(io, false)
-        @peer.tl_serialize(io, false)
-        @random_id.tl_serialize(io, true)
-        @start_param.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @bot.tl_serialize(io)
+        @peer.tl_serialize(io)
+        @random_id.tl_serialize(io)
+        @start_param.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetMessagesViews < TLRequest
-      CONSTRUCTOR_ID = 0x5784D3E1
+      getter constructor_id : UInt32 = 0x5784D3E1_u32
+      class_getter constructor_id : UInt32 = 0x5784D3E1_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Array(Int32)
@@ -3955,19 +4118,20 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, false)
-        @increment.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
+        @increment.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessageViews
       end
     end
 
     class EditChatAdmin < TLRequest
-      CONSTRUCTOR_ID = 0xA85BD1C2
+      getter constructor_id : UInt32 = 0xA85BD1C2_u32
+      class_getter constructor_id : UInt32 = 0xA85BD1C2_u32
 
       getter chat_id : Int64
       getter user_id : Root::TypeInputUser
@@ -3984,19 +4148,20 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @chat_id.tl_serialize(io, true)
-        @user_id.tl_serialize(io, false)
-        @is_admin.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @chat_id.tl_serialize(io)
+        @user_id.tl_serialize(io)
+        @is_admin.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class MigrateChat < TLRequest
-      CONSTRUCTOR_ID = 0xA2875319
+      getter constructor_id : UInt32 = 0xA2875319_u32
+      class_getter constructor_id : UInt32 = 0xA2875319_u32
 
       getter chat_id : Int64
 
@@ -4007,17 +4172,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @chat_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @chat_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class SearchGlobal < TLRequest
-      CONSTRUCTOR_ID = 0x4BC6589A
+      getter constructor_id : UInt32 = 0x4BC6589A_u32
+      class_getter constructor_id : UInt32 = 0x4BC6589A_u32
 
       getter q : Bytes
       getter filter : Root::TypeMessagesFilter
@@ -4040,40 +4206,41 @@ module Proton::TL
         limit : Int32,
         folder_id : Int32 | Nil = nil
       )
-        @q = q
+        @q = TL::Utils.parse_bytes!(q)
         @filter = filter
-        @min_date = min_date
-        @max_date = max_date
-        @offset_rate = offset_rate
+        @min_date = TL::Utils.parse_int!(min_date, Int32)
+        @max_date = TL::Utils.parse_int!(max_date, Int32)
+        @offset_rate = TL::Utils.parse_int!(offset_rate, Int32)
         @offset_peer = offset_peer
-        @offset_id = offset_id
-        @limit = limit
-        @folder_id = folder_id
+        @offset_id = TL::Utils.parse_int!(offset_id, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
+        @folder_id = TL::Utils.parse_int(folder_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!folder_id.nil? ? 1 : 0)
+          (!folder_id.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @folder_id.tl_serialize(io, true) unless @folder_id.nil?
-        @q.tl_serialize(io, true)
-        @filter.tl_serialize(io, false)
-        @min_date.tl_serialize(io, true)
-        @max_date.tl_serialize(io, true)
-        @offset_rate.tl_serialize(io, true)
-        @offset_peer.tl_serialize(io, false)
-        @offset_id.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        @folder_id.tl_serialize(io) unless @folder_id.nil?
+        @q.tl_serialize(io)
+        @filter.tl_serialize(io)
+        @min_date.tl_serialize(io)
+        @max_date.tl_serialize(io)
+        @offset_rate.tl_serialize(io)
+        @offset_peer.tl_serialize(io)
+        @offset_id.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class ReorderStickerSets < TLRequest
-      CONSTRUCTOR_ID = 0x78337739
+      getter constructor_id : UInt32 = 0x78337739_u32
+      class_getter constructor_id : UInt32 = 0x78337739_u32
 
       getter order : Array(Int64)
       getter masks : Bool | Nil
@@ -4087,20 +4254,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!masks.nil? ? 1 : 0)
+          (!masks.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @order.tl_serialize(io, false)
+        @order.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetDocumentByHash < TLRequest
-      CONSTRUCTOR_ID = 0x338E2464
+      getter constructor_id : UInt32 = 0x338E2464_u32
+      class_getter constructor_id : UInt32 = 0x338E2464_u32
 
       getter sha256 : Bytes
       getter size : Int32
@@ -4112,24 +4280,25 @@ module Proton::TL
         mime_type : Bytes | String | IO
       )
         @sha256 = TL::Utils.parse_bytes!(sha256)
-        @size = size
-        @mime_type = mime_type
+        @size = TL::Utils.parse_int!(size, Int32)
+        @mime_type = TL::Utils.parse_bytes!(mime_type)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @sha256.tl_serialize(io, true)
-        @size.tl_serialize(io, true)
-        @mime_type.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @sha256.tl_serialize(io)
+        @size.tl_serialize(io)
+        @mime_type.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeDocument
       end
     end
 
     class GetSavedGifs < TLRequest
-      CONSTRUCTOR_ID = 0x5CF09635
+      getter constructor_id : UInt32 = 0x5CF09635_u32
+      class_getter constructor_id : UInt32 = 0x5CF09635_u32
 
       getter hash : Int64
 
@@ -4140,17 +4309,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeSavedGifs
       end
     end
 
     class SaveGif < TLRequest
-      CONSTRUCTOR_ID = 0x327A30CB
+      getter constructor_id : UInt32 = 0x327A30CB_u32
+      class_getter constructor_id : UInt32 = 0x327A30CB_u32
 
       getter id : Root::TypeInputDocument
       getter unsave : Bool
@@ -4164,18 +4334,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, false)
-        @unsave.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
+        @unsave.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetInlineBotResults < TLRequest
-      CONSTRUCTOR_ID = 0x514E999D
+      getter constructor_id : UInt32 = 0x514E999D_u32
+      class_getter constructor_id : UInt32 = 0x514E999D_u32
 
       getter bot : Root::TypeInputUser
       getter peer : Root::TypeInputPeer
@@ -4192,30 +4363,31 @@ module Proton::TL
       )
         @bot = bot
         @peer = peer
-        @query = query
-        @offset = offset
+        @query = TL::Utils.parse_bytes!(query)
+        @offset = TL::Utils.parse_bytes!(offset)
         @geo_point = geo_point
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!geo_point.nil? ? 1 : 0)
+          (!geo_point.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @bot.tl_serialize(io, false)
-        @peer.tl_serialize(io, false)
-        @geo_point.tl_serialize(io, false) unless @geo_point.nil?
-        @query.tl_serialize(io, true)
-        @offset.tl_serialize(io, true)
+        @bot.tl_serialize(io)
+        @peer.tl_serialize(io)
+        @geo_point.tl_serialize(io) unless @geo_point.nil?
+        @query.tl_serialize(io)
+        @offset.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeBotResults
       end
     end
 
     class SetInlineBotResults < TLRequest
-      CONSTRUCTOR_ID = 0xEB5EA206
+      getter constructor_id : UInt32 = 0xEB5EA206_u32
+      class_getter constructor_id : UInt32 = 0xEB5EA206_u32
 
       getter query_id : Int64
       getter results : Array(Root::TypeInputBotInlineResult)
@@ -4236,35 +4408,36 @@ module Proton::TL
       )
         @query_id = query_id
         @results = results
-        @cache_time = cache_time
+        @cache_time = TL::Utils.parse_int!(cache_time, Int32)
         @gallery = gallery
         @is_private = is_private
-        @next_offset = next_offset
+        @next_offset = TL::Utils.parse_bytes(next_offset)
         @switch_pm = switch_pm
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!gallery.nil? ? 1 : 0) |
-            (!is_private.nil? ? 2 : 0) |
-            (!next_offset.nil? ? 4 : 0) |
-            (!switch_pm.nil? ? 8 : 0)
+          (!gallery.nil? ? 0x01 : 0) |
+            (!is_private.nil? ? 0x02 : 0) |
+            (!next_offset.nil? ? 0x04 : 0) |
+            (!switch_pm.nil? ? 0x08 : 0)
         ).tl_serialize(io)
-        @query_id.tl_serialize(io, true)
-        @results.tl_serialize(io, false)
-        @cache_time.tl_serialize(io, true)
-        @next_offset.tl_serialize(io, true) unless @next_offset.nil?
-        @switch_pm.tl_serialize(io, false) unless @switch_pm.nil?
+        @query_id.tl_serialize(io)
+        @results.tl_serialize(io)
+        @cache_time.tl_serialize(io)
+        @next_offset.tl_serialize(io) unless @next_offset.nil?
+        @switch_pm.tl_serialize(io) unless @switch_pm.nil?
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class SendInlineBotResult < TLRequest
-      CONSTRUCTOR_ID = 0x220815B0
+      getter constructor_id : UInt32 = 0x7AA11297_u32
+      class_getter constructor_id : UInt32 = 0x7AA11297_u32
 
       getter peer : Root::TypeInputPeer
       getter random_id : Int64
@@ -4276,6 +4449,7 @@ module Proton::TL
       getter hide_via : Bool | Nil
       getter reply_to_msg_id : Int32 | Nil
       getter schedule_date : Int32 | Nil
+      getter send_as : Root::TypeInputPeer | Nil
 
       def initialize(
         peer : Root::TypeInputPeer,
@@ -4287,45 +4461,50 @@ module Proton::TL
         clear_draft : Bool | Nil = nil,
         hide_via : Bool | Nil = nil,
         reply_to_msg_id : Int32 | Nil = nil,
-        schedule_date : Int32 | Nil = nil
+        schedule_date : Int32 | Nil = nil,
+        send_as : Root::TypeInputPeer | Nil = nil
       )
         @peer = peer
         @random_id = random_id
         @query_id = query_id
-        @id = id
+        @id = TL::Utils.parse_bytes!(id)
         @silent = silent
         @background = background
         @clear_draft = clear_draft
         @hide_via = hide_via
-        @reply_to_msg_id = reply_to_msg_id
-        @schedule_date = schedule_date
+        @reply_to_msg_id = TL::Utils.parse_int(reply_to_msg_id, Int32)
+        @schedule_date = TL::Utils.parse_int(schedule_date, Int32)
+        @send_as = send_as
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!silent.nil? ? 32 : 0) |
-            (!background.nil? ? 64 : 0) |
-            (!clear_draft.nil? ? 128 : 0) |
-            (!hide_via.nil? ? 2048 : 0) |
-            (!reply_to_msg_id.nil? ? 1 : 0) |
-            (!schedule_date.nil? ? 1024 : 0)
+          (!silent.nil? ? 0x20 : 0) |
+            (!background.nil? ? 0x40 : 0) |
+            (!clear_draft.nil? ? 0x80 : 0) |
+            (!hide_via.nil? ? 0x800 : 0) |
+            (!reply_to_msg_id.nil? ? 0x01 : 0) |
+            (!schedule_date.nil? ? 0x400 : 0) |
+            (!send_as.nil? ? 0x2000 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @reply_to_msg_id.tl_serialize(io, true) unless @reply_to_msg_id.nil?
-        @random_id.tl_serialize(io, true)
-        @query_id.tl_serialize(io, true)
-        @id.tl_serialize(io, true)
-        @schedule_date.tl_serialize(io, true) unless @schedule_date.nil?
+        @peer.tl_serialize(io)
+        @reply_to_msg_id.tl_serialize(io) unless @reply_to_msg_id.nil?
+        @random_id.tl_serialize(io)
+        @query_id.tl_serialize(io)
+        @id.tl_serialize(io)
+        @schedule_date.tl_serialize(io) unless @schedule_date.nil?
+        @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetMessageEditData < TLRequest
-      CONSTRUCTOR_ID = 0xFDA68D36
+      getter constructor_id : UInt32 = 0xFDA68D36_u32
+      class_getter constructor_id : UInt32 = 0xFDA68D36_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Int32
@@ -4335,22 +4514,23 @@ module Proton::TL
         id : Int32
       )
         @peer = peer
-        @id = id
+        @id = TL::Utils.parse_int!(id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessageEditData
       end
     end
 
     class EditMessage < TLRequest
-      CONSTRUCTOR_ID = 0x48F71778
+      getter constructor_id : UInt32 = 0x48F71778_u32
+      class_getter constructor_id : UInt32 = 0x48F71778_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Int32
@@ -4372,41 +4552,42 @@ module Proton::TL
         schedule_date : Int32 | Nil = nil
       )
         @peer = peer
-        @id = id
+        @id = TL::Utils.parse_int!(id, Int32)
         @no_webpage = no_webpage
-        @message = message
+        @message = TL::Utils.parse_bytes(message)
         @media = media
         @reply_markup = reply_markup
         @entities = entities
-        @schedule_date = schedule_date
+        @schedule_date = TL::Utils.parse_int(schedule_date, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!no_webpage.nil? ? 2 : 0) |
-            (!message.nil? ? 2048 : 0) |
-            (!media.nil? ? 16384 : 0) |
-            (!reply_markup.nil? ? 4 : 0) |
-            (!entities.nil? ? 8 : 0) |
-            (!schedule_date.nil? ? 32768 : 0)
+          (!no_webpage.nil? ? 0x02 : 0) |
+            (!message.nil? ? 0x800 : 0) |
+            (!media.nil? ? 0x4000 : 0) |
+            (!reply_markup.nil? ? 0x04 : 0) |
+            (!entities.nil? ? 0x08 : 0) |
+            (!schedule_date.nil? ? 0x8000 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, true)
-        @message.tl_serialize(io, true) unless @message.nil?
-        @media.tl_serialize(io, false) unless @media.nil?
-        @reply_markup.tl_serialize(io, false) unless @reply_markup.nil?
-        @entities.tl_serialize(io, false) unless @entities.nil?
-        @schedule_date.tl_serialize(io, true) unless @schedule_date.nil?
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
+        @message.tl_serialize(io) unless @message.nil?
+        @media.tl_serialize(io) unless @media.nil?
+        @reply_markup.tl_serialize(io) unless @reply_markup.nil?
+        @entities.tl_serialize(io) unless @entities.nil?
+        @schedule_date.tl_serialize(io) unless @schedule_date.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class EditInlineBotMessage < TLRequest
-      CONSTRUCTOR_ID = 0x83557DBA
+      getter constructor_id : UInt32 = 0x83557DBA_u32
+      class_getter constructor_id : UInt32 = 0x83557DBA_u32
 
       getter id : Root::TypeInputBotInlineMessageID
       getter no_webpage : Bool | Nil
@@ -4425,35 +4606,36 @@ module Proton::TL
       )
         @id = id
         @no_webpage = no_webpage
-        @message = message
+        @message = TL::Utils.parse_bytes(message)
         @media = media
         @reply_markup = reply_markup
         @entities = entities
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!no_webpage.nil? ? 2 : 0) |
-            (!message.nil? ? 2048 : 0) |
-            (!media.nil? ? 16384 : 0) |
-            (!reply_markup.nil? ? 4 : 0) |
-            (!entities.nil? ? 8 : 0)
+          (!no_webpage.nil? ? 0x02 : 0) |
+            (!message.nil? ? 0x800 : 0) |
+            (!media.nil? ? 0x4000 : 0) |
+            (!reply_markup.nil? ? 0x04 : 0) |
+            (!entities.nil? ? 0x08 : 0)
         ).tl_serialize(io)
-        @id.tl_serialize(io, false)
-        @message.tl_serialize(io, true) unless @message.nil?
-        @media.tl_serialize(io, false) unless @media.nil?
-        @reply_markup.tl_serialize(io, false) unless @reply_markup.nil?
-        @entities.tl_serialize(io, false) unless @entities.nil?
+        @id.tl_serialize(io)
+        @message.tl_serialize(io) unless @message.nil?
+        @media.tl_serialize(io) unless @media.nil?
+        @reply_markup.tl_serialize(io) unless @reply_markup.nil?
+        @entities.tl_serialize(io) unless @entities.nil?
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetBotCallbackAnswer < TLRequest
-      CONSTRUCTOR_ID = 0x9342CA07
+      getter constructor_id : UInt32 = 0x9342CA07_u32
+      class_getter constructor_id : UInt32 = 0x9342CA07_u32
 
       getter peer : Root::TypeInputPeer
       getter msg_id : Int32
@@ -4469,32 +4651,33 @@ module Proton::TL
         password : Root::TypeInputCheckPasswordSRP | Nil = nil
       )
         @peer = peer
-        @msg_id = msg_id
+        @msg_id = TL::Utils.parse_int!(msg_id, Int32)
         @game = game
         @data = TL::Utils.parse_bytes(data)
         @password = password
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!game.nil? ? 2 : 0) |
-            (!data.nil? ? 1 : 0) |
-            (!password.nil? ? 4 : 0)
+          (!game.nil? ? 0x02 : 0) |
+            (!data.nil? ? 0x01 : 0) |
+            (!password.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @msg_id.tl_serialize(io, true)
-        @data.tl_serialize(io, true) unless @data.nil?
-        @password.tl_serialize(io, false) unless @password.nil?
+        @peer.tl_serialize(io)
+        @msg_id.tl_serialize(io)
+        @data.tl_serialize(io) unless @data.nil?
+        @password.tl_serialize(io) unless @password.nil?
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeBotCallbackAnswer
       end
     end
 
     class SetBotCallbackAnswer < TLRequest
-      CONSTRUCTOR_ID = 0xD58F130A
+      getter constructor_id : UInt32 = 0xD58F130A_u32
+      class_getter constructor_id : UInt32 = 0xD58F130A_u32
 
       getter query_id : Int64
       getter cache_time : Int32
@@ -4510,32 +4693,33 @@ module Proton::TL
         url : Bytes | Nil = nil
       )
         @query_id = query_id
-        @cache_time = cache_time
+        @cache_time = TL::Utils.parse_int!(cache_time, Int32)
         @alert = alert
-        @message = message
-        @url = url
+        @message = TL::Utils.parse_bytes(message)
+        @url = TL::Utils.parse_bytes(url)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!alert.nil? ? 2 : 0) |
-            (!message.nil? ? 1 : 0) |
-            (!url.nil? ? 4 : 0)
+          (!alert.nil? ? 0x02 : 0) |
+            (!message.nil? ? 0x01 : 0) |
+            (!url.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @query_id.tl_serialize(io, true)
-        @message.tl_serialize(io, true) unless @message.nil?
-        @url.tl_serialize(io, true) unless @url.nil?
-        @cache_time.tl_serialize(io, true)
+        @query_id.tl_serialize(io)
+        @message.tl_serialize(io) unless @message.nil?
+        @url.tl_serialize(io) unless @url.nil?
+        @cache_time.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetPeerDialogs < TLRequest
-      CONSTRUCTOR_ID = 0xE470BCFD
+      getter constructor_id : UInt32 = 0xE470BCFD_u32
+      class_getter constructor_id : UInt32 = 0xE470BCFD_u32
 
       getter peers : Array(Root::TypeInputDialogPeer)
 
@@ -4546,17 +4730,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peers.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peers.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypePeerDialogs
       end
     end
 
     class SaveDraft < TLRequest
-      CONSTRUCTOR_ID = 0xBC39E14B
+      getter constructor_id : UInt32 = 0xBC39E14B_u32
+      class_getter constructor_id : UInt32 = 0xBC39E14B_u32
 
       getter peer : Root::TypeInputPeer
       getter message : Bytes
@@ -4572,44 +4757,46 @@ module Proton::TL
         entities : Array(Root::TypeMessageEntity) | Nil = nil
       )
         @peer = peer
-        @message = message
+        @message = TL::Utils.parse_bytes!(message)
         @no_webpage = no_webpage
-        @reply_to_msg_id = reply_to_msg_id
+        @reply_to_msg_id = TL::Utils.parse_int(reply_to_msg_id, Int32)
         @entities = entities
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!no_webpage.nil? ? 2 : 0) |
-            (!reply_to_msg_id.nil? ? 1 : 0) |
-            (!entities.nil? ? 8 : 0)
+          (!no_webpage.nil? ? 0x02 : 0) |
+            (!reply_to_msg_id.nil? ? 0x01 : 0) |
+            (!entities.nil? ? 0x08 : 0)
         ).tl_serialize(io)
-        @reply_to_msg_id.tl_serialize(io, true) unless @reply_to_msg_id.nil?
-        @peer.tl_serialize(io, false)
-        @message.tl_serialize(io, true)
-        @entities.tl_serialize(io, false) unless @entities.nil?
+        @reply_to_msg_id.tl_serialize(io) unless @reply_to_msg_id.nil?
+        @peer.tl_serialize(io)
+        @message.tl_serialize(io)
+        @entities.tl_serialize(io) unless @entities.nil?
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetAllDrafts < TLRequest
-      CONSTRUCTOR_ID = 0x6A3F8D65
+      getter constructor_id : UInt32 = 0x6A3F8D65_u32
+      class_getter constructor_id : UInt32 = 0x6A3F8D65_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetFeaturedStickers < TLRequest
-      CONSTRUCTOR_ID = 0x64780B14
+      getter constructor_id : UInt32 = 0x64780B14_u32
+      class_getter constructor_id : UInt32 = 0x64780B14_u32
 
       getter hash : Int64
 
@@ -4620,17 +4807,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeFeaturedStickers
       end
     end
 
     class ReadFeaturedStickers < TLRequest
-      CONSTRUCTOR_ID = 0x5B118126
+      getter constructor_id : UInt32 = 0x5B118126_u32
+      class_getter constructor_id : UInt32 = 0x5B118126_u32
 
       getter id : Array(Int64)
 
@@ -4641,17 +4829,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetRecentStickers < TLRequest
-      CONSTRUCTOR_ID = 0x9DA9403B
+      getter constructor_id : UInt32 = 0x9DA9403B_u32
+      class_getter constructor_id : UInt32 = 0x9DA9403B_u32
 
       getter hash : Int64
       getter attached : Bool | Nil
@@ -4665,20 +4854,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!attached.nil? ? 1 : 0)
+          (!attached.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @hash.tl_serialize(io, true)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeRecentStickers
       end
     end
 
     class SaveRecentSticker < TLRequest
-      CONSTRUCTOR_ID = 0x392718F8
+      getter constructor_id : UInt32 = 0x392718F8_u32
+      class_getter constructor_id : UInt32 = 0x392718F8_u32
 
       getter id : Root::TypeInputDocument
       getter unsave : Bool
@@ -4695,21 +4885,22 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!attached.nil? ? 1 : 0)
+          (!attached.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @id.tl_serialize(io, false)
-        @unsave.tl_serialize(io, false)
+        @id.tl_serialize(io)
+        @unsave.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class ClearRecentStickers < TLRequest
-      CONSTRUCTOR_ID = 0x8999602D
+      getter constructor_id : UInt32 = 0x8999602D_u32
+      class_getter constructor_id : UInt32 = 0x8999602D_u32
 
       getter attached : Bool | Nil
 
@@ -4720,19 +4911,20 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!attached.nil? ? 1 : 0)
+          (!attached.nil? ? 0x01 : 0)
         ).tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetArchivedStickers < TLRequest
-      CONSTRUCTOR_ID = 0x57F17692
+      getter constructor_id : UInt32 = 0x57F17692_u32
+      class_getter constructor_id : UInt32 = 0x57F17692_u32
 
       getter offset_id : Int64
       getter limit : Int32
@@ -4744,26 +4936,27 @@ module Proton::TL
         masks : Bool | Nil = nil
       )
         @offset_id = offset_id
-        @limit = limit
+        @limit = TL::Utils.parse_int!(limit, Int32)
         @masks = masks
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!masks.nil? ? 1 : 0)
+          (!masks.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @offset_id.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        @offset_id.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeArchivedStickers
       end
     end
 
     class GetMaskStickers < TLRequest
-      CONSTRUCTOR_ID = 0x640F82B8
+      getter constructor_id : UInt32 = 0x640F82B8_u32
+      class_getter constructor_id : UInt32 = 0x640F82B8_u32
 
       getter hash : Int64
 
@@ -4774,17 +4967,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeAllStickers
       end
     end
 
     class GetAttachedStickers < TLRequest
-      CONSTRUCTOR_ID = 0xCC5B67CC
+      getter constructor_id : UInt32 = 0xCC5B67CC_u32
+      class_getter constructor_id : UInt32 = 0xCC5B67CC_u32
 
       getter media : Root::TypeInputStickeredMedia
 
@@ -4795,17 +4989,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @media.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @media.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeStickerSetCovered)
       end
     end
 
     class SetGameScore < TLRequest
-      CONSTRUCTOR_ID = 0x8EF8ECC0
+      getter constructor_id : UInt32 = 0x8EF8ECC0_u32
+      class_getter constructor_id : UInt32 = 0x8EF8ECC0_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Int32
@@ -4823,32 +5018,33 @@ module Proton::TL
         force : Bool | Nil = nil
       )
         @peer = peer
-        @id = id
+        @id = TL::Utils.parse_int!(id, Int32)
         @user_id = user_id
-        @score = score
+        @score = TL::Utils.parse_int!(score, Int32)
         @edit_message = edit_message
         @force = force
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!edit_message.nil? ? 1 : 0) |
-            (!force.nil? ? 2 : 0)
+          (!edit_message.nil? ? 0x01 : 0) |
+            (!force.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, true)
-        @user_id.tl_serialize(io, false)
-        @score.tl_serialize(io, true)
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
+        @user_id.tl_serialize(io)
+        @score.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class SetInlineGameScore < TLRequest
-      CONSTRUCTOR_ID = 0x15AD9F64
+      getter constructor_id : UInt32 = 0x15AD9F64_u32
+      class_getter constructor_id : UInt32 = 0x15AD9F64_u32
 
       getter id : Root::TypeInputBotInlineMessageID
       getter user_id : Root::TypeInputUser
@@ -4865,29 +5061,30 @@ module Proton::TL
       )
         @id = id
         @user_id = user_id
-        @score = score
+        @score = TL::Utils.parse_int!(score, Int32)
         @edit_message = edit_message
         @force = force
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!edit_message.nil? ? 1 : 0) |
-            (!force.nil? ? 2 : 0)
+          (!edit_message.nil? ? 0x01 : 0) |
+            (!force.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @id.tl_serialize(io, false)
-        @user_id.tl_serialize(io, false)
-        @score.tl_serialize(io, true)
+        @id.tl_serialize(io)
+        @user_id.tl_serialize(io)
+        @score.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetGameHighScores < TLRequest
-      CONSTRUCTOR_ID = 0xE822649D
+      getter constructor_id : UInt32 = 0xE822649D_u32
+      class_getter constructor_id : UInt32 = 0xE822649D_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Int32
@@ -4899,24 +5096,25 @@ module Proton::TL
         user_id : Root::TypeInputUser
       )
         @peer = peer
-        @id = id
+        @id = TL::Utils.parse_int!(id, Int32)
         @user_id = user_id
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, true)
-        @user_id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
+        @user_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeHighScores
       end
     end
 
     class GetInlineGameHighScores < TLRequest
-      CONSTRUCTOR_ID = 0x0F635E1B
+      getter constructor_id : UInt32 = 0x0F635E1B_u32
+      class_getter constructor_id : UInt32 = 0x0F635E1B_u32
 
       getter id : Root::TypeInputBotInlineMessageID
       getter user_id : Root::TypeInputUser
@@ -4930,18 +5128,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, false)
-        @user_id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
+        @user_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeHighScores
       end
     end
 
     class GetCommonChats < TLRequest
-      CONSTRUCTOR_ID = 0xE40CA104
+      getter constructor_id : UInt32 = 0xE40CA104_u32
+      class_getter constructor_id : UInt32 = 0xE40CA104_u32
 
       getter user_id : Root::TypeInputUser
       getter max_id : Int64
@@ -4954,23 +5153,24 @@ module Proton::TL
       )
         @user_id = user_id
         @max_id = max_id
-        @limit = limit
+        @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @user_id.tl_serialize(io, false)
-        @max_id.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @user_id.tl_serialize(io)
+        @max_id.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeChats
       end
     end
 
     class GetAllChats < TLRequest
-      CONSTRUCTOR_ID = 0x875F74BE
+      getter constructor_id : UInt32 = 0x875F74BE_u32
+      class_getter constructor_id : UInt32 = 0x875F74BE_u32
 
       getter except_ids : Array(Int64)
 
@@ -4981,17 +5181,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @except_ids.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @except_ids.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeChats
       end
     end
 
     class GetWebPage < TLRequest
-      CONSTRUCTOR_ID = 0x32CA8F91
+      getter constructor_id : UInt32 = 0x32CA8F91_u32
+      class_getter constructor_id : UInt32 = 0x32CA8F91_u32
 
       getter url : Bytes
       getter hash : Int32
@@ -5000,23 +5201,24 @@ module Proton::TL
         url : Bytes | String | IO,
         hash : Int32
       )
-        @url = url
-        @hash = hash
+        @url = TL::Utils.parse_bytes!(url)
+        @hash = TL::Utils.parse_int!(hash, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @url.tl_serialize(io, true)
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @url.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeWebPage
       end
     end
 
     class ToggleDialogPin < TLRequest
-      CONSTRUCTOR_ID = 0xA731E257
+      getter constructor_id : UInt32 = 0xA731E257_u32
+      class_getter constructor_id : UInt32 = 0xA731E257_u32
 
       getter peer : Root::TypeInputDialogPeer
       getter pinned : Bool | Nil
@@ -5030,20 +5232,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!pinned.nil? ? 1 : 0)
+          (!pinned.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class ReorderPinnedDialogs < TLRequest
-      CONSTRUCTOR_ID = 0x3B1ADF37
+      getter constructor_id : UInt32 = 0x3B1ADF37_u32
+      class_getter constructor_id : UInt32 = 0x3B1ADF37_u32
 
       getter folder_id : Int32
       getter order : Array(Root::TypeInputDialogPeer)
@@ -5054,48 +5257,50 @@ module Proton::TL
         order : Array(Root::TypeInputDialogPeer),
         force : Bool | Nil = nil
       )
-        @folder_id = folder_id
+        @folder_id = TL::Utils.parse_int!(folder_id, Int32)
         @order = order
         @force = force
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!force.nil? ? 1 : 0)
+          (!force.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @folder_id.tl_serialize(io, true)
-        @order.tl_serialize(io, false)
+        @folder_id.tl_serialize(io)
+        @order.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetPinnedDialogs < TLRequest
-      CONSTRUCTOR_ID = 0xD6B94DF2
+      getter constructor_id : UInt32 = 0xD6B94DF2_u32
+      class_getter constructor_id : UInt32 = 0xD6B94DF2_u32
 
       getter folder_id : Int32
 
       def initialize(
         folder_id : Int32
       )
-        @folder_id = folder_id
+        @folder_id = TL::Utils.parse_int!(folder_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @folder_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @folder_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypePeerDialogs
       end
     end
 
     class SetBotShippingResults < TLRequest
-      CONSTRUCTOR_ID = 0xE5F672FA
+      getter constructor_id : UInt32 = 0xE5F672FA_u32
+      class_getter constructor_id : UInt32 = 0xE5F672FA_u32
 
       getter query_id : Int64
       getter error : Bytes | Nil
@@ -5107,28 +5312,29 @@ module Proton::TL
         shipping_options : Array(Root::TypeShippingOption) | Nil = nil
       )
         @query_id = query_id
-        @error = error
+        @error = TL::Utils.parse_bytes(error)
         @shipping_options = shipping_options
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!error.nil? ? 1 : 0) |
-            (!shipping_options.nil? ? 2 : 0)
+          (!error.nil? ? 0x01 : 0) |
+            (!shipping_options.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @query_id.tl_serialize(io, true)
-        @error.tl_serialize(io, true) unless @error.nil?
-        @shipping_options.tl_serialize(io, false) unless @shipping_options.nil?
+        @query_id.tl_serialize(io)
+        @error.tl_serialize(io) unless @error.nil?
+        @shipping_options.tl_serialize(io) unless @shipping_options.nil?
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class SetBotPrecheckoutResults < TLRequest
-      CONSTRUCTOR_ID = 0x09C2DD95
+      getter constructor_id : UInt32 = 0x09C2DD95_u32
+      class_getter constructor_id : UInt32 = 0x09C2DD95_u32
 
       getter query_id : Int64
       getter success : Bool | Nil
@@ -5141,26 +5347,27 @@ module Proton::TL
       )
         @query_id = query_id
         @success = success
-        @error = error
+        @error = TL::Utils.parse_bytes(error)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!success.nil? ? 2 : 0) |
-            (!error.nil? ? 1 : 0)
+          (!success.nil? ? 0x02 : 0) |
+            (!error.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @query_id.tl_serialize(io, true)
-        @error.tl_serialize(io, true) unless @error.nil?
+        @query_id.tl_serialize(io)
+        @error.tl_serialize(io) unless @error.nil?
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class UploadMedia < TLRequest
-      CONSTRUCTOR_ID = 0x519BC2B1
+      getter constructor_id : UInt32 = 0x519BC2B1_u32
+      class_getter constructor_id : UInt32 = 0x519BC2B1_u32
 
       getter peer : Root::TypeInputPeer
       getter media : Root::TypeInputMedia
@@ -5174,18 +5381,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @media.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @media.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeMessageMedia
       end
     end
 
     class SendScreenshotNotification < TLRequest
-      CONSTRUCTOR_ID = 0xC97DF020
+      getter constructor_id : UInt32 = 0xC97DF020_u32
+      class_getter constructor_id : UInt32 = 0xC97DF020_u32
 
       getter peer : Root::TypeInputPeer
       getter reply_to_msg_id : Int32
@@ -5197,24 +5405,25 @@ module Proton::TL
         random_id : Int64
       )
         @peer = peer
-        @reply_to_msg_id = reply_to_msg_id
+        @reply_to_msg_id = TL::Utils.parse_int!(reply_to_msg_id, Int32)
         @random_id = random_id
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @reply_to_msg_id.tl_serialize(io, true)
-        @random_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @reply_to_msg_id.tl_serialize(io)
+        @random_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetFavedStickers < TLRequest
-      CONSTRUCTOR_ID = 0x04F1AAA9
+      getter constructor_id : UInt32 = 0x04F1AAA9_u32
+      class_getter constructor_id : UInt32 = 0x04F1AAA9_u32
 
       getter hash : Int64
 
@@ -5225,17 +5434,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeFavedStickers
       end
     end
 
     class FaveSticker < TLRequest
-      CONSTRUCTOR_ID = 0xB9FFC55B
+      getter constructor_id : UInt32 = 0xB9FFC55B_u32
+      class_getter constructor_id : UInt32 = 0xB9FFC55B_u32
 
       getter id : Root::TypeInputDocument
       getter unfave : Bool
@@ -5249,18 +5459,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @id.tl_serialize(io, false)
-        @unfave.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @id.tl_serialize(io)
+        @unfave.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetUnreadMentions < TLRequest
-      CONSTRUCTOR_ID = 0x46578472
+      getter constructor_id : UInt32 = 0x46578472_u32
+      class_getter constructor_id : UInt32 = 0x46578472_u32
 
       getter peer : Root::TypeInputPeer
       getter offset_id : Int32
@@ -5278,30 +5489,31 @@ module Proton::TL
         min_id : Int32
       )
         @peer = peer
-        @offset_id = offset_id
-        @add_offset = add_offset
-        @limit = limit
-        @max_id = max_id
-        @min_id = min_id
+        @offset_id = TL::Utils.parse_int!(offset_id, Int32)
+        @add_offset = TL::Utils.parse_int!(add_offset, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
+        @max_id = TL::Utils.parse_int!(max_id, Int32)
+        @min_id = TL::Utils.parse_int!(min_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @offset_id.tl_serialize(io, true)
-        @add_offset.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
-        @max_id.tl_serialize(io, true)
-        @min_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @offset_id.tl_serialize(io)
+        @add_offset.tl_serialize(io)
+        @limit.tl_serialize(io)
+        @max_id.tl_serialize(io)
+        @min_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class ReadMentions < TLRequest
-      CONSTRUCTOR_ID = 0x0F0189D3
+      getter constructor_id : UInt32 = 0x0F0189D3_u32
+      class_getter constructor_id : UInt32 = 0x0F0189D3_u32
 
       getter peer : Root::TypeInputPeer
 
@@ -5312,17 +5524,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeAffectedHistory
       end
     end
 
     class GetRecentLocations < TLRequest
-      CONSTRUCTOR_ID = 0x702A40E0
+      getter constructor_id : UInt32 = 0x702A40E0_u32
+      class_getter constructor_id : UInt32 = 0x702A40E0_u32
 
       getter peer : Root::TypeInputPeer
       getter limit : Int32
@@ -5334,24 +5547,25 @@ module Proton::TL
         hash : Int64
       )
         @peer = peer
-        @limit = limit
+        @limit = TL::Utils.parse_int!(limit, Int32)
         @hash = hash
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @limit.tl_serialize(io, true)
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @limit.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class SendMultiMedia < TLRequest
-      CONSTRUCTOR_ID = 0xCC0110CB
+      getter constructor_id : UInt32 = 0xF803138F_u32
+      class_getter constructor_id : UInt32 = 0xF803138F_u32
 
       getter peer : Root::TypeInputPeer
       getter multi_media : Array(Root::TypeInputSingleMedia)
@@ -5360,6 +5574,7 @@ module Proton::TL
       getter clear_draft : Bool | Nil
       getter reply_to_msg_id : Int32 | Nil
       getter schedule_date : Int32 | Nil
+      getter send_as : Root::TypeInputPeer | Nil
 
       def initialize(
         peer : Root::TypeInputPeer,
@@ -5368,39 +5583,44 @@ module Proton::TL
         background : Bool | Nil = nil,
         clear_draft : Bool | Nil = nil,
         reply_to_msg_id : Int32 | Nil = nil,
-        schedule_date : Int32 | Nil = nil
+        schedule_date : Int32 | Nil = nil,
+        send_as : Root::TypeInputPeer | Nil = nil
       )
         @peer = peer
         @multi_media = multi_media
         @silent = silent
         @background = background
         @clear_draft = clear_draft
-        @reply_to_msg_id = reply_to_msg_id
-        @schedule_date = schedule_date
+        @reply_to_msg_id = TL::Utils.parse_int(reply_to_msg_id, Int32)
+        @schedule_date = TL::Utils.parse_int(schedule_date, Int32)
+        @send_as = send_as
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!silent.nil? ? 32 : 0) |
-            (!background.nil? ? 64 : 0) |
-            (!clear_draft.nil? ? 128 : 0) |
-            (!reply_to_msg_id.nil? ? 1 : 0) |
-            (!schedule_date.nil? ? 1024 : 0)
+          (!silent.nil? ? 0x20 : 0) |
+            (!background.nil? ? 0x40 : 0) |
+            (!clear_draft.nil? ? 0x80 : 0) |
+            (!reply_to_msg_id.nil? ? 0x01 : 0) |
+            (!schedule_date.nil? ? 0x400 : 0) |
+            (!send_as.nil? ? 0x2000 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @reply_to_msg_id.tl_serialize(io, true) unless @reply_to_msg_id.nil?
-        @multi_media.tl_serialize(io, false)
-        @schedule_date.tl_serialize(io, true) unless @schedule_date.nil?
+        @peer.tl_serialize(io)
+        @reply_to_msg_id.tl_serialize(io) unless @reply_to_msg_id.nil?
+        @multi_media.tl_serialize(io)
+        @schedule_date.tl_serialize(io) unless @schedule_date.nil?
+        @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class UploadEncryptedFile < TLRequest
-      CONSTRUCTOR_ID = 0x5057C497
+      getter constructor_id : UInt32 = 0x5057C497_u32
+      class_getter constructor_id : UInt32 = 0x5057C497_u32
 
       getter peer : Root::TypeInputEncryptedChat
       getter file : Root::TypeInputEncryptedFile
@@ -5414,18 +5634,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @file.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @file.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeEncryptedFile
       end
     end
 
     class SearchStickerSets < TLRequest
-      CONSTRUCTOR_ID = 0x35705B8A
+      getter constructor_id : UInt32 = 0x35705B8A_u32
+      class_getter constructor_id : UInt32 = 0x35705B8A_u32
 
       getter q : Bytes
       getter hash : Int64
@@ -5436,39 +5657,41 @@ module Proton::TL
         hash : Int64,
         exclude_featured : Bool | Nil = nil
       )
-        @q = q
+        @q = TL::Utils.parse_bytes!(q)
         @hash = hash
         @exclude_featured = exclude_featured
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!exclude_featured.nil? ? 1 : 0)
+          (!exclude_featured.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @q.tl_serialize(io, true)
-        @hash.tl_serialize(io, true)
+        @q.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeFoundStickerSets
       end
     end
 
     class GetSplitRanges < TLRequest
-      CONSTRUCTOR_ID = 0x1CFF7E08
+      getter constructor_id : UInt32 = 0x1CFF7E08_u32
+      class_getter constructor_id : UInt32 = 0x1CFF7E08_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeMessageRange)
       end
     end
 
     class MarkDialogUnread < TLRequest
-      CONSTRUCTOR_ID = 0xC286D98F
+      getter constructor_id : UInt32 = 0xC286D98F_u32
+      class_getter constructor_id : UInt32 = 0xC286D98F_u32
 
       getter peer : Root::TypeInputDialogPeer
       getter unread : Bool | Nil
@@ -5482,44 +5705,47 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!unread.nil? ? 1 : 0)
+          (!unread.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetDialogUnreadMarks < TLRequest
-      CONSTRUCTOR_ID = 0x22E24E22
+      getter constructor_id : UInt32 = 0x22E24E22_u32
+      class_getter constructor_id : UInt32 = 0x22E24E22_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeDialogPeer)
       end
     end
 
     class ClearAllDrafts < TLRequest
-      CONSTRUCTOR_ID = 0x7E58EE9C
+      getter constructor_id : UInt32 = 0x7E58EE9C_u32
+      class_getter constructor_id : UInt32 = 0x7E58EE9C_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class UpdatePinnedMessage < TLRequest
-      CONSTRUCTOR_ID = 0xD2AAF7EC
+      getter constructor_id : UInt32 = 0xD2AAF7EC_u32
+      class_getter constructor_id : UInt32 = 0xD2AAF7EC_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Int32
@@ -5535,30 +5761,31 @@ module Proton::TL
         pm_oneside : Bool | Nil = nil
       )
         @peer = peer
-        @id = id
+        @id = TL::Utils.parse_int!(id, Int32)
         @silent = silent
         @unpin = unpin
         @pm_oneside = pm_oneside
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!silent.nil? ? 1 : 0) |
-            (!unpin.nil? ? 2 : 0) |
-            (!pm_oneside.nil? ? 4 : 0)
+          (!silent.nil? ? 0x01 : 0) |
+            (!unpin.nil? ? 0x02 : 0) |
+            (!pm_oneside.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, true)
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class SendVote < TLRequest
-      CONSTRUCTOR_ID = 0x10EA6184
+      getter constructor_id : UInt32 = 0x10EA6184_u32
+      class_getter constructor_id : UInt32 = 0x10EA6184_u32
 
       getter peer : Root::TypeInputPeer
       getter msg_id : Int32
@@ -5570,24 +5797,25 @@ module Proton::TL
         options : Array(Bytes)
       )
         @peer = peer
-        @msg_id = msg_id
+        @msg_id = TL::Utils.parse_int!(msg_id, Int32)
         @options = options
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @msg_id.tl_serialize(io, true)
-        @options.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @msg_id.tl_serialize(io)
+        @options.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetPollResults < TLRequest
-      CONSTRUCTOR_ID = 0x73BB643B
+      getter constructor_id : UInt32 = 0x73BB643B_u32
+      class_getter constructor_id : UInt32 = 0x73BB643B_u32
 
       getter peer : Root::TypeInputPeer
       getter msg_id : Int32
@@ -5597,22 +5825,23 @@ module Proton::TL
         msg_id : Int32
       )
         @peer = peer
-        @msg_id = msg_id
+        @msg_id = TL::Utils.parse_int!(msg_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @msg_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @msg_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetOnlines < TLRequest
-      CONSTRUCTOR_ID = 0x6E2BE050
+      getter constructor_id : UInt32 = 0x6E2BE050_u32
+      class_getter constructor_id : UInt32 = 0x6E2BE050_u32
 
       getter peer : Root::TypeInputPeer
 
@@ -5623,48 +5852,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeChatOnlines
       end
     end
 
-    class GetStatsURL < TLRequest
-      CONSTRUCTOR_ID = 0x812C2AE6
-
-      getter peer : Root::TypeInputPeer
-      getter params : Bytes
-      getter dark : Bool | Nil
-
-      def initialize(
-        peer : Root::TypeInputPeer,
-        params : Bytes | String | IO,
-        dark : Bool | Nil = nil
-      )
-        @peer = peer
-        @params = params
-        @dark = dark
-      end
-
-      def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        (
-          (!dark.nil? ? 1 : 0)
-        ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @params.tl_serialize(io, true)
-      end
-
-      def return_type
-        Root::TypeStatsURL
-      end
-    end
-
     class EditChatAbout < TLRequest
-      CONSTRUCTOR_ID = 0xDEF60797
+      getter constructor_id : UInt32 = 0xDEF60797_u32
+      class_getter constructor_id : UInt32 = 0xDEF60797_u32
 
       getter peer : Root::TypeInputPeer
       getter about : Bytes
@@ -5674,22 +5873,23 @@ module Proton::TL
         about : Bytes | String | IO
       )
         @peer = peer
-        @about = about
+        @about = TL::Utils.parse_bytes!(about)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @about.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @about.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class EditChatDefaultBannedRights < TLRequest
-      CONSTRUCTOR_ID = 0xA5866B41
+      getter constructor_id : UInt32 = 0xA5866B41_u32
+      class_getter constructor_id : UInt32 = 0xA5866B41_u32
 
       getter peer : Root::TypeInputPeer
       getter banned_rights : Root::TypeChatBannedRights
@@ -5703,39 +5903,41 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @banned_rights.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @banned_rights.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetEmojiKeywords < TLRequest
-      CONSTRUCTOR_ID = 0x35A0E062
+      getter constructor_id : UInt32 = 0x35A0E062_u32
+      class_getter constructor_id : UInt32 = 0x35A0E062_u32
 
       getter lang_code : Bytes
 
       def initialize(
         lang_code : Bytes | String | IO
       )
-        @lang_code = lang_code
+        @lang_code = TL::Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @lang_code.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @lang_code.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeEmojiKeywordsDifference
       end
     end
 
     class GetEmojiKeywordsDifference < TLRequest
-      CONSTRUCTOR_ID = 0x1508B6AF
+      getter constructor_id : UInt32 = 0x1508B6AF_u32
+      class_getter constructor_id : UInt32 = 0x1508B6AF_u32
 
       getter lang_code : Bytes
       getter from_version : Int32
@@ -5744,23 +5946,24 @@ module Proton::TL
         lang_code : Bytes | String | IO,
         from_version : Int32
       )
-        @lang_code = lang_code
-        @from_version = from_version
+        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @from_version = TL::Utils.parse_int!(from_version, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @lang_code.tl_serialize(io, true)
-        @from_version.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @lang_code.tl_serialize(io)
+        @from_version.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeEmojiKeywordsDifference
       end
     end
 
     class GetEmojiKeywordsLanguages < TLRequest
-      CONSTRUCTOR_ID = 0x4E9963B2
+      getter constructor_id : UInt32 = 0x4E9963B2_u32
+      class_getter constructor_id : UInt32 = 0x4E9963B2_u32
 
       getter lang_codes : Array(Bytes)
 
@@ -5771,38 +5974,40 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @lang_codes.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @lang_codes.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeEmojiLanguage)
       end
     end
 
     class GetEmojiURL < TLRequest
-      CONSTRUCTOR_ID = 0xD5B10C26
+      getter constructor_id : UInt32 = 0xD5B10C26_u32
+      class_getter constructor_id : UInt32 = 0xD5B10C26_u32
 
       getter lang_code : Bytes
 
       def initialize(
         lang_code : Bytes | String | IO
       )
-        @lang_code = lang_code
+        @lang_code = TL::Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @lang_code.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @lang_code.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeEmojiURL
       end
     end
 
     class GetSearchCounters < TLRequest
-      CONSTRUCTOR_ID = 0x732EEF00
+      getter constructor_id : UInt32 = 0x732EEF00_u32
+      class_getter constructor_id : UInt32 = 0x732EEF00_u32
 
       getter peer : Root::TypeInputPeer
       getter filters : Array(Root::TypeMessagesFilter)
@@ -5816,18 +6021,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @filters.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @filters.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Messages::TypeSearchCounter)
       end
     end
 
     class RequestUrlAuth < TLRequest
-      CONSTRUCTOR_ID = 0x198FB446
+      getter constructor_id : UInt32 = 0x198FB446_u32
+      class_getter constructor_id : UInt32 = 0x198FB446_u32
 
       getter peer : Root::TypeInputPeer | Nil
       getter msg_id : Int32 | Nil
@@ -5841,32 +6047,33 @@ module Proton::TL
         url : Bytes | Nil = nil
       )
         @peer = peer
-        @msg_id = msg_id
-        @button_id = button_id
-        @url = url
+        @msg_id = TL::Utils.parse_int(msg_id, Int32)
+        @button_id = TL::Utils.parse_int(button_id, Int32)
+        @url = TL::Utils.parse_bytes(url)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!peer.nil? ? 2 : 0) |
-            (!msg_id.nil? ? 2 : 0) |
-            (!button_id.nil? ? 2 : 0) |
-            (!url.nil? ? 4 : 0)
+          (!peer.nil? ? 0x02 : 0) |
+            (!msg_id.nil? ? 0x02 : 0) |
+            (!button_id.nil? ? 0x02 : 0) |
+            (!url.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false) unless @peer.nil?
-        @msg_id.tl_serialize(io, true) unless @msg_id.nil?
-        @button_id.tl_serialize(io, true) unless @button_id.nil?
-        @url.tl_serialize(io, true) unless @url.nil?
+        @peer.tl_serialize(io) unless @peer.nil?
+        @msg_id.tl_serialize(io) unless @msg_id.nil?
+        @button_id.tl_serialize(io) unless @button_id.nil?
+        @url.tl_serialize(io) unless @url.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUrlAuthResult
       end
     end
 
     class AcceptUrlAuth < TLRequest
-      CONSTRUCTOR_ID = 0xB12C7125
+      getter constructor_id : UInt32 = 0xB12C7125_u32
+      class_getter constructor_id : UInt32 = 0xB12C7125_u32
 
       getter write_allowed : Bool | Nil
       getter peer : Root::TypeInputPeer | Nil
@@ -5883,33 +6090,34 @@ module Proton::TL
       )
         @write_allowed = write_allowed
         @peer = peer
-        @msg_id = msg_id
-        @button_id = button_id
-        @url = url
+        @msg_id = TL::Utils.parse_int(msg_id, Int32)
+        @button_id = TL::Utils.parse_int(button_id, Int32)
+        @url = TL::Utils.parse_bytes(url)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!write_allowed.nil? ? 1 : 0) |
-            (!peer.nil? ? 2 : 0) |
-            (!msg_id.nil? ? 2 : 0) |
-            (!button_id.nil? ? 2 : 0) |
-            (!url.nil? ? 4 : 0)
+          (!write_allowed.nil? ? 0x01 : 0) |
+            (!peer.nil? ? 0x02 : 0) |
+            (!msg_id.nil? ? 0x02 : 0) |
+            (!button_id.nil? ? 0x02 : 0) |
+            (!url.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false) unless @peer.nil?
-        @msg_id.tl_serialize(io, true) unless @msg_id.nil?
-        @button_id.tl_serialize(io, true) unless @button_id.nil?
-        @url.tl_serialize(io, true) unless @url.nil?
+        @peer.tl_serialize(io) unless @peer.nil?
+        @msg_id.tl_serialize(io) unless @msg_id.nil?
+        @button_id.tl_serialize(io) unless @button_id.nil?
+        @url.tl_serialize(io) unless @url.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUrlAuthResult
       end
     end
 
     class HidePeerSettingsBar < TLRequest
-      CONSTRUCTOR_ID = 0x4FACB138
+      getter constructor_id : UInt32 = 0x4FACB138_u32
+      class_getter constructor_id : UInt32 = 0x4FACB138_u32
 
       getter peer : Root::TypeInputPeer
 
@@ -5920,17 +6128,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetScheduledHistory < TLRequest
-      CONSTRUCTOR_ID = 0xF516760B
+      getter constructor_id : UInt32 = 0xF516760B_u32
+      class_getter constructor_id : UInt32 = 0xF516760B_u32
 
       getter peer : Root::TypeInputPeer
       getter hash : Int64
@@ -5944,18 +6153,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class GetScheduledMessages < TLRequest
-      CONSTRUCTOR_ID = 0xBDBB0464
+      getter constructor_id : UInt32 = 0xBDBB0464_u32
+      class_getter constructor_id : UInt32 = 0xBDBB0464_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Array(Int32)
@@ -5969,18 +6179,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class SendScheduledMessages < TLRequest
-      CONSTRUCTOR_ID = 0xBD38850A
+      getter constructor_id : UInt32 = 0xBD38850A_u32
+      class_getter constructor_id : UInt32 = 0xBD38850A_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Array(Int32)
@@ -5994,18 +6205,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class DeleteScheduledMessages < TLRequest
-      CONSTRUCTOR_ID = 0x59AE2B16
+      getter constructor_id : UInt32 = 0x59AE2B16_u32
+      class_getter constructor_id : UInt32 = 0x59AE2B16_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Array(Int32)
@@ -6019,18 +6231,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetPollVotes < TLRequest
-      CONSTRUCTOR_ID = 0xB86E380E
+      getter constructor_id : UInt32 = 0xB86E380E_u32
+      class_getter constructor_id : UInt32 = 0xB86E380E_u32
 
       getter peer : Root::TypeInputPeer
       getter id : Int32
@@ -6046,32 +6259,33 @@ module Proton::TL
         offset : Bytes | Nil = nil
       )
         @peer = peer
-        @id = id
-        @limit = limit
+        @id = TL::Utils.parse_int!(id, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
         @option = TL::Utils.parse_bytes(option)
-        @offset = offset
+        @offset = TL::Utils.parse_bytes(offset)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!option.nil? ? 1 : 0) |
-            (!offset.nil? ? 2 : 0)
+          (!option.nil? ? 0x01 : 0) |
+            (!offset.nil? ? 0x02 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @id.tl_serialize(io, true)
-        @option.tl_serialize(io, true) unless @option.nil?
-        @offset.tl_serialize(io, true) unless @offset.nil?
-        @limit.tl_serialize(io, true)
+        @peer.tl_serialize(io)
+        @id.tl_serialize(io)
+        @option.tl_serialize(io) unless @option.nil?
+        @offset.tl_serialize(io) unless @offset.nil?
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeVotesList
       end
     end
 
     class ToggleStickerSets < TLRequest
-      CONSTRUCTOR_ID = 0xB5052FEA
+      getter constructor_id : UInt32 = 0xB5052FEA_u32
+      class_getter constructor_id : UInt32 = 0xB5052FEA_u32
 
       getter stickersets : Array(Root::TypeInputStickerSet)
       getter uninstall : Bool | Nil
@@ -6091,46 +6305,49 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!uninstall.nil? ? 1 : 0) |
-            (!archive.nil? ? 2 : 0) |
-            (!unarchive.nil? ? 4 : 0)
+          (!uninstall.nil? ? 0x01 : 0) |
+            (!archive.nil? ? 0x02 : 0) |
+            (!unarchive.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @stickersets.tl_serialize(io, false)
+        @stickersets.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetDialogFilters < TLRequest
-      CONSTRUCTOR_ID = 0xF19ED96D
+      getter constructor_id : UInt32 = 0xF19ED96D_u32
+      class_getter constructor_id : UInt32 = 0xF19ED96D_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeDialogFilter)
       end
     end
 
     class GetSuggestedDialogFilters < TLRequest
-      CONSTRUCTOR_ID = 0xA29CD42C
+      getter constructor_id : UInt32 = 0xA29CD42C_u32
+      class_getter constructor_id : UInt32 = 0xA29CD42C_u32
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
       end
 
-      def return_type
+      def self.return_type
         Array(Root::TypeDialogFilterSuggested)
       end
     end
 
     class UpdateDialogFilter < TLRequest
-      CONSTRUCTOR_ID = 0x1AD4A04A
+      getter constructor_id : UInt32 = 0x1AD4A04A_u32
+      class_getter constructor_id : UInt32 = 0x1AD4A04A_u32
 
       getter id : Int32
       getter filter : Root::TypeDialogFilter | Nil
@@ -6139,26 +6356,27 @@ module Proton::TL
         id : Int32,
         filter : Root::TypeDialogFilter | Nil = nil
       )
-        @id = id
+        @id = TL::Utils.parse_int!(id, Int32)
         @filter = filter
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!filter.nil? ? 1 : 0)
+          (!filter.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @id.tl_serialize(io, true)
-        @filter.tl_serialize(io, false) unless @filter.nil?
+        @id.tl_serialize(io)
+        @filter.tl_serialize(io) unless @filter.nil?
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class UpdateDialogFiltersOrder < TLRequest
-      CONSTRUCTOR_ID = 0xC563C1E4
+      getter constructor_id : UInt32 = 0xC563C1E4_u32
+      class_getter constructor_id : UInt32 = 0xC563C1E4_u32
 
       getter order : Array(Int32)
 
@@ -6169,17 +6387,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @order.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @order.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetOldFeaturedStickers < TLRequest
-      CONSTRUCTOR_ID = 0x7ED094A1
+      getter constructor_id : UInt32 = 0x7ED094A1_u32
+      class_getter constructor_id : UInt32 = 0x7ED094A1_u32
 
       getter offset : Int32
       getter limit : Int32
@@ -6190,25 +6409,26 @@ module Proton::TL
         limit : Int32,
         hash : Int64
       )
-        @offset = offset
-        @limit = limit
+        @offset = TL::Utils.parse_int!(offset, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
         @hash = hash
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @offset.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @offset.tl_serialize(io)
+        @limit.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeFeaturedStickers
       end
     end
 
     class GetReplies < TLRequest
-      CONSTRUCTOR_ID = 0x22DDD30C
+      getter constructor_id : UInt32 = 0x22DDD30C_u32
+      class_getter constructor_id : UInt32 = 0x22DDD30C_u32
 
       getter peer : Root::TypeInputPeer
       getter msg_id : Int32
@@ -6232,36 +6452,37 @@ module Proton::TL
         hash : Int64
       )
         @peer = peer
-        @msg_id = msg_id
-        @offset_id = offset_id
-        @offset_date = offset_date
-        @add_offset = add_offset
-        @limit = limit
-        @max_id = max_id
-        @min_id = min_id
+        @msg_id = TL::Utils.parse_int!(msg_id, Int32)
+        @offset_id = TL::Utils.parse_int!(offset_id, Int32)
+        @offset_date = TL::Utils.parse_int!(offset_date, Int32)
+        @add_offset = TL::Utils.parse_int!(add_offset, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
+        @max_id = TL::Utils.parse_int!(max_id, Int32)
+        @min_id = TL::Utils.parse_int!(min_id, Int32)
         @hash = hash
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @msg_id.tl_serialize(io, true)
-        @offset_id.tl_serialize(io, true)
-        @offset_date.tl_serialize(io, true)
-        @add_offset.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
-        @max_id.tl_serialize(io, true)
-        @min_id.tl_serialize(io, true)
-        @hash.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @msg_id.tl_serialize(io)
+        @offset_id.tl_serialize(io)
+        @offset_date.tl_serialize(io)
+        @add_offset.tl_serialize(io)
+        @limit.tl_serialize(io)
+        @max_id.tl_serialize(io)
+        @min_id.tl_serialize(io)
+        @hash.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class GetDiscussionMessage < TLRequest
-      CONSTRUCTOR_ID = 0x446972FD
+      getter constructor_id : UInt32 = 0x446972FD_u32
+      class_getter constructor_id : UInt32 = 0x446972FD_u32
 
       getter peer : Root::TypeInputPeer
       getter msg_id : Int32
@@ -6271,22 +6492,23 @@ module Proton::TL
         msg_id : Int32
       )
         @peer = peer
-        @msg_id = msg_id
+        @msg_id = TL::Utils.parse_int!(msg_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @msg_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @msg_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeDiscussionMessage
       end
     end
 
     class ReadDiscussion < TLRequest
-      CONSTRUCTOR_ID = 0xF731A9F4
+      getter constructor_id : UInt32 = 0xF731A9F4_u32
+      class_getter constructor_id : UInt32 = 0xF731A9F4_u32
 
       getter peer : Root::TypeInputPeer
       getter msg_id : Int32
@@ -6298,24 +6520,25 @@ module Proton::TL
         read_max_id : Int32
       )
         @peer = peer
-        @msg_id = msg_id
-        @read_max_id = read_max_id
+        @msg_id = TL::Utils.parse_int!(msg_id, Int32)
+        @read_max_id = TL::Utils.parse_int!(read_max_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @msg_id.tl_serialize(io, true)
-        @read_max_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @msg_id.tl_serialize(io)
+        @read_max_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class UnpinAllMessages < TLRequest
-      CONSTRUCTOR_ID = 0xF025BC8B
+      getter constructor_id : UInt32 = 0xF025BC8B_u32
+      class_getter constructor_id : UInt32 = 0xF025BC8B_u32
 
       getter peer : Root::TypeInputPeer
 
@@ -6326,17 +6549,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeAffectedHistory
       end
     end
 
     class DeleteChat < TLRequest
-      CONSTRUCTOR_ID = 0x5BD0EE50
+      getter constructor_id : UInt32 = 0x5BD0EE50_u32
+      class_getter constructor_id : UInt32 = 0x5BD0EE50_u32
 
       getter chat_id : Int64
 
@@ -6347,17 +6571,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @chat_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @chat_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class DeletePhoneCallHistory < TLRequest
-      CONSTRUCTOR_ID = 0xF9CBE409
+      getter constructor_id : UInt32 = 0xF9CBE409_u32
+      class_getter constructor_id : UInt32 = 0xF9CBE409_u32
 
       getter revoke : Bool | Nil
 
@@ -6368,40 +6593,42 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!revoke.nil? ? 1 : 0)
+          (!revoke.nil? ? 0x01 : 0)
         ).tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeAffectedFoundMessages
       end
     end
 
     class CheckHistoryImport < TLRequest
-      CONSTRUCTOR_ID = 0x43FE19F3
+      getter constructor_id : UInt32 = 0x43FE19F3_u32
+      class_getter constructor_id : UInt32 = 0x43FE19F3_u32
 
       getter import_head : Bytes
 
       def initialize(
         import_head : Bytes | String | IO
       )
-        @import_head = import_head
+        @import_head = TL::Utils.parse_bytes!(import_head)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @import_head.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @import_head.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeHistoryImportParsed
       end
     end
 
     class InitHistoryImport < TLRequest
-      CONSTRUCTOR_ID = 0x34090C3B
+      getter constructor_id : UInt32 = 0x34090C3B_u32
+      class_getter constructor_id : UInt32 = 0x34090C3B_u32
 
       getter peer : Root::TypeInputPeer
       getter file : Root::TypeInputFile
@@ -6414,23 +6641,24 @@ module Proton::TL
       )
         @peer = peer
         @file = file
-        @media_count = media_count
+        @media_count = TL::Utils.parse_int!(media_count, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @file.tl_serialize(io, false)
-        @media_count.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @file.tl_serialize(io)
+        @media_count.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeHistoryImport
       end
     end
 
     class UploadImportedMedia < TLRequest
-      CONSTRUCTOR_ID = 0x2A862092
+      getter constructor_id : UInt32 = 0x2A862092_u32
+      class_getter constructor_id : UInt32 = 0x2A862092_u32
 
       getter peer : Root::TypeInputPeer
       getter import_id : Int64
@@ -6445,25 +6673,26 @@ module Proton::TL
       )
         @peer = peer
         @import_id = import_id
-        @file_name = file_name
+        @file_name = TL::Utils.parse_bytes!(file_name)
         @media = media
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @import_id.tl_serialize(io, true)
-        @file_name.tl_serialize(io, true)
-        @media.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @import_id.tl_serialize(io)
+        @file_name.tl_serialize(io)
+        @media.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeMessageMedia
       end
     end
 
     class StartHistoryImport < TLRequest
-      CONSTRUCTOR_ID = 0xB43DF344
+      getter constructor_id : UInt32 = 0xB43DF344_u32
+      class_getter constructor_id : UInt32 = 0xB43DF344_u32
 
       getter peer : Root::TypeInputPeer
       getter import_id : Int64
@@ -6477,18 +6706,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @import_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @import_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetExportedChatInvites < TLRequest
-      CONSTRUCTOR_ID = 0xA2B5A3F6
+      getter constructor_id : UInt32 = 0xA2B5A3F6_u32
+      class_getter constructor_id : UInt32 = 0xA2B5A3F6_u32
 
       getter peer : Root::TypeInputPeer
       getter admin_id : Root::TypeInputUser
@@ -6507,33 +6737,34 @@ module Proton::TL
       )
         @peer = peer
         @admin_id = admin_id
-        @limit = limit
+        @limit = TL::Utils.parse_int!(limit, Int32)
         @revoked = revoked
-        @offset_date = offset_date
-        @offset_link = offset_link
+        @offset_date = TL::Utils.parse_int(offset_date, Int32)
+        @offset_link = TL::Utils.parse_bytes(offset_link)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!revoked.nil? ? 8 : 0) |
-            (!offset_date.nil? ? 4 : 0) |
-            (!offset_link.nil? ? 4 : 0)
+          (!revoked.nil? ? 0x08 : 0) |
+            (!offset_date.nil? ? 0x04 : 0) |
+            (!offset_link.nil? ? 0x04 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @admin_id.tl_serialize(io, false)
-        @offset_date.tl_serialize(io, true) unless @offset_date.nil?
-        @offset_link.tl_serialize(io, true) unless @offset_link.nil?
-        @limit.tl_serialize(io, true)
+        @peer.tl_serialize(io)
+        @admin_id.tl_serialize(io)
+        @offset_date.tl_serialize(io) unless @offset_date.nil?
+        @offset_link.tl_serialize(io) unless @offset_link.nil?
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeExportedChatInvites
       end
     end
 
     class GetExportedChatInvite < TLRequest
-      CONSTRUCTOR_ID = 0x73746F5C
+      getter constructor_id : UInt32 = 0x73746F5C_u32
+      class_getter constructor_id : UInt32 = 0x73746F5C_u32
 
       getter peer : Root::TypeInputPeer
       getter link : Bytes
@@ -6543,63 +6774,75 @@ module Proton::TL
         link : Bytes | String | IO
       )
         @peer = peer
-        @link = link
+        @link = TL::Utils.parse_bytes!(link)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @link.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @link.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeExportedChatInvite
       end
     end
 
     class EditExportedChatInvite < TLRequest
-      CONSTRUCTOR_ID = 0x02E4FFBE
+      getter constructor_id : UInt32 = 0xBDCA2F75_u32
+      class_getter constructor_id : UInt32 = 0xBDCA2F75_u32
 
       getter peer : Root::TypeInputPeer
       getter link : Bytes
       getter revoked : Bool | Nil
       getter expire_date : Int32 | Nil
       getter usage_limit : Int32 | Nil
+      getter request_needed : Bool | Nil
+      getter title : Bytes | Nil
 
       def initialize(
         peer : Root::TypeInputPeer,
         link : Bytes | String | IO,
         revoked : Bool | Nil = nil,
         expire_date : Int32 | Nil = nil,
-        usage_limit : Int32 | Nil = nil
+        usage_limit : Int32 | Nil = nil,
+        request_needed : Bool | Nil = nil,
+        title : Bytes | Nil = nil
       )
         @peer = peer
-        @link = link
+        @link = TL::Utils.parse_bytes!(link)
         @revoked = revoked
-        @expire_date = expire_date
-        @usage_limit = usage_limit
+        @expire_date = TL::Utils.parse_int(expire_date, Int32)
+        @usage_limit = TL::Utils.parse_int(usage_limit, Int32)
+        @request_needed = request_needed
+        @title = TL::Utils.parse_bytes(title)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!revoked.nil? ? 4 : 0) |
-            (!expire_date.nil? ? 1 : 0) |
-            (!usage_limit.nil? ? 2 : 0)
+          (!revoked.nil? ? 0x04 : 0) |
+            (!expire_date.nil? ? 0x01 : 0) |
+            (!usage_limit.nil? ? 0x02 : 0) |
+            (!request_needed.nil? ? 0x08 : 0) |
+            (!title.nil? ? 0x10 : 0)
         ).tl_serialize(io)
-        @peer.tl_serialize(io, false)
-        @link.tl_serialize(io, true)
-        @expire_date.tl_serialize(io, true) unless @expire_date.nil?
-        @usage_limit.tl_serialize(io, true) unless @usage_limit.nil?
+        @peer.tl_serialize(io)
+        @link.tl_serialize(io)
+        @expire_date.tl_serialize(io) unless @expire_date.nil?
+        @usage_limit.tl_serialize(io) unless @usage_limit.nil?
+        @request_needed.tl_serialize(io) unless @request_needed.nil?
+        @title.tl_serialize(io) unless @title.nil?
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeExportedChatInvite
       end
     end
 
     class DeleteRevokedExportedChatInvites < TLRequest
-      CONSTRUCTOR_ID = 0x56987BD5
+      getter constructor_id : UInt32 = 0x56987BD5_u32
+      class_getter constructor_id : UInt32 = 0x56987BD5_u32
 
       getter peer : Root::TypeInputPeer
       getter admin_id : Root::TypeInputUser
@@ -6613,18 +6856,19 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @admin_id.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @admin_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class DeleteExportedChatInvite < TLRequest
-      CONSTRUCTOR_ID = 0xD464A42B
+      getter constructor_id : UInt32 = 0xD464A42B_u32
+      class_getter constructor_id : UInt32 = 0xD464A42B_u32
 
       getter peer : Root::TypeInputPeer
       getter link : Bytes
@@ -6634,22 +6878,23 @@ module Proton::TL
         link : Bytes | String | IO
       )
         @peer = peer
-        @link = link
+        @link = TL::Utils.parse_bytes!(link)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @link.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @link.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Bool
       end
     end
 
     class GetAdminsWithInvites < TLRequest
-      CONSTRUCTOR_ID = 0x3920E6EF
+      getter constructor_id : UInt32 = 0x3920E6EF_u32
+      class_getter constructor_id : UInt32 = 0x3920E6EF_u32
 
       getter peer : Root::TypeInputPeer
 
@@ -6660,54 +6905,68 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeChatAdminsWithInvites
       end
     end
 
     class GetChatInviteImporters < TLRequest
-      CONSTRUCTOR_ID = 0x26FB7289
+      getter constructor_id : UInt32 = 0xDF04DD4E_u32
+      class_getter constructor_id : UInt32 = 0xDF04DD4E_u32
 
       getter peer : Root::TypeInputPeer
-      getter link : Bytes
       getter offset_date : Int32
       getter offset_user : Root::TypeInputUser
       getter limit : Int32
+      getter requested : Bool | Nil
+      getter link : Bytes | Nil
+      getter q : Bytes | Nil
 
       def initialize(
         peer : Root::TypeInputPeer,
-        link : Bytes | String | IO,
         offset_date : Int32,
         offset_user : Root::TypeInputUser,
-        limit : Int32
+        limit : Int32,
+        requested : Bool | Nil = nil,
+        link : Bytes | Nil = nil,
+        q : Bytes | Nil = nil
       )
         @peer = peer
-        @link = link
-        @offset_date = offset_date
+        @offset_date = TL::Utils.parse_int!(offset_date, Int32)
         @offset_user = offset_user
-        @limit = limit
+        @limit = TL::Utils.parse_int!(limit, Int32)
+        @requested = requested
+        @link = TL::Utils.parse_bytes(link)
+        @q = TL::Utils.parse_bytes(q)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @link.tl_serialize(io, true)
-        @offset_date.tl_serialize(io, true)
-        @offset_user.tl_serialize(io, false)
-        @limit.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        (
+          (!requested.nil? ? 0x01 : 0) |
+            (!link.nil? ? 0x02 : 0) |
+            (!q.nil? ? 0x04 : 0)
+        ).tl_serialize(io)
+        @peer.tl_serialize(io)
+        @link.tl_serialize(io) unless @link.nil?
+        @q.tl_serialize(io) unless @q.nil?
+        @offset_date.tl_serialize(io)
+        @offset_user.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeChatInviteImporters
       end
     end
 
     class SetHistoryTTL < TLRequest
-      CONSTRUCTOR_ID = 0xB80E5FE4
+      getter constructor_id : UInt32 = 0xB80E5FE4_u32
+      class_getter constructor_id : UInt32 = 0xB80E5FE4_u32
 
       getter peer : Root::TypeInputPeer
       getter period : Int32
@@ -6717,22 +6976,23 @@ module Proton::TL
         period : Int32
       )
         @peer = peer
-        @period = period
+        @period = TL::Utils.parse_int!(period, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @period.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @period.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class CheckHistoryImportPeer < TLRequest
-      CONSTRUCTOR_ID = 0x5DC60F03
+      getter constructor_id : UInt32 = 0x5DC60F03_u32
+      class_getter constructor_id : UInt32 = 0x5DC60F03_u32
 
       getter peer : Root::TypeInputPeer
 
@@ -6743,17 +7003,18 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeCheckedHistoryImportPeer
       end
     end
 
     class SetChatTheme < TLRequest
-      CONSTRUCTOR_ID = 0xE63BE13F
+      getter constructor_id : UInt32 = 0xE63BE13F_u32
+      class_getter constructor_id : UInt32 = 0xE63BE13F_u32
 
       getter peer : Root::TypeInputPeer
       getter emoticon : Bytes
@@ -6763,22 +7024,23 @@ module Proton::TL
         emoticon : Bytes | String | IO
       )
         @peer = peer
-        @emoticon = emoticon
+        @emoticon = TL::Utils.parse_bytes!(emoticon)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @emoticon.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @emoticon.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Root::TypeUpdates
       end
     end
 
     class GetMessageReadParticipants < TLRequest
-      CONSTRUCTOR_ID = 0x2C6F97B7
+      getter constructor_id : UInt32 = 0x2C6F97B7_u32
+      class_getter constructor_id : UInt32 = 0x2C6F97B7_u32
 
       getter peer : Root::TypeInputPeer
       getter msg_id : Int32
@@ -6788,17 +7050,202 @@ module Proton::TL
         msg_id : Int32
       )
         @peer = peer
-        @msg_id = msg_id
+        @msg_id = TL::Utils.parse_int!(msg_id, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @peer.tl_serialize(io, false)
-        @msg_id.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @msg_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Array(Int64)
+      end
+    end
+
+    class GetSearchResultsCalendar < TLRequest
+      getter constructor_id : UInt32 = 0x49F0BDE9_u32
+      class_getter constructor_id : UInt32 = 0x49F0BDE9_u32
+
+      getter peer : Root::TypeInputPeer
+      getter filter : Root::TypeMessagesFilter
+      getter offset_id : Int32
+      getter offset_date : Int32
+
+      def initialize(
+        peer : Root::TypeInputPeer,
+        filter : Root::TypeMessagesFilter,
+        offset_id : Int32,
+        offset_date : Int32
+      )
+        @peer = peer
+        @filter = filter
+        @offset_id = TL::Utils.parse_int!(offset_id, Int32)
+        @offset_date = TL::Utils.parse_int!(offset_date, Int32)
+      end
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @filter.tl_serialize(io)
+        @offset_id.tl_serialize(io)
+        @offset_date.tl_serialize(io)
+      end
+
+      def self.return_type
+        Messages::TypeSearchResultsCalendar
+      end
+    end
+
+    class GetSearchResultsPositions < TLRequest
+      getter constructor_id : UInt32 = 0x6E9583A3_u32
+      class_getter constructor_id : UInt32 = 0x6E9583A3_u32
+
+      getter peer : Root::TypeInputPeer
+      getter filter : Root::TypeMessagesFilter
+      getter offset_id : Int32
+      getter limit : Int32
+
+      def initialize(
+        peer : Root::TypeInputPeer,
+        filter : Root::TypeMessagesFilter,
+        offset_id : Int32,
+        limit : Int32
+      )
+        @peer = peer
+        @filter = filter
+        @offset_id = TL::Utils.parse_int!(offset_id, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
+      end
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @filter.tl_serialize(io)
+        @offset_id.tl_serialize(io)
+        @limit.tl_serialize(io)
+      end
+
+      def self.return_type
+        Messages::TypeSearchResultsPositions
+      end
+    end
+
+    class HideChatJoinRequest < TLRequest
+      getter constructor_id : UInt32 = 0x7FE7E815_u32
+      class_getter constructor_id : UInt32 = 0x7FE7E815_u32
+
+      getter peer : Root::TypeInputPeer
+      getter user_id : Root::TypeInputUser
+      getter approved : Bool | Nil
+
+      def initialize(
+        peer : Root::TypeInputPeer,
+        user_id : Root::TypeInputUser,
+        approved : Bool | Nil = nil
+      )
+        @peer = peer
+        @user_id = user_id
+        @approved = approved
+      end
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+        (
+          (!approved.nil? ? 0x01 : 0)
+        ).tl_serialize(io)
+        @peer.tl_serialize(io)
+        @user_id.tl_serialize(io)
+      end
+
+      def self.return_type
+        Root::TypeUpdates
+      end
+    end
+
+    class HideAllChatJoinRequests < TLRequest
+      getter constructor_id : UInt32 = 0xE085F4EA_u32
+      class_getter constructor_id : UInt32 = 0xE085F4EA_u32
+
+      getter peer : Root::TypeInputPeer
+      getter approved : Bool | Nil
+      getter link : Bytes | Nil
+
+      def initialize(
+        peer : Root::TypeInputPeer,
+        approved : Bool | Nil = nil,
+        link : Bytes | Nil = nil
+      )
+        @peer = peer
+        @approved = approved
+        @link = TL::Utils.parse_bytes(link)
+      end
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+        (
+          (!approved.nil? ? 0x01 : 0) |
+            (!link.nil? ? 0x02 : 0)
+        ).tl_serialize(io)
+        @peer.tl_serialize(io)
+        @link.tl_serialize(io) unless @link.nil?
+      end
+
+      def self.return_type
+        Root::TypeUpdates
+      end
+    end
+
+    class ToggleNoForwards < TLRequest
+      getter constructor_id : UInt32 = 0xB11EAFA2_u32
+      class_getter constructor_id : UInt32 = 0xB11EAFA2_u32
+
+      getter peer : Root::TypeInputPeer
+      getter enabled : Bool
+
+      def initialize(
+        peer : Root::TypeInputPeer,
+        enabled : Bool
+      )
+        @peer = peer
+        @enabled = enabled
+      end
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @enabled.tl_serialize(io)
+      end
+
+      def self.return_type
+        Root::TypeUpdates
+      end
+    end
+
+    class SaveDefaultSendAs < TLRequest
+      getter constructor_id : UInt32 = 0xCCFDDF96_u32
+      class_getter constructor_id : UInt32 = 0xCCFDDF96_u32
+
+      getter peer : Root::TypeInputPeer
+      getter send_as : Root::TypeInputPeer
+
+      def initialize(
+        peer : Root::TypeInputPeer,
+        send_as : Root::TypeInputPeer
+      )
+        @peer = peer
+        @send_as = send_as
+      end
+
+      def tl_serialize(io : IO, bare = false)
+        constructor_id.tl_serialize(io) unless bare
+        @peer.tl_serialize(io)
+        @send_as.tl_serialize(io)
+      end
+
+      def self.return_type
+        Bool
       end
     end
   end

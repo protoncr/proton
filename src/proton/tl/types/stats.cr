@@ -15,14 +15,12 @@ module Proton::TL
   module Stats
     abstract class TypeBroadcastStats < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xBDF78394
           BroadcastStats.tl_deserialize(io, bare)
-        when 0xAB42441A
-          GetBroadcastStats.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -31,14 +29,12 @@ module Proton::TL
 
     abstract class TypeMegagroupStats < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0xEF7FF916
           MegagroupStats.tl_deserialize(io, bare)
-        when 0xDCDF8607
-          GetMegagroupStats.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -47,14 +43,12 @@ module Proton::TL
 
     abstract class TypeMessageStats < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
         when 0x8999F295
           MessageStats.tl_deserialize(io, bare)
-        when 0xB6E0A3F5
-          GetMessageStats.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -63,12 +57,10 @@ module Proton::TL
 
     abstract class TypeStatsGraph < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x621D5FA0
-          LoadAsyncGraph.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -77,12 +69,10 @@ module Proton::TL
 
     abstract class TypeMessages < TLObject
       def self.tl_deserialize(io : IO, bare = false)
-        constructor_id = Int32.tl_deserialize(io)
+        constructor_id = UInt32.tl_deserialize(io)
         io.seek(-4, :current)
 
         case constructor_id
-        when 0x5630281B
-          GetMessagePublicForwards.tl_deserialize(io, bare)
         else
           raise "Unknown constructor id: #{constructor_id}"
         end
@@ -90,7 +80,8 @@ module Proton::TL
     end
 
     class BroadcastStats < TypeBroadcastStats
-      CONSTRUCTOR_ID = 0xBDF78394
+      getter constructor_id : UInt32 = 0xBDF78394_u32
+      class_getter constructor_id : UInt32 = 0xBDF78394_u32
 
       getter period : Root::TypeStatsDateRangeDays
       getter followers : Root::TypeStatsAbsValueAndPrev
@@ -143,47 +134,49 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @period.tl_serialize(io, false)
-        @followers.tl_serialize(io, false)
-        @views_per_post.tl_serialize(io, false)
-        @shares_per_post.tl_serialize(io, false)
-        @enabled_notifications.tl_serialize(io, false)
-        @growth_graph.tl_serialize(io, false)
-        @followers_graph.tl_serialize(io, false)
-        @mute_graph.tl_serialize(io, false)
-        @top_hours_graph.tl_serialize(io, false)
-        @interactions_graph.tl_serialize(io, false)
-        @iv_interactions_graph.tl_serialize(io, false)
-        @views_by_source_graph.tl_serialize(io, false)
-        @new_followers_by_source_graph.tl_serialize(io, false)
-        @languages_graph.tl_serialize(io, false)
-        @recent_message_interactions.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @period.tl_serialize(io)
+        @followers.tl_serialize(io)
+        @views_per_post.tl_serialize(io)
+        @shares_per_post.tl_serialize(io)
+        @enabled_notifications.tl_serialize(io)
+        @growth_graph.tl_serialize(io)
+        @followers_graph.tl_serialize(io)
+        @mute_graph.tl_serialize(io)
+        @top_hours_graph.tl_serialize(io)
+        @interactions_graph.tl_serialize(io)
+        @iv_interactions_graph.tl_serialize(io)
+        @views_by_source_graph.tl_serialize(io)
+        @new_followers_by_source_graph.tl_serialize(io)
+        @languages_graph.tl_serialize(io)
+        @recent_message_interactions.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          period: Root::TypeStatsDateRangeDays.tl_deserialize(io, false),
-          followers: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io, false),
-          views_per_post: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io, false),
-          shares_per_post: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io, false),
-          enabled_notifications: Root::TypeStatsPercentValue.tl_deserialize(io, false),
-          growth_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          followers_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          mute_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          top_hours_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          interactions_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          iv_interactions_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          views_by_source_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          new_followers_by_source_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          languages_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          recent_message_interactions: Array(Root::TypeMessageInteractionCounters).tl_deserialize(io, false),
+          period: Root::TypeStatsDateRangeDays.tl_deserialize(io),
+          followers: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io),
+          views_per_post: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io),
+          shares_per_post: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io),
+          enabled_notifications: Root::TypeStatsPercentValue.tl_deserialize(io),
+          growth_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          followers_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          mute_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          top_hours_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          interactions_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          iv_interactions_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          views_by_source_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          new_followers_by_source_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          languages_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          recent_message_interactions: Array(Root::TypeMessageInteractionCounters).tl_deserialize(io),
         )
       end
     end
 
     class MegagroupStats < TypeMegagroupStats
-      CONSTRUCTOR_ID = 0xEF7FF916
+      getter constructor_id : UInt32 = 0xEF7FF916_u32
+      class_getter constructor_id : UInt32 = 0xEF7FF916_u32
 
       getter period : Root::TypeStatsDateRangeDays
       getter members : Root::TypeStatsAbsValueAndPrev
@@ -242,51 +235,53 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @period.tl_serialize(io, false)
-        @members.tl_serialize(io, false)
-        @messages.tl_serialize(io, false)
-        @viewers.tl_serialize(io, false)
-        @posters.tl_serialize(io, false)
-        @growth_graph.tl_serialize(io, false)
-        @members_graph.tl_serialize(io, false)
-        @new_members_by_source_graph.tl_serialize(io, false)
-        @languages_graph.tl_serialize(io, false)
-        @messages_graph.tl_serialize(io, false)
-        @actions_graph.tl_serialize(io, false)
-        @top_hours_graph.tl_serialize(io, false)
-        @weekdays_graph.tl_serialize(io, false)
-        @top_posters.tl_serialize(io, false)
-        @top_admins.tl_serialize(io, false)
-        @top_inviters.tl_serialize(io, false)
-        @users.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @period.tl_serialize(io)
+        @members.tl_serialize(io)
+        @messages.tl_serialize(io)
+        @viewers.tl_serialize(io)
+        @posters.tl_serialize(io)
+        @growth_graph.tl_serialize(io)
+        @members_graph.tl_serialize(io)
+        @new_members_by_source_graph.tl_serialize(io)
+        @languages_graph.tl_serialize(io)
+        @messages_graph.tl_serialize(io)
+        @actions_graph.tl_serialize(io)
+        @top_hours_graph.tl_serialize(io)
+        @weekdays_graph.tl_serialize(io)
+        @top_posters.tl_serialize(io)
+        @top_admins.tl_serialize(io)
+        @top_inviters.tl_serialize(io)
+        @users.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          period: Root::TypeStatsDateRangeDays.tl_deserialize(io, false),
-          members: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io, false),
-          messages: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io, false),
-          viewers: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io, false),
-          posters: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io, false),
-          growth_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          members_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          new_members_by_source_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          languages_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          messages_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          actions_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          top_hours_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          weekdays_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
-          top_posters: Array(Root::TypeStatsGroupTopPoster).tl_deserialize(io, false),
-          top_admins: Array(Root::TypeStatsGroupTopAdmin).tl_deserialize(io, false),
-          top_inviters: Array(Root::TypeStatsGroupTopInviter).tl_deserialize(io, false),
-          users: Array(Root::TypeUser).tl_deserialize(io, false),
+          period: Root::TypeStatsDateRangeDays.tl_deserialize(io),
+          members: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io),
+          messages: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io),
+          viewers: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io),
+          posters: Root::TypeStatsAbsValueAndPrev.tl_deserialize(io),
+          growth_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          members_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          new_members_by_source_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          languages_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          messages_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          actions_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          top_hours_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          weekdays_graph: Root::TypeStatsGraph.tl_deserialize(io),
+          top_posters: Array(Root::TypeStatsGroupTopPoster).tl_deserialize(io),
+          top_admins: Array(Root::TypeStatsGroupTopAdmin).tl_deserialize(io),
+          top_inviters: Array(Root::TypeStatsGroupTopInviter).tl_deserialize(io),
+          users: Array(Root::TypeUser).tl_deserialize(io),
         )
       end
     end
 
     class MessageStats < TypeMessageStats
-      CONSTRUCTOR_ID = 0x8999F295
+      getter constructor_id : UInt32 = 0x8999F295_u32
+      class_getter constructor_id : UInt32 = 0x8999F295_u32
 
       getter views_graph : Root::TypeStatsGraph
 
@@ -297,19 +292,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @views_graph.tl_serialize(io, false)
+        constructor_id.tl_serialize(io) unless bare
+        @views_graph.tl_serialize(io)
       end
 
       def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          views_graph: Root::TypeStatsGraph.tl_deserialize(io, false),
+          views_graph: Root::TypeStatsGraph.tl_deserialize(io),
         )
       end
     end
 
     class GetBroadcastStats < TLRequest
-      CONSTRUCTOR_ID = 0xAB42441A
+      getter constructor_id : UInt32 = 0xAB42441A_u32
+      class_getter constructor_id : UInt32 = 0xAB42441A_u32
 
       getter channel : Root::TypeInputChannel
       getter dark : Bool | Nil
@@ -323,20 +320,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!dark.nil? ? 1 : 0)
+          (!dark.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @channel.tl_serialize(io, false)
+        @channel.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Stats::TypeBroadcastStats
       end
     end
 
     class LoadAsyncGraph < TLRequest
-      CONSTRUCTOR_ID = 0x621D5FA0
+      getter constructor_id : UInt32 = 0x621D5FA0_u32
+      class_getter constructor_id : UInt32 = 0x621D5FA0_u32
 
       getter token : Bytes
       getter x : Int64 | Nil
@@ -345,26 +343,27 @@ module Proton::TL
         token : Bytes | String | IO,
         x : Int64 | Nil = nil
       )
-        @token = token
+        @token = TL::Utils.parse_bytes!(token)
         @x = x
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!x.nil? ? 1 : 0)
+          (!x.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @token.tl_serialize(io, true)
-        @x.tl_serialize(io, true) unless @x.nil?
+        @token.tl_serialize(io)
+        @x.tl_serialize(io) unless @x.nil?
       end
 
-      def return_type
+      def self.return_type
         Root::TypeStatsGraph
       end
     end
 
     class GetMegagroupStats < TLRequest
-      CONSTRUCTOR_ID = 0xDCDF8607
+      getter constructor_id : UInt32 = 0xDCDF8607_u32
+      class_getter constructor_id : UInt32 = 0xDCDF8607_u32
 
       getter channel : Root::TypeInputChannel
       getter dark : Bool | Nil
@@ -378,20 +377,21 @@ module Proton::TL
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!dark.nil? ? 1 : 0)
+          (!dark.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @channel.tl_serialize(io, false)
+        @channel.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Stats::TypeMegagroupStats
       end
     end
 
     class GetMessagePublicForwards < TLRequest
-      CONSTRUCTOR_ID = 0x5630281B
+      getter constructor_id : UInt32 = 0x5630281B_u32
+      class_getter constructor_id : UInt32 = 0x5630281B_u32
 
       getter channel : Root::TypeInputChannel
       getter msg_id : Int32
@@ -409,30 +409,31 @@ module Proton::TL
         limit : Int32
       )
         @channel = channel
-        @msg_id = msg_id
-        @offset_rate = offset_rate
+        @msg_id = TL::Utils.parse_int!(msg_id, Int32)
+        @offset_rate = TL::Utils.parse_int!(offset_rate, Int32)
         @offset_peer = offset_peer
-        @offset_id = offset_id
-        @limit = limit
+        @offset_id = TL::Utils.parse_int!(offset_id, Int32)
+        @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
-        @channel.tl_serialize(io, false)
-        @msg_id.tl_serialize(io, true)
-        @offset_rate.tl_serialize(io, true)
-        @offset_peer.tl_serialize(io, false)
-        @offset_id.tl_serialize(io, true)
-        @limit.tl_serialize(io, true)
+        constructor_id.tl_serialize(io) unless bare
+        @channel.tl_serialize(io)
+        @msg_id.tl_serialize(io)
+        @offset_rate.tl_serialize(io)
+        @offset_peer.tl_serialize(io)
+        @offset_id.tl_serialize(io)
+        @limit.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Messages::TypeMessages
       end
     end
 
     class GetMessageStats < TLRequest
-      CONSTRUCTOR_ID = 0xB6E0A3F5
+      getter constructor_id : UInt32 = 0xB6E0A3F5_u32
+      class_getter constructor_id : UInt32 = 0xB6E0A3F5_u32
 
       getter channel : Root::TypeInputChannel
       getter msg_id : Int32
@@ -444,20 +445,20 @@ module Proton::TL
         dark : Bool | Nil = nil
       )
         @channel = channel
-        @msg_id = msg_id
+        @msg_id = TL::Utils.parse_int!(msg_id, Int32)
         @dark = dark
       end
 
       def tl_serialize(io : IO, bare = false)
-        CONSTRUCTOR_ID.tl_serialize(io) unless bare
+        constructor_id.tl_serialize(io) unless bare
         (
-          (!dark.nil? ? 1 : 0)
+          (!dark.nil? ? 0x01 : 0)
         ).tl_serialize(io)
-        @channel.tl_serialize(io, false)
-        @msg_id.tl_serialize(io, true)
+        @channel.tl_serialize(io)
+        @msg_id.tl_serialize(io)
       end
 
-      def return_type
+      def self.return_type
         Stats::TypeMessageStats
       end
     end

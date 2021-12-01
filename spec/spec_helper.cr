@@ -1,6 +1,8 @@
 require "../src/proton"
-
 require "spectator"
+
+# Simplify namespacing a bit
+include Proton
 
 Spectator.configure do |config|
   config.fail_blank # Fail on no tests.
