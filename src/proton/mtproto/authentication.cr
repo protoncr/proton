@@ -205,7 +205,7 @@ module Proton
           nonce: BigInt.from_bytes(nonce, 128),
           server_nonce: BigInt.from_bytes(server_nonce, 128),
           retry_id: 0_i64, # TODO: Use a real retry id
-          g_b: g_b.to_slice(IO::ByteFormat::BigEndian)      ).to_bytes
+          g_b: g_b.to_slice(IO::ByteFormat::BigEndian)        ).to_bytes
 
         # sha1(client_dh_inner).digest() + client_dh_inner
         client_dh_inner_hashed = begin

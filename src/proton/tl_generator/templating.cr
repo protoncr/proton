@@ -4,12 +4,12 @@ require "tl_parser"
 
 ACCEPTABLE_TYPES = {
   "string" => ["Bytes", "String", "IO"],
-  "bytes" => ["Bytes", "String", "IO"],
-  "int64" => ["Int32", "Int64"],
+  "bytes"  => ["Bytes", "String", "IO"],
+  "int64"  => ["Int32", "Int64"],
   "int128" => ["BigInt", "Int::Primitive"],
   "int256" => ["BigInt", "Int::Primitive"],
-  "!X" => ["TLObject"],
-  "date" => ["Int64", "Time"],
+  "!X"     => ["TLObject"],
+  "date"   => ["Int64", "Time"],
 }
 
 def classify(name : String)
@@ -56,7 +56,7 @@ def type_to_crystal(type : String)
   end
 end
 
-@[Crinja::Attributes()]
+@[Crinja::Attributes]
 class TLParser::Definition
   include Crinja::Object
 
@@ -84,12 +84,12 @@ class TLParser::Definition
   end
 end
 
-@[Crinja::Attributes()]
+@[Crinja::Attributes]
 struct TLParser::Flag
   include Crinja::Object::Auto
 end
 
-@[Crinja::Attributes()]
+@[Crinja::Attributes]
 struct TLParser::FlagsParam
   include Crinja::Object
 
@@ -105,7 +105,7 @@ struct TLParser::FlagsParam
   end
 end
 
-@[Crinja::Attributes()]
+@[Crinja::Attributes]
 struct TLParser::NormalParam
   include Crinja::Object
 
@@ -125,7 +125,7 @@ struct TLParser::NormalParam
   end
 end
 
-@[Crinja::Attributes()]
+@[Crinja::Attributes]
 class TLParser::Parameter
   include Crinja::Object
 
@@ -147,7 +147,7 @@ class TLParser::Parameter
   end
 
   def acceptable_types
-    ACCEPTABLE_TYPES[type.to_s]? || [ crystal_type ]
+    ACCEPTABLE_TYPES[type.to_s]? || [crystal_type]
   end
 
   def crinja_attribute(attr : Crinja::Value) : Crinja::Value
@@ -170,7 +170,7 @@ class TLParser::Parameter
   end
 end
 
-@[Crinja::Attributes()]
+@[Crinja::Attributes]
 class TLParser::Type
   include Crinja::Object::Auto
 
@@ -179,7 +179,7 @@ class TLParser::Type
   end
 
   def acceptable_types
-    ACCEPTABLE_TYPES[to_s]? || [ to_s ]
+    ACCEPTABLE_TYPES[to_s]? || [to_s]
   end
 end
 
@@ -190,8 +190,8 @@ class Crinja
 
   module Filter
     Crinja.filter(:classify) { classify(target.to_s) }
-    Crinja.filter({ lower: false }, :camelcase) { target.to_s.camelcase(lower: arguments["lower"].truthy?) }
-    Crinja.filter({ pad_to: 0, capitalize: false }, :hex) do
+    Crinja.filter({lower: false}, :camelcase) { target.to_s.camelcase(lower: arguments["lower"].truthy?) }
+    Crinja.filter({pad_to: 0, capitalize: false}, :hex) do
       hex = target.to_s.to_u64.to_s(16)
       pad_to = arguments["pad_to"].to_i
       if pad_to > 0 && hex.size < pad_to

@@ -3,7 +3,7 @@ require "../spec_helper"
 Spectator.describe Proton::MTProto::IntermediateTransport do
   subject(pack) do
     input = Bytes.new(n).map_with_index! { |_, i| (i & 0xff).to_u8 }
-    { Proton::MTProto::IntermediateTransport.new, IO::Memory.new(input), IO::Memory.new }
+    {Proton::MTProto::IntermediateTransport.new, IO::Memory.new(input), IO::Memory.new}
   end
 
   describe "#pack" do
@@ -48,7 +48,7 @@ end
 Spectator.describe Proton::MTProto::AbridgedTransport do
   subject(pack) do
     input = Bytes.new(n).map_with_index! { |_, i| (i & 0xff).to_u8 }
-    { Proton::MTProto::AbridgedTransport.new, IO::Memory.new(input), IO::Memory.new }
+    {Proton::MTProto::AbridgedTransport.new, IO::Memory.new(input), IO::Memory.new}
   end
 
   describe "#pack" do
@@ -109,13 +109,13 @@ end
 Spectator.describe Proton::MTProto::FullTransport do
   subject(pack) do
     input = Bytes.new(n).map_with_index! { |_, i| (i & 0xff).to_u8 }
-    { Proton::MTProto::FullTransport.new, IO::Memory.new(input), IO::Memory.new }
+    {Proton::MTProto::FullTransport.new, IO::Memory.new(input), IO::Memory.new}
   end
 
   subject(unpack) do
     transport, expected_output, input = pack
     transport.pack(expected_output, input)
-    { expected_output, Proton::MTProto::FullTransport.new, input, IO::Memory.new }
+    {expected_output, Proton::MTProto::FullTransport.new, input, IO::Memory.new}
   end
 
   describe "#pack" do

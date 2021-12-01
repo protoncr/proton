@@ -62,16 +62,16 @@ module Proton
 
         len = input.read_bytes(UInt8)
         len = if len < 127
-          header_len = 1
-          len.to_u32
-        else
-          if input.size < 4
-            raise MissingBytesError.new
-          end
+                header_len = 1
+                len.to_u32
+              else
+                if input.size < 4
+                  raise MissingBytesError.new
+                end
 
-          header_len = 4
-          input.read_bytes(UInt32, IO::ByteFormat::LittleEndian)
-        end
+                header_len = 4
+                input.read_bytes(UInt32, IO::ByteFormat::LittleEndian)
+              end
 
         len = len * 4
         if input.size < header_len + len

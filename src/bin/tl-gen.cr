@@ -1,10 +1,10 @@
 require "json"
 require "../proton/tl_generator/generator"
 
-GEN_TL = Bool.from_json(ENV.fetch("PROTON_GEN_TL", "true"))
+GEN_TL      = Bool.from_json(ENV.fetch("PROTON_GEN_TL", "true"))
 TL_API_FILE = ENV.fetch("PROTON_TL_API_FILE", Path[__DIR__, "../proton/tl_generator/data/api.tl"].expand.to_s)
 
-GEN_MT = Bool.from_json(ENV.fetch("PROTON_GEN_MT", "true"))
+GEN_MT      = Bool.from_json(ENV.fetch("PROTON_GEN_MT", "true"))
 MT_API_FILE = ENV.fetch("PROTON_MT_API_FILE", Path[__DIR__, "../proton/tl_generator/data/mtproto.tl"].expand.to_s)
 
 OUTPUT_DIR = ENV.fetch("PROTON_TL_OUTPUT_DIR", Path[__DIR__, "../proton/tl"].expand.to_s)

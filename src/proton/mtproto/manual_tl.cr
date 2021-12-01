@@ -13,7 +13,7 @@ module Proton
     # the response object from Telegram.
     class Message
       include TL::Serializable
-      extend  TL::Deserializable
+      extend TL::Deserializable
       include TL::Identifiable
 
       # msg_id (8 bytes), seq_no (4 bytes), bytes (4 len)
@@ -28,7 +28,7 @@ module Proton
       def initialize(
         msg_id : Int64,
         seq_no : Int32,
-        body : Bytes | String | IO,
+        body : Bytes | String | IO
       )
         @msg_id = msg_id
         @seq_no = seq_no
@@ -114,9 +114,9 @@ module Proton
     # msg_container#73f1f8dc messages:vector<message> = MessageContainer;
     # ```
     class MessageContainer
-      extend  TL::Deserializable
+      extend TL::Deserializable
       include TL::Identifiable
-      extend  TL::Identifiable
+      extend TL::Identifiable
 
       getter constructor_id : UInt32 = 0x73f1f8dc_u32
       class_getter constructor_id : UInt32 = 0x73f1f8dc_u32
@@ -172,7 +172,7 @@ module Proton
     # Note: that this is "not used", in favour of `msg_container`.
     class MessageCopy
       include TL::Identifiable
-      extend  TL::Identifiable
+      extend TL::Identifiable
 
       getter constructor_id : UInt32 = 0xe06046b2_u32
       class_getter constructor_id : UInt32 = 0xe06046b2_u32
@@ -180,7 +180,7 @@ module Proton
       getter orig_message : Array(Message)
 
       def initialize(
-        orig_message : Array(Message),
+        orig_message : Array(Message)
       )
         @orig_message = orig_message
       end
@@ -193,9 +193,9 @@ module Proton
     # ```
     class GzipPacked
       include TL::Serializable
-      extend  TL::Deserializable
+      extend TL::Deserializable
       include TL::Identifiable
-      extend  TL::Identifiable
+      extend TL::Identifiable
 
       getter constructor_id : UInt32 = 0x3072cfa1_u32
       class_getter constructor_id : UInt32 = 0x3072cfa1_u32

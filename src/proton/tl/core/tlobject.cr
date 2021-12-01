@@ -1,10 +1,10 @@
 module Proton::TL
   abstract class TLObject
     include TL::Serializable
-    extend  TL::Deserializable
+    extend TL::Deserializable
 
     include TL::Identifiable
-    extend  TL::Identifiable
+    extend TL::Identifiable
 
     def ==(other)
       return false unless self.class == other.class
@@ -17,6 +17,6 @@ module Proton::TL
 
   abstract class TLRequest
     include TL::Serializable
-    extend  TL::RemoteCallable
+    extend TL::RemoteCallable
   end
 end

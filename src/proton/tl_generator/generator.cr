@@ -21,8 +21,8 @@ module Proton::Generator
   }
 
   PRIMITIVE_SUPER_CLASSES = ["Bool", "True", "Null"]
-  PRIMITIVE_TYPES = ["int", "int53", "int128", "int256", "long", "double", "bytes", "string", "true", "date", "vector", "Vector", "!X"]
-  OPTIONAL_KEYS = ["; may be null", "; may be empty", "for bots only", "pass null", "if known", "if available"]
+  PRIMITIVE_TYPES         = ["int", "int53", "int128", "int256", "long", "double", "bytes", "string", "true", "date", "vector", "Vector", "!X"]
+  OPTIONAL_KEYS           = ["; may be null", "; may be empty", "for bots only", "pass null", "if known", "if available"]
 
   def extract_layer(file : String)
     lines = file.lines
@@ -36,9 +36,8 @@ module Proton::Generator
     definitions : Array(TLParser::Definition),
     layer : Int32,
     *,
-    module_root : String = "Proton::TL",
+    module_root : String = "Proton::TL"
   )
-
     types_dir = File.join(output_dir, "types")
     defs = definitions.reject { |d| d.id.in?(CORE_TYPES) }
     ns_defs = defs.group_by { |d| d.namespace }
@@ -62,15 +61,15 @@ module Proton::Generator
         raw_file = File.read(file)
         rendered = Crinja.render(raw_file, {
           depth: dirname == "." ? 0 : dirname.parts.size,
-          defs: defs,
-          }, config: CRINJA_CONFIG)
+          defs:  defs,
+        }, config: CRINJA_CONFIG)
 
-          output_file = Path[output_dir, dirname, basename].normalize
-          File.write(output_file, rendered)
-        else
-          basename = File.basename(file)
-          output_file = Path[output_dir, dirname, basename].normalize
-          FileUtils.cp(file, output_file)
+        output_file = Path[output_dir, dirname, basename].normalize
+        File.write(output_file, rendered)
+      else
+        basename = File.basename(file)
+        output_file = Path[output_dir, dirname, basename].normalize
+        FileUtils.cp(file, output_file)
       end
     end
 
@@ -121,12 +120,12 @@ module Proton::Generator
 
       File.open(File.join(ns_dir, ns_file), "w") do |f|
         rendered = Crinja.render(template, {
-          depth: depth,
-          namespace: namespace,
-          namespaces: namespaces,
-          module_root: module_root,
-          definitions: defs.sort_by { |d| d.category },
-          ns_types: ns_types,
+          depth:         depth,
+          namespace:     namespace,
+          namespaces:    namespaces,
+          module_root:   module_root,
+          definitions:   defs.sort_by { |d| d.category },
+          ns_types:      ns_types,
           ns_references: ns_references,
         }, config: CRINJA_CONFIG)
         formatted = Crystal.format(rendered, ns_file)
