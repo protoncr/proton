@@ -1,5 +1,6 @@
 require "../src/proton"
 require "spectator"
+require "timecop"
 
 # Simplify namespacing a bit
 include Proton

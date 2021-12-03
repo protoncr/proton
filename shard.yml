@@ -36,3 +36,6 @@ development_dependencies:
   spectator:
     gitlab: arctic-fox/spectator
     branch: master
+  timecop:
+    github: crystal-community/timecop.cr
+    version: ~> 0.4.1

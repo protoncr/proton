@@ -1,3 +1,5 @@
+require "../crypto/lib"
+
 require "./errors"
 require "./utils"
 require "./manual_tl"
@@ -7,6 +9,10 @@ require "./transport/base"
 require "./transport/intermediate"
 require "./transport/abridged"
 require "./transport/full"
+
+require "./mtp/base"
+require "./mtp/plain"
+require "./mtp/encrypted"
 
 module Proton
   # This library is an implementation of the [Mobile Transport Protocol].
@@ -18,7 +24,7 @@ module Proton
   # [Mobile Transport Protocol]: https://core.telegram.org/mtproto
   module MTProto
     # The default compression threshold to be used.
-    DEFAULT_COMPRESSION_THRESHOLD = 512
+    DEFAULT_COMPRESSION_THRESHOLD = 512_u32
 
     # A Message Identifier.
     #

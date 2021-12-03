@@ -99,7 +99,7 @@ module Proton
 
       def self.step3(data : Step2, response : Bytes)
         random_bytes = Random::Secure.random_bytes(256 + 16)
-        now = Time.now.to_unix.to_i32
+        now = Time.local.to_unix.to_i32
         do_step3(data, response, random_bytes, now.to_i32)
       end
 

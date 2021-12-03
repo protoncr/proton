@@ -40,7 +40,7 @@ module Proton
         IO::ByteFormat::LittleEndian.decode(UInt32, @result[0..3])
       end
 
-      def requires_ack
+      def requires_ack?
         #  > Content-related Message
         #  >   A message requiring an explicit acknowledgment.
         #  > [...]
