@@ -152,7 +152,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Photos::TypePhoto
       end
     end
@@ -187,7 +187,7 @@ module Proton::TL
         @video_start_ts.tl_serialize(io) unless @video_start_ts.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Photos::TypePhoto
       end
     end
@@ -209,7 +209,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Int64)
       end
     end
@@ -243,7 +243,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Photos::TypePhotos
       end
     end

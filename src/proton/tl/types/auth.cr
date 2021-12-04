@@ -650,7 +650,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeSentCode
       end
     end
@@ -684,7 +684,7 @@ module Proton::TL
         @last_name.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -714,7 +714,7 @@ module Proton::TL
         @phone_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -727,7 +727,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeLoggedOut
       end
     end
@@ -740,7 +740,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -762,7 +762,7 @@ module Proton::TL
         @dc_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeExportedAuthorization
       end
     end
@@ -788,7 +788,7 @@ module Proton::TL
         @bytes.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -822,7 +822,7 @@ module Proton::TL
         @encrypted_message.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -856,7 +856,7 @@ module Proton::TL
         @bot_auth_token.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -878,7 +878,7 @@ module Proton::TL
         @password.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -891,7 +891,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypePasswordRecovery
       end
     end
@@ -920,7 +920,7 @@ module Proton::TL
         @new_settings.tl_serialize(io) unless @new_settings.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -946,7 +946,7 @@ module Proton::TL
         @phone_code_hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeSentCode
       end
     end
@@ -972,7 +972,7 @@ module Proton::TL
         @phone_code_hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -994,7 +994,7 @@ module Proton::TL
         @except_auth_keys.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1024,7 +1024,7 @@ module Proton::TL
         @except_ids.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeLoginToken
       end
     end
@@ -1046,7 +1046,7 @@ module Proton::TL
         @token.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeLoginToken
       end
     end
@@ -1068,7 +1068,7 @@ module Proton::TL
         @token.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeAuthorization
       end
     end
@@ -1090,7 +1090,7 @@ module Proton::TL
         @code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end

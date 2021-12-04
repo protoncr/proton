@@ -327,7 +327,7 @@ module Proton::TL
         @channel.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Stats::TypeBroadcastStats
       end
     end
@@ -356,7 +356,7 @@ module Proton::TL
         @x.tl_serialize(io) unless @x.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeStatsGraph
       end
     end
@@ -384,7 +384,7 @@ module Proton::TL
         @channel.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Stats::TypeMegagroupStats
       end
     end
@@ -426,7 +426,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -458,7 +458,7 @@ module Proton::TL
         @msg_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Stats::TypeMessageStats
       end
     end

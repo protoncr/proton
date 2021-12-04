@@ -43,7 +43,7 @@ module Proton::TL
         @params.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeDataJSON
       end
     end
@@ -69,7 +69,7 @@ module Proton::TL
         @data.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -99,7 +99,7 @@ module Proton::TL
         @commands.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -125,7 +125,7 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -151,7 +151,7 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeBotCommand)
       end
     end

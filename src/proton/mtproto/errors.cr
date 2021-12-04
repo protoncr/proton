@@ -30,9 +30,9 @@ module Proton
     end
 
     class InvalidPQSizeError < Error
-      getter size : Int32
+      getter size : Int::Primitive
 
-      def initialize(@size : Int32)
+      def initialize(@size : Int::Primitive)
         super("invalid pq size #{@size}")
       end
     end
@@ -61,9 +61,9 @@ module Proton
     end
 
     class EncryptedResponseNotPaddedError < Error
-      getter len : Int32
+      getter len : Int::Primitive
 
-      def initialize(@len : Int32)
+      def initialize(@len : Int::Primitive)
         super("the encrypted server response was #{@len} bytes long, which is not correctly padded")
       end
     end
@@ -121,7 +121,7 @@ module Proton
     # The request should be retransmited when this happens, unless the
     # variant is `InvalidParameters`.
     class RequestError < Error
-      def from(error : Exception)
+      def self.from(error : Exception)
         DeserializeError.new(error.message)
       end
     end
@@ -129,19 +129,19 @@ module Proton
     # The error type reported by the server when a request is misused.
     class RpcError < RequestError
       # A numerical value similar to HTTP status codes.
-      getter code : Int32
+      getter code : Int::Primitive
 
       # The ASCII error name, normally in screaming snake case.
       getter name : String
 
       # If the error contained an additional value, it will be present here.
-      getter value : UInt32?
+      getter value : Int::Primitive?
 
       # The constructor identifier of the request that triggered this error.
       # Won't be present if the error was artificially constructed.
-      getter caused_by : UInt32?
+      property caused_by : Int::Primitive?
 
-      def initialize(@code : Int32, @name : String, @value : UInt32? = nil, @caused_by : UInt32? = nil)
+      def initialize(@code : Int::Primitive, @name : String, @value : Int::Primitive? = nil, @caused_by : Int::Primitive? = nil)
         message = String.build do |str|
           str << "rpc error #{@code}: #{name}"
           if caused_by
@@ -173,9 +173,9 @@ module Proton
     end
 
     class BadMessageError < RequestError
-      getter code : Int32
+      getter code : Int::Primitive
 
-      def initialize(@code : Int32)
+      def initialize(@code : Int::Primitive)
         msg = case @code
               when 16
                 "msg_id too low (most likely, client time is wrong)"
@@ -214,43 +214,43 @@ module Proton
     end
 
     class BadAuthKeyError < DeserializeError
-      getter got : Int64
-      getter expected : Int64
+      getter got : Int::Primitive
+      getter expected : Int::Primitive
 
-      def initialize(@got : Int64, @expected : Int64)
+      def initialize(@got : Int::Primitive, @expected : Int::Primitive)
         super("bad server auth key (got #{@got}, expected #{@expected})")
       end
     end
 
     class BadMessageIdError < DeserializeError
-      getter got : Int32
+      getter got : Int::Primitive
 
-      def initialize(@got : Int32)
+      def initialize(@got : Int::Primitive)
         super("bad server message id (got #{@got})")
       end
     end
 
     class NegativeMessageLengthError < DeserializeError
-      getter got : Int32
+      getter got : Int::Primitive
 
-      def initialize(@got : Int32)
+      def initialize(@got : Int::Primitive)
         super("bad server message length (got #{@got})")
       end
     end
 
     class TooLongMessageLengthError < DeserializeError
-      getter got : Int32
-      getter max : Int32
+      getter got : Int::Primitive
+      getter max : Int::Primitive
 
-      def initialize(@got : UInt32, @max : UInt32)
+      def initialize(@got : Int::Primitive, @max : Int::Primitive)
         super("bad server message length (got #{got}, when at most it should be #{max})")
       end
     end
 
     class TransportError < DeserializeError
-      getter code : Int32
+      getter code : Int::Primitive
 
-      def initialize(@code : Int32)
+      def initialize(@code : Int::Primitive)
         super("transpot-level error, http status code: #{code}")
       end
     end
@@ -268,9 +268,9 @@ module Proton
     end
 
     class UnexpectedConstructorError < DeserializeError
-      getter id : UInt32
+      getter id : Int::Primitive
 
-      def initialize(@id : UInt32)
+      def initialize(@id : Int::Primitive)
         super("unexpected constructor: %08X" % @id)
       end
     end
@@ -290,27 +290,27 @@ module Proton
     end
 
     class BadLenError < Error
-      getter got : Int32
+      getter got : Int::Primitive
 
-      def initialize(@got : Int32)
+      def initialize(@got : Int::Primitive)
         super("bad length (got #{@got})")
       end
     end
 
     class BadSeqError < Error
-      getter got : UInt32
-      getter expected : UInt32
+      getter got : Int::Primitive
+      getter expected : Int::Primitive
 
-      def initialize(@got : UInt32, @expected : UInt32)
+      def initialize(@got : Int::Primitive, @expected : Int::Primitive)
         super("bad sequence (expected #{@expected}, got #{@got})")
       end
     end
 
     class BadCrcError < Error
-      getter got : UInt32
-      getter expected : UInt32
+      getter got : Int::Primitive
+      getter expected : Int::Primitive
 
-      def initialize(@got : UInt32, @expected : UInt32)
+      def initialize(@got : Int::Primitive, @expected : Int::Primitive)
         super("bad crc (expected #{@expected}, got #{@got})")
       end
     end

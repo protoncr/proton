@@ -422,7 +422,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Updates::TypeState
       end
     end
@@ -459,7 +459,7 @@ module Proton::TL
         @qts.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Updates::TypeDifference
       end
     end
@@ -499,7 +499,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Updates::TypeChannelDifference
       end
     end

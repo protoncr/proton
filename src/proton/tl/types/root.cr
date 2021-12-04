@@ -31729,7 +31729,7 @@ module Proton::TL
         @query.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bytes
       end
     end
@@ -31755,7 +31755,7 @@ module Proton::TL
         @query.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bytes
       end
     end
@@ -31817,7 +31817,7 @@ module Proton::TL
         @query.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bytes
       end
     end
@@ -31843,7 +31843,7 @@ module Proton::TL
         @query.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bytes
       end
     end
@@ -31865,7 +31865,7 @@ module Proton::TL
         @query.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bytes
       end
     end
@@ -31891,7 +31891,7 @@ module Proton::TL
         @query.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bytes
       end
     end
@@ -31917,7 +31917,7 @@ module Proton::TL
         @query.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bytes
       end
     end
@@ -31939,7 +31939,7 @@ module Proton::TL
         @nonce.tl_serialize(io, 128)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeResPQ
       end
     end
@@ -31961,7 +31961,7 @@ module Proton::TL
         @nonce.tl_serialize(io, 128)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeResPQ
       end
     end
@@ -32003,7 +32003,7 @@ module Proton::TL
         @encrypted_data.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeServerDHParams
       end
     end
@@ -32033,7 +32033,7 @@ module Proton::TL
         @encrypted_data.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeSetClientDHParamsAnswer
       end
     end
@@ -32046,7 +32046,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeDestroyAuthKeyRes
       end
     end
@@ -32068,7 +32068,7 @@ module Proton::TL
         @req_msg_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeRpcDropAnswer
       end
     end
@@ -32090,7 +32090,7 @@ module Proton::TL
         @num.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeFutureSalts
       end
     end
@@ -32112,7 +32112,7 @@ module Proton::TL
         @ping_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypePong
       end
     end
@@ -32138,7 +32138,7 @@ module Proton::TL
         @disconnect_delay.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypePong
       end
     end
@@ -32160,7 +32160,7 @@ module Proton::TL
         @session_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeDestroySessionRes
       end
     end

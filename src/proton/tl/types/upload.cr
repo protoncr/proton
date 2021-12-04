@@ -259,7 +259,7 @@ module Proton::TL
         @bytes.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -299,7 +299,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Upload::TypeFile
       end
     end
@@ -333,7 +333,7 @@ module Proton::TL
         @bytes.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -363,7 +363,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Upload::TypeWebFile
       end
     end
@@ -393,7 +393,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Upload::TypeCdnFile
       end
     end
@@ -419,7 +419,7 @@ module Proton::TL
         @request_token.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeFileHash)
       end
     end
@@ -445,7 +445,7 @@ module Proton::TL
         @offset.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeFileHash)
       end
     end
@@ -471,7 +471,7 @@ module Proton::TL
         @offset.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeFileHash)
       end
     end

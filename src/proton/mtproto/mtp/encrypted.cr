@@ -36,7 +36,7 @@ module Proton
 
       # Salts that may be used when encrypting payload, sorted by valid date descending (so the last one is the one
       # that can be used now).
-      getter salts : Array(TL::Root::FutureSalt)
+      getter salts : Array(TL::Root::TypeFutureSalt)
 
       # The `now` received from future salts along with the instant when it occured.
       #
@@ -81,7 +81,7 @@ module Proton
       def initialize(
         @auth_key : Crypto::AuthKey,
         @time_offset : Int32,
-        @salts : Array(TL::Root::FutureSalt),
+        @salts : Array(TL::Root::TypeFutureSalt),
         @start_salt_time : Tuple(Int32, Time::Span)?,
         @client_id : Int64,
         @sequence : Int32,
@@ -210,13 +210,13 @@ module Proton
           self.handle_bad_notfication(message)
         when TL::Root::MsgsStateReq.constructor_id
           # Request for Message Status Information
-          self.handle_msg_state_req(message)
+          self.handle_state_req(message)
         when TL::Root::MsgsStateInfo.constructor_id
           # Informational Message regarding Status of Messages
           self.handle_state_info(message)
         when TL::Root::MsgsAllInfo.constructor_id
           # Voluntary Communication of Status of Messages
-          self.handle_msg_all(message : Message)
+          self.handle_msg_all(message)
         when TL::Root::MsgDetailedInfo.constructor_id,
              TL::Root::MsgNewDetailedInfo.constructor_id
           # Extended Voluntary Communication of Status of One Message
@@ -230,14 +230,14 @@ module Proton
         when TL::Root::FutureSalts.constructor_id
           # Response to a request for several future salts
           self.handle_future_salts(message)
-        when TL::Types::Pong.constructor_id
+        when TL::Root::Pong.constructor_id
           # Ping Messages (PING/PONG)
           self.handle_pong(message)
-        when TL::Types::DestroySessionOk.constructor_id,
-             TL::Types::DestroySessionNone.constructor_id
+        when TL::Root::DestroySessionOk.constructor_id,
+             TL::Root::DestroySessionNone.constructor_id
           # Request to destroy the session
           self.handle_destroy_session(message)
-        when TL::Types::NewSessionCreated.constructor_id
+        when TL::Root::NewSessionCreated.constructor_id
           # New Session Creation Notification
           self.handle_new_session_created(message)
         when MessageContainer.constructor_id
@@ -340,7 +340,7 @@ module Proton
       # [RPC Error]: https://core.telegram.org/mtproto/service_messages#rpc-error
       # [Cancellation of an RPC Query]: https://core.telegram.org/mtproto/service_messages#cancellation-of-an-rpc-query
       def handle_rpc_result(message : Message)
-        rpc_result = RpcResult.tl_deserialize(message.body)
+        rpc_result = RpcResult.tl_deserialize(IO::Memory.new(message.body))
         req_msg_id = rpc_result.req_msg_id
         result = rpc_result.result
         msg_id = MsgId.new(req_msg_id)
@@ -352,7 +352,7 @@ module Proton
         case inner_constructor
         when TL::Root::RpcError.constructor_id
           # RPC Error
-          err = TL::Root::RpcError.tl_deserialize(result)
+          err = TL::Root::RpcError.tl_deserialize(IO::Memory.new(result))
           @rpc_results.push({msg_id, RpcError.from_tl(err)})
         when TL::Root::RpcAnswerUnknown.constructor_id
           # Cancellation of an RPC Query
@@ -373,17 +373,17 @@ module Proton
           # would probably outweight the benefits) so we don't check
           # that the decompressed payload is an error or answer drop.
 
-          body = GzipPacked.tl_deserialize(result)
+          body = GzipPacked.tl_deserialize(IO::Memory.new(result))
           gzip = body.decompress
           self.store_own_updates(gzip)
         else
-          self.store_own_updates(result)
+          self.store_own_updates(result.to_slice)
           @rpc_results.push({msg_id, result})
         end
 
         nil
       rescue ex
-        @rpc_results.push({msg_id, RequestError.from(ex)})
+        @rpc_results.push({msg_id.not_nil!, RequestError.from(ex)})
         nil
       end
 
@@ -434,7 +434,7 @@ module Proton
       # [Acknowledgment of Receipt]: https://core.telegram.org/mtproto/service_messages_about_messages#acknowledgment-of-receipt
       def handle_ack(message : Message)
         # TODO: Notify about this somehow
-        ack = TL::Root::MsgsAck.tl_deserialize(message.body)
+        ack = TL::Root::MsgsAck.tl_deserialize(IO::Memory.new(message.body))
         nil
       end
 
@@ -505,12 +505,12 @@ module Proton
       #
       # [Notice of Ignored Error Message]: https://core.telegram.org/mtproto/service_messages_about_messages#notice-of-ignored-error-message
       def handle_bad_notfication(message : Message)
-        x = TL::Root::TypeBadMsgNotification.tl_deserialize(message.body)
+        x = TL::Root::TypeBadMsgNotification.tl_deserialize(IO::Memory.new(message.body))
         bad_msg = case x
-                  in TL::Root::BadMsgNotification
+                  when TL::Root::BadMsgNotification
                     x
-                  in TL::Root::BadServerSalt
-                    @rpc_result.push({MsgId.new(x.bad_msg_id), BadMessageError.new(x.error_code)})
+                  when TL::Root::BadServerSalt
+                    @rpc_results.push({MsgId.new(x.bad_msg_id), BadMessageError.new(x.error_code)})
 
                     @salts.clear
                     @salts.push(TL::Root::FutureSalt.new(
@@ -520,16 +520,18 @@ module Proton
                     ))
 
                     # Try enqueuing a request to get future salts, in order to prevent this from happening for longer.
-                    if self.push(TL::Root::GetFutureSalts.new(num: NUM_FUTURE_SALTS))
+                    if self.push(TL::Root::GetFutureSalts.new(num: NUM_FUTURE_SALTS).to_bytes)
                       Log.info { "got bad salt; asking for more salts" }
                     else
                       Log.info { "got bad salt, but can't ask for future salts because the buffer is full" }
                     end
 
                     return
+                  else
+                    raise "unreachable"
                   end
 
-        @rpc_result.push({MsgId.new(x.bad_msg_id), BadMessageError.new(x.error_code)})
+        @rpc_results.push({MsgId.new(x.bad_msg_id), BadMessageError.new(x.error_code)})
         case x.error_code
         when 16
           # Sent msg_id was too low (our time_offset is wrong)
@@ -565,7 +567,7 @@ module Proton
       # [Request for Message Status Information]: https://core.telegram.org/mtproto/service_messages_about_messages#request-for-message-status-information
       def handle_state_req(message : Message)
         # TODO: Implement
-        x = TL::Root::MsgsStateReq.tl_deserialize(message.body)
+        x = TL::Root::MsgsStateReq.tl_deserialize(IO::Memory.new())
         Log.info { "got state request for #{x.msg_ids.size} messages" }
         nil
       end
@@ -608,7 +610,7 @@ module Proton
       # [Informational Message regarding Status of Messages]: https://core.telegram.org/mtproto/service_messages_about_messages#informational-message-regarding-status-of-messages
       def handle_state_info(message : Message)
         # TODO: Implement
-        x = TL::Root::MsgsStateInfo.tl_deserialize(message.body)
+        x = TL::Root::MsgsStateInfo.tl_deserialize(IO::Memory.new())
         nil
       end
 
@@ -631,7 +633,7 @@ module Proton
       # [Voluntary Communication of Status of Messages]: https://core.telegram.org/mtproto/service_messages_about_messages#voluntary-communication-of-status-of-messages
       def handle_msg_all(message : Message)
         # TODO: Implement
-        x = TL::Root::MsgsAllInfo.tl_deserialize(message.body)
+        x = TL::Root::MsgsAllInfo.tl_deserialize(IO::Memory.new())
         nil
       end
 
@@ -661,12 +663,12 @@ module Proton
       def handle_detailed_info(message : Message)
         # TODO: https://github.com/telegramdesktop/tdesktop/blob/8f82880b938e06b7a2a27685ef9301edb12b4648/Telegram/SourceFiles/mtproto/connection.cpp#L1790-L1820
         # TODO: https://github.com/telegramdesktop/tdesktop/blob/8f82880b938e06b7a2a27685ef9301edb12b4648/Telegram/SourceFiles/mtproto/connection.cpp#L1822-L1845
-        x = TL::Root::TypeMsgDetailedInfo.tl_deserialize(message.body)
+        x = TL::Root::TypeMsgDetailedInfo.tl_deserialize(IO::Memory.new())
 
         case x
-        in TL::Root::MsgDetailedInfo
+        when TL::Root::MsgDetailedInfo
           @pending_ack.push(x.answer_msg_id)
-        in TL::Root::MsgNewDetailedInfo
+        when TL::Root::MsgNewDetailedInfo
           @pending_ack.push(x.answer_msg_id)
         end
 
@@ -704,7 +706,7 @@ module Proton
       def handle_msg_resend(message : Message)
         # TODO implement
         # `msg_resend_ans_req` seems to never occur (it was even missing from `mtproto.tl`)\
-        x = TL::Root::TypeMsgResendReq.tl_deserialize(message.body)
+        x = TL::Root::TypeMsgResendReq.tl_deserialize(IO::Memory.new())
         nil
       end
 
@@ -731,13 +733,12 @@ module Proton
       #
       # [Request for several future salts]: https://core.telegram.org/mtproto/service_messages#request-for-several-future-salts
       def handle_future_salts(message : Message)
-        x = TL::Root::FutureSalts.tl_deserialize(message.body)
-        salts = x.salts.as(TL::Root::FutureSalt)
+        x = TL::Root::FutureSalts.tl_deserialize(IO::Memory.new())
 
-        @rpc_results.push({MsgId.new(salts.req_msg_id), message.body})
+        @rpc_results.push({MsgId.new(x.req_msg_id), message.body})
 
-        @start_salt_time = {salts.now, Time.monotonic}
-        @salts = salts.salts.sort_by { |s| -s.valid_since }
+        @start_salt_time = {x.now, Time.monotonic}
+        @salts = x.salts.sort_by { |s| -s.valid_since }
 
         Log.info { "got #{@salts.size} future salts" }
 
@@ -780,7 +781,7 @@ module Proton
       # [Ping Messages (PING/PONG)]: https://core.telegram.org/mtproto/service_messages#ping-messages-ping-pong
       # [Deferred Connection Closure + PING]: https://core.telegram.org/mtproto/service_messages#deferred-connection-closure-ping
       def handle_pong(message : Message)
-        x = TL::Root::Pong.tl_deserialize(message.body)
+        x = TL::Root::Pong.tl_deserialize(IO::Memory.new())
         @rpc_results.push({MsgId.new(x.msg_id), message.body})
         nil
       end
@@ -801,7 +802,7 @@ module Proton
       # [Request to Destroy Session]: https://core.telegram.org/mtproto/service_messages#request-to-destroy-session
       def handle_destroy_session(message : Message)
         # TODO: Implement
-        x = TL::Root::TypeDestroySessionRes.tl_deserialize(message.body)
+        x = TL::Root::TypeDestroySessionRes.tl_deserialize(IO::Memory.new())
         nil
       end
 
@@ -838,7 +839,7 @@ module Proton
       #
       # [New Session Creation Notification]: https://core.telegram.org/mtproto/service_messages#new-session-creation-notification
       def handle_new_session_created(message : Message)
-        x = TL::Root::NewSessionCreated.tl_deserialize(message.body)
+        x = TL::Root::NewSessionCreated.tl_deserialize(IO::Memory.new())
 
         @salts.clear
         @salts.push(TL::Root::FutureSalt.new(
@@ -888,7 +889,7 @@ module Proton
       # [Containers]: https://core.telegram.org/mtproto/service_messages#containers
       # [Simple Container]: https://core.telegram.org/mtproto/service_messages#simple-container
       def handle_container(message : Message)
-        x = MessageContainer.tl_deserialize(message.body)
+        x = MessageContainer.tl_deserialize(IO::Memory.new())
 
         x.messages.each do |msg|
           self.process_message(msg)
@@ -938,10 +939,10 @@ module Proton
       #
       # [Packed Object]: https://core.telegram.org/mtproto/service_messages#packed-object
       def handle_gzip_packed(message : Message)
-        x = GzipPacked.tl_deserialize(message.body)
+        x = GzipPacked.tl_deserialize(IO::Memory.new())
 
-        msg = message.clone
-        msg.body = container.decompress
+        msg = message.dup
+        msg.body = x.decompress
 
         self.process_message(msg)
 
@@ -1142,7 +1143,7 @@ module Proton
               valid_since: 0,
               valid_until: Int32::MAX,
               salt: self.first_salt,
-            )],
+            ).as(TL::Root::TypeFutureSalt)],
             start_salt_time: nil,
             client_id: begin
               buffer = IO::Memory.new(Random::Secure.random_bytes(8))

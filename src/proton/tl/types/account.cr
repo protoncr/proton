@@ -1016,7 +1016,7 @@ module Proton::TL
         @other_uids.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1046,7 +1046,7 @@ module Proton::TL
         @other_uids.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1072,7 +1072,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1094,7 +1094,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypePeerNotifySettings
       end
     end
@@ -1107,7 +1107,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1142,7 +1142,7 @@ module Proton::TL
         @about.tl_serialize(io) unless @about.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUser
       end
     end
@@ -1164,7 +1164,7 @@ module Proton::TL
         @offline.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1186,7 +1186,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeWallPapers
       end
     end
@@ -1216,7 +1216,7 @@ module Proton::TL
         @message.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1238,7 +1238,7 @@ module Proton::TL
         @username.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1260,7 +1260,7 @@ module Proton::TL
         @username.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUser
       end
     end
@@ -1282,7 +1282,7 @@ module Proton::TL
         @key.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypePrivacyRules
       end
     end
@@ -1308,7 +1308,7 @@ module Proton::TL
         @rules.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypePrivacyRules
       end
     end
@@ -1330,7 +1330,7 @@ module Proton::TL
         @reason.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1343,7 +1343,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeAccountDaysTTL
       end
     end
@@ -1365,7 +1365,7 @@ module Proton::TL
         @ttl.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1391,7 +1391,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeSentCode
       end
     end
@@ -1421,7 +1421,7 @@ module Proton::TL
         @phone_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUser
       end
     end
@@ -1443,7 +1443,7 @@ module Proton::TL
         @period.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1456,7 +1456,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeAuthorizations
       end
     end
@@ -1478,7 +1478,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1491,7 +1491,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypePassword
       end
     end
@@ -1513,7 +1513,7 @@ module Proton::TL
         @password.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypePasswordSettings
       end
     end
@@ -1539,7 +1539,7 @@ module Proton::TL
         @new_settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1565,7 +1565,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeSentCode
       end
     end
@@ -1591,7 +1591,7 @@ module Proton::TL
         @phone_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1617,7 +1617,7 @@ module Proton::TL
         @period.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeTmpPassword
       end
     end
@@ -1630,7 +1630,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeWebAuthorizations
       end
     end
@@ -1652,7 +1652,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1665,7 +1665,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1678,7 +1678,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeSecureValue)
       end
     end
@@ -1700,7 +1700,7 @@ module Proton::TL
         @types.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeSecureValue)
       end
     end
@@ -1726,7 +1726,7 @@ module Proton::TL
         @secure_secret_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeSecureValue
       end
     end
@@ -1748,7 +1748,7 @@ module Proton::TL
         @types.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1778,7 +1778,7 @@ module Proton::TL
         @public_key.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeAuthorizationForm
       end
     end
@@ -1816,7 +1816,7 @@ module Proton::TL
         @credentials.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1842,7 +1842,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Auth::TypeSentCode
       end
     end
@@ -1872,7 +1872,7 @@ module Proton::TL
         @phone_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1894,7 +1894,7 @@ module Proton::TL
         @email.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeSentEmailCode
       end
     end
@@ -1920,7 +1920,7 @@ module Proton::TL
         @code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1969,7 +1969,7 @@ module Proton::TL
         @file_max_size.tl_serialize(io) unless @file_max_size.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeTakeout
       end
     end
@@ -1993,7 +1993,7 @@ module Proton::TL
         ).tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2015,7 +2015,7 @@ module Proton::TL
         @code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2028,7 +2028,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2041,7 +2041,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2054,7 +2054,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2076,7 +2076,7 @@ module Proton::TL
         @silent.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2105,7 +2105,7 @@ module Proton::TL
         @peer.tl_serialize(io) unless @peer.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -2127,7 +2127,7 @@ module Proton::TL
         @wallpaper.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeWallPaper
       end
     end
@@ -2157,7 +2157,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeWallPaper
       end
     end
@@ -2187,7 +2187,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2213,7 +2213,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2226,7 +2226,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2239,7 +2239,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeAutoDownloadSettings
       end
     end
@@ -2271,7 +2271,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2308,7 +2308,7 @@ module Proton::TL
         @mime_type.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeDocument
       end
     end
@@ -2346,7 +2346,7 @@ module Proton::TL
         @settings.tl_serialize(io) unless @settings.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeTheme
       end
     end
@@ -2394,7 +2394,7 @@ module Proton::TL
         @settings.tl_serialize(io) unless @settings.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeTheme
       end
     end
@@ -2420,7 +2420,7 @@ module Proton::TL
         @unsave.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2459,7 +2459,7 @@ module Proton::TL
         @base_theme.tl_serialize(io) unless @base_theme.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2489,7 +2489,7 @@ module Proton::TL
         @document_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeTheme
       end
     end
@@ -2515,7 +2515,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeThemes
       end
     end
@@ -2539,7 +2539,7 @@ module Proton::TL
         ).tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2552,7 +2552,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeContentSettings
       end
     end
@@ -2574,7 +2574,7 @@ module Proton::TL
         @wallpapers.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeWallPaper)
       end
     end
@@ -2587,7 +2587,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeGlobalPrivacySettings
       end
     end
@@ -2609,7 +2609,7 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeGlobalPrivacySettings
       end
     end
@@ -2643,7 +2643,7 @@ module Proton::TL
         @message.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2656,7 +2656,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeResetPasswordResult
       end
     end
@@ -2669,7 +2669,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2691,7 +2691,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Account::TypeThemes
       end
     end
@@ -2713,7 +2713,7 @@ module Proton::TL
         @authorization_ttl_days.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -2747,7 +2747,7 @@ module Proton::TL
         @call_requests_disabled.tl_serialize(io) unless @call_requests_disabled.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end

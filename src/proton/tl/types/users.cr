@@ -76,7 +76,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeUser)
       end
     end
@@ -98,7 +98,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Users::TypeUserFull
       end
     end
@@ -124,7 +124,7 @@ module Proton::TL
         @errors.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end

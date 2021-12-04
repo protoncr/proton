@@ -39,7 +39,7 @@ module Proton::TL
         @folder_peers.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -61,7 +61,7 @@ module Proton::TL
         @folder_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end

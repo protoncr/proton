@@ -2678,7 +2678,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -2727,7 +2727,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeDialogs
       end
     end
@@ -2777,7 +2777,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -2851,7 +2851,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -2877,7 +2877,7 @@ module Proton::TL
         @max_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeAffectedMessages
       end
     end
@@ -2923,7 +2923,7 @@ module Proton::TL
         @max_date.tl_serialize(io) unless @max_date.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeAffectedHistory
       end
     end
@@ -2951,7 +2951,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeAffectedMessages
       end
     end
@@ -2973,7 +2973,7 @@ module Proton::TL
         @max_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeReceivedNotifyMessage)
       end
     end
@@ -3006,7 +3006,7 @@ module Proton::TL
         @action.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -3079,7 +3079,7 @@ module Proton::TL
         @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -3152,7 +3152,7 @@ module Proton::TL
         @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -3218,7 +3218,7 @@ module Proton::TL
         @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -3240,7 +3240,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -3262,7 +3262,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypePeerSettings
       end
     end
@@ -3296,7 +3296,7 @@ module Proton::TL
         @message.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -3318,7 +3318,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeChats
       end
     end
@@ -3340,7 +3340,7 @@ module Proton::TL
         @chat_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeChatFull
       end
     end
@@ -3366,7 +3366,7 @@ module Proton::TL
         @title.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -3392,7 +3392,7 @@ module Proton::TL
         @photo.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -3422,7 +3422,7 @@ module Proton::TL
         @fwd_limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -3454,7 +3454,7 @@ module Proton::TL
         @user_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -3480,7 +3480,7 @@ module Proton::TL
         @title.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -3506,7 +3506,7 @@ module Proton::TL
         @random_length.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeDhConfig
       end
     end
@@ -3536,7 +3536,7 @@ module Proton::TL
         @g_a.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeEncryptedChat
       end
     end
@@ -3566,7 +3566,7 @@ module Proton::TL
         @key_fingerprint.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeEncryptedChat
       end
     end
@@ -3594,7 +3594,7 @@ module Proton::TL
         @chat_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -3620,7 +3620,7 @@ module Proton::TL
         @typing.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -3646,7 +3646,7 @@ module Proton::TL
         @max_date.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -3682,7 +3682,7 @@ module Proton::TL
         @data.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeSentEncryptedMessage
       end
     end
@@ -3722,7 +3722,7 @@ module Proton::TL
         @file.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeSentEncryptedMessage
       end
     end
@@ -3752,7 +3752,7 @@ module Proton::TL
         @data.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeSentEncryptedMessage
       end
     end
@@ -3774,7 +3774,7 @@ module Proton::TL
         @max_qts.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Int64)
       end
     end
@@ -3796,7 +3796,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -3818,7 +3818,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeAffectedMessages
       end
     end
@@ -3844,7 +3844,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeStickers
       end
     end
@@ -3866,7 +3866,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeAllStickers
       end
     end
@@ -3895,7 +3895,7 @@ module Proton::TL
         @entities.tl_serialize(io) unless @entities.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeMessageMedia
       end
     end
@@ -3942,7 +3942,7 @@ module Proton::TL
         @title.tl_serialize(io) unless @title.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeExportedChatInvite
       end
     end
@@ -3964,7 +3964,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeChatInvite
       end
     end
@@ -3986,7 +3986,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -4012,7 +4012,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -4038,7 +4038,7 @@ module Proton::TL
         @archived.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeStickerSetInstallResult
       end
     end
@@ -4060,7 +4060,7 @@ module Proton::TL
         @stickerset.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4094,7 +4094,7 @@ module Proton::TL
         @start_param.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -4124,7 +4124,7 @@ module Proton::TL
         @increment.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessageViews
       end
     end
@@ -4154,7 +4154,7 @@ module Proton::TL
         @is_admin.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4176,7 +4176,7 @@ module Proton::TL
         @chat_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -4233,7 +4233,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -4261,7 +4261,7 @@ module Proton::TL
         @order.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4291,7 +4291,7 @@ module Proton::TL
         @mime_type.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeDocument
       end
     end
@@ -4313,7 +4313,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeSavedGifs
       end
     end
@@ -4339,7 +4339,7 @@ module Proton::TL
         @unsave.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4380,7 +4380,7 @@ module Proton::TL
         @offset.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeBotResults
       end
     end
@@ -4430,7 +4430,7 @@ module Proton::TL
         @switch_pm.tl_serialize(io) unless @switch_pm.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4497,7 +4497,7 @@ module Proton::TL
         @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -4523,7 +4523,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessageEditData
       end
     end
@@ -4580,7 +4580,7 @@ module Proton::TL
         @schedule_date.tl_serialize(io) unless @schedule_date.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -4628,7 +4628,7 @@ module Proton::TL
         @entities.tl_serialize(io) unless @entities.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4670,7 +4670,7 @@ module Proton::TL
         @password.tl_serialize(io) unless @password.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeBotCallbackAnswer
       end
     end
@@ -4712,7 +4712,7 @@ module Proton::TL
         @cache_time.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4734,7 +4734,7 @@ module Proton::TL
         @peers.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypePeerDialogs
       end
     end
@@ -4776,7 +4776,7 @@ module Proton::TL
         @entities.tl_serialize(io) unless @entities.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4789,7 +4789,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -4811,7 +4811,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeFeaturedStickers
       end
     end
@@ -4833,7 +4833,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4861,7 +4861,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeRecentStickers
       end
     end
@@ -4893,7 +4893,7 @@ module Proton::TL
         @unsave.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4917,7 +4917,7 @@ module Proton::TL
         ).tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -4949,7 +4949,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeArchivedStickers
       end
     end
@@ -4971,7 +4971,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeAllStickers
       end
     end
@@ -4993,7 +4993,7 @@ module Proton::TL
         @media.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeStickerSetCovered)
       end
     end
@@ -5037,7 +5037,7 @@ module Proton::TL
         @score.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -5077,7 +5077,7 @@ module Proton::TL
         @score.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -5107,7 +5107,7 @@ module Proton::TL
         @user_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeHighScores
       end
     end
@@ -5133,7 +5133,7 @@ module Proton::TL
         @user_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeHighScores
       end
     end
@@ -5163,7 +5163,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeChats
       end
     end
@@ -5185,7 +5185,7 @@ module Proton::TL
         @except_ids.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeChats
       end
     end
@@ -5211,7 +5211,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeWebPage
       end
     end
@@ -5239,7 +5239,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -5271,7 +5271,7 @@ module Proton::TL
         @order.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -5293,7 +5293,7 @@ module Proton::TL
         @folder_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypePeerDialogs
       end
     end
@@ -5327,7 +5327,7 @@ module Proton::TL
         @shipping_options.tl_serialize(io) unless @shipping_options.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -5360,7 +5360,7 @@ module Proton::TL
         @error.tl_serialize(io) unless @error.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -5386,7 +5386,7 @@ module Proton::TL
         @media.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeMessageMedia
       end
     end
@@ -5416,7 +5416,7 @@ module Proton::TL
         @random_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -5438,7 +5438,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeFavedStickers
       end
     end
@@ -5464,7 +5464,7 @@ module Proton::TL
         @unfave.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -5506,7 +5506,7 @@ module Proton::TL
         @min_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -5528,7 +5528,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeAffectedHistory
       end
     end
@@ -5558,7 +5558,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -5613,7 +5613,7 @@ module Proton::TL
         @send_as.tl_serialize(io) unless @send_as.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -5639,7 +5639,7 @@ module Proton::TL
         @file.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeEncryptedFile
       end
     end
@@ -5671,7 +5671,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeFoundStickerSets
       end
     end
@@ -5684,7 +5684,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeMessageRange)
       end
     end
@@ -5712,7 +5712,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -5725,7 +5725,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeDialogPeer)
       end
     end
@@ -5738,7 +5738,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -5778,7 +5778,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -5808,7 +5808,7 @@ module Proton::TL
         @options.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -5834,7 +5834,7 @@ module Proton::TL
         @msg_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -5856,7 +5856,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeChatOnlines
       end
     end
@@ -5882,7 +5882,7 @@ module Proton::TL
         @about.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -5908,7 +5908,7 @@ module Proton::TL
         @banned_rights.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -5930,7 +5930,7 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeEmojiKeywordsDifference
       end
     end
@@ -5956,7 +5956,7 @@ module Proton::TL
         @from_version.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeEmojiKeywordsDifference
       end
     end
@@ -5978,7 +5978,7 @@ module Proton::TL
         @lang_codes.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeEmojiLanguage)
       end
     end
@@ -6000,7 +6000,7 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeEmojiURL
       end
     end
@@ -6026,7 +6026,7 @@ module Proton::TL
         @filters.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Messages::TypeSearchCounter)
       end
     end
@@ -6066,7 +6066,7 @@ module Proton::TL
         @url.tl_serialize(io) unless @url.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUrlAuthResult
       end
     end
@@ -6110,7 +6110,7 @@ module Proton::TL
         @url.tl_serialize(io) unless @url.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUrlAuthResult
       end
     end
@@ -6132,7 +6132,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -6158,7 +6158,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -6184,7 +6184,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -6210,7 +6210,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -6236,7 +6236,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -6278,7 +6278,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeVotesList
       end
     end
@@ -6314,7 +6314,7 @@ module Proton::TL
         @stickersets.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -6327,7 +6327,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeDialogFilter)
       end
     end
@@ -6340,7 +6340,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeDialogFilterSuggested)
       end
     end
@@ -6369,7 +6369,7 @@ module Proton::TL
         @filter.tl_serialize(io) unless @filter.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -6391,7 +6391,7 @@ module Proton::TL
         @order.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -6421,7 +6421,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeFeaturedStickers
       end
     end
@@ -6475,7 +6475,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeMessages
       end
     end
@@ -6501,7 +6501,7 @@ module Proton::TL
         @msg_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeDiscussionMessage
       end
     end
@@ -6531,7 +6531,7 @@ module Proton::TL
         @read_max_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -6553,7 +6553,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeAffectedHistory
       end
     end
@@ -6575,7 +6575,7 @@ module Proton::TL
         @chat_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -6599,7 +6599,7 @@ module Proton::TL
         ).tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeAffectedFoundMessages
       end
     end
@@ -6621,7 +6621,7 @@ module Proton::TL
         @import_head.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeHistoryImportParsed
       end
     end
@@ -6651,7 +6651,7 @@ module Proton::TL
         @media_count.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeHistoryImport
       end
     end
@@ -6685,7 +6685,7 @@ module Proton::TL
         @media.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeMessageMedia
       end
     end
@@ -6711,7 +6711,7 @@ module Proton::TL
         @import_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -6757,7 +6757,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeExportedChatInvites
       end
     end
@@ -6783,7 +6783,7 @@ module Proton::TL
         @link.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeExportedChatInvite
       end
     end
@@ -6835,7 +6835,7 @@ module Proton::TL
         @title.tl_serialize(io) unless @title.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeExportedChatInvite
       end
     end
@@ -6861,7 +6861,7 @@ module Proton::TL
         @admin_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -6887,7 +6887,7 @@ module Proton::TL
         @link.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -6909,7 +6909,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeChatAdminsWithInvites
       end
     end
@@ -6959,7 +6959,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeChatInviteImporters
       end
     end
@@ -6985,7 +6985,7 @@ module Proton::TL
         @period.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -7007,7 +7007,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeCheckedHistoryImportPeer
       end
     end
@@ -7033,7 +7033,7 @@ module Proton::TL
         @emoticon.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -7059,7 +7059,7 @@ module Proton::TL
         @msg_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Int64)
       end
     end
@@ -7093,7 +7093,7 @@ module Proton::TL
         @offset_date.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeSearchResultsCalendar
       end
     end
@@ -7127,7 +7127,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeSearchResultsPositions
       end
     end
@@ -7159,7 +7159,7 @@ module Proton::TL
         @user_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -7192,7 +7192,7 @@ module Proton::TL
         @link.tl_serialize(io) unless @link.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -7218,7 +7218,7 @@ module Proton::TL
         @enabled.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -7244,7 +7244,7 @@ module Proton::TL
         @send_as.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end

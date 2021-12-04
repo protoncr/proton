@@ -66,10 +66,10 @@ module Proton
 
         len = buf.read_bytes(Int32, IO::ByteFormat::LittleEndian)
         raise NegativeMessageLengthError.new(got: len) if len <= 0
-        raise TooLongMessageLengthError.new(got: len.to_u32, max: payload.size - 20) if (20 + len) > payload.size
+        raise TooLongMessageLengthError.new(got: len.to_u32, max: (payload.size - 20).to_u32) if (20 + len) > payload.size
 
         Deserialization.new(
-          rpc_results: RpcResult.new(MsgId.new(0), payload[20...(20 + len)]),
+          rpc_results: [{ MsgId.new(0), payload[20...(20 + len)].as(Bytes | RequestError) }],
           updates: [] of Bytes
         )
       end

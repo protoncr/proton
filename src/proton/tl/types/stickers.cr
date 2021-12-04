@@ -113,7 +113,7 @@ module Proton::TL
         @software.tl_serialize(io) unless @software.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -135,7 +135,7 @@ module Proton::TL
         @sticker.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -161,7 +161,7 @@ module Proton::TL
         @position.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -187,7 +187,7 @@ module Proton::TL
         @sticker.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -213,7 +213,7 @@ module Proton::TL
         @thumb.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -235,7 +235,7 @@ module Proton::TL
         @short_name.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -257,7 +257,7 @@ module Proton::TL
         @title.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Stickers::TypeSuggestedShortName
       end
     end

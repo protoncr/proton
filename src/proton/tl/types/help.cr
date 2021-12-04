@@ -1005,7 +1005,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeConfig
       end
     end
@@ -1018,7 +1018,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeNearestDc
       end
     end
@@ -1040,7 +1040,7 @@ module Proton::TL
         @source.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeAppUpdate
       end
     end
@@ -1053,7 +1053,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeInviteText
       end
     end
@@ -1066,7 +1066,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeSupport
       end
     end
@@ -1088,7 +1088,7 @@ module Proton::TL
         @prev_app_version.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -1114,7 +1114,7 @@ module Proton::TL
         @message.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1127,7 +1127,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeCdnConfig
       end
     end
@@ -1149,7 +1149,7 @@ module Proton::TL
         @referer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeRecentMeUrls
       end
     end
@@ -1162,7 +1162,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeTermsOfServiceUpdate
       end
     end
@@ -1184,7 +1184,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1206,7 +1206,7 @@ module Proton::TL
         @path.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeDeepLinkInfo
       end
     end
@@ -1219,7 +1219,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeJSONValue
       end
     end
@@ -1241,7 +1241,7 @@ module Proton::TL
         @events.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1263,7 +1263,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypePassportConfig
       end
     end
@@ -1276,7 +1276,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeSupportName
       end
     end
@@ -1298,7 +1298,7 @@ module Proton::TL
         @user_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeUserInfo
       end
     end
@@ -1328,7 +1328,7 @@ module Proton::TL
         @entities.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeUserInfo
       end
     end
@@ -1341,7 +1341,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypePromoData
       end
     end
@@ -1363,7 +1363,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1389,7 +1389,7 @@ module Proton::TL
         @suggestion.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1415,7 +1415,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Help::TypeCountriesList
       end
     end

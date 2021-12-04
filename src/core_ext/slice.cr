@@ -3,6 +3,14 @@ struct Slice(T)
     self.class.concat(self, other)
   end
 
+  def advance(n)
+    copy = self[n..]
+    new_size = self.size - n
+    @pointer.realloc(new_size)
+    copy.to_unsafe.move_to(@pointer, n)
+    @size = new_size
+  end
+
   def self.concat(*slices)
     size = slices.map(&.bytesize).sum
     buffer = Bytes.new(size)

@@ -3,7 +3,7 @@ module Proton
     # Results from the deserialization of a response.
     record Deserialization,
       # Result bodies to Remote Procedure Calls.
-      rpc_results : Array(Tuple(MsgId, Bytes)),
+      rpc_results : Array(Tuple(MsgId, Bytes | RequestError)),
       # Updates that came in the response.
       updates : Array(Bytes)
 

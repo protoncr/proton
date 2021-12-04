@@ -19,11 +19,11 @@ module Proton
       # msg_id (8 bytes), seq_no (4 bytes), bytes (4 len)
       SIZE_OVERHEAD = 8 + 4 + 4
 
-      getter msg_id : Int64
+      property msg_id : Int64
 
-      getter seq_no : Int32
+      property seq_no : Int32
 
-      getter body : Bytes
+      property body : Bytes
 
       def initialize(
         msg_id : Int64,
@@ -37,7 +37,7 @@ module Proton
 
       # Peek the constructor ID from the body.
       def constructor_id : UInt32
-        IO::ByteFormat::LittleEndian.decode(UInt32, @result[0..3])
+        IO::ByteFormat::LittleEndian.decode(UInt32, @body[0..3])
       end
 
       def requires_ack?
@@ -81,10 +81,11 @@ module Proton
       include TL::Identifiable
 
       getter constructor_id : UInt32 = 0xf35c6d01_u32
+      class_getter constructor_id : UInt32 = 0xf35c6d01_u32
 
-      getter req_msg_id : Int64
+      property req_msg_id : Int64
 
-      getter result : Bytes
+      property result : Bytes
 
       def initialize(
         req_msg_id : Int64,
@@ -147,7 +148,7 @@ module Proton
         @messages = messages
       end
 
-      def self.tl_deserialize(io : IO)
+      def self.tl_deserialize(io : IO, bare = false)
         TL::Utils.assert_constructor(io, self.constructor_id) unless bare
 
         len = Int32.tl_deserialize(io)
@@ -177,7 +178,7 @@ module Proton
       getter constructor_id : UInt32 = 0xe06046b2_u32
       class_getter constructor_id : UInt32 = 0xe06046b2_u32
 
-      getter orig_message : Array(Message)
+      property orig_message : Array(Message)
 
       def initialize(
         orig_message : Array(Message)

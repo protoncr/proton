@@ -457,7 +457,7 @@ module Proton::TL
         @theme_params.tl_serialize(io) unless @theme_params.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Payments::TypePaymentForm
       end
     end
@@ -483,7 +483,7 @@ module Proton::TL
         @msg_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Payments::TypePaymentReceipt
       end
     end
@@ -519,7 +519,7 @@ module Proton::TL
         @info.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Payments::TypeValidatedRequestedInfo
       end
     end
@@ -570,7 +570,7 @@ module Proton::TL
         @tip_amount.tl_serialize(io) unless @tip_amount.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Payments::TypePaymentResult
       end
     end
@@ -583,7 +583,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Payments::TypeSavedInfo
       end
     end
@@ -611,7 +611,7 @@ module Proton::TL
         ).tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -633,7 +633,7 @@ module Proton::TL
         @number.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Payments::TypeBankCardData
       end
     end

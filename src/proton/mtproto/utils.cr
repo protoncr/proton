@@ -23,7 +23,7 @@ module Proton
       def ungzip_io(input : IO)
         data = nil
         Compress::Gzip::Reader.open(input) do |gz|
-          data = gz.gets_to_end
+          data = gz.gets_to_end.to_slice
         end
         data.not_nil!
       end

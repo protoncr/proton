@@ -140,7 +140,7 @@ module {{ module_root }}
           )
         end
         {% else %}
-        def self.return_type
+        def self.return_type : Deserializable
           {{ def.type.crystal_type }}
         end
         {% endif %}

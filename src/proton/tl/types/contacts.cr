@@ -433,7 +433,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Int32)
       end
     end
@@ -446,7 +446,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeContactStatus)
       end
     end
@@ -468,7 +468,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Contacts::TypeContacts
       end
     end
@@ -490,7 +490,7 @@ module Proton::TL
         @contacts.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Contacts::TypeImportedContacts
       end
     end
@@ -512,7 +512,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -534,7 +534,7 @@ module Proton::TL
         @phones.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -556,7 +556,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -578,7 +578,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -604,7 +604,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Contacts::TypeBlocked
       end
     end
@@ -630,7 +630,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Contacts::TypeFound
       end
     end
@@ -652,7 +652,7 @@ module Proton::TL
         @username.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Contacts::TypeResolvedPeer
       end
     end
@@ -716,7 +716,7 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Contacts::TypeTopPeers
       end
     end
@@ -742,7 +742,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -755,7 +755,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -768,7 +768,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeSavedContact)
       end
     end
@@ -790,7 +790,7 @@ module Proton::TL
         @enabled.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -830,7 +830,7 @@ module Proton::TL
         @phone.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -852,7 +852,7 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -885,7 +885,7 @@ module Proton::TL
         @self_expires.tl_serialize(io) unless @self_expires.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -921,7 +921,7 @@ module Proton::TL
         @msg_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end

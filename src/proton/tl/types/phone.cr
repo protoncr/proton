@@ -297,7 +297,7 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeDataJSON
       end
     end
@@ -337,7 +337,7 @@ module Proton::TL
         @protocol.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Phone::TypePhoneCall
       end
     end
@@ -367,7 +367,7 @@ module Proton::TL
         @protocol.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Phone::TypePhoneCall
       end
     end
@@ -401,7 +401,7 @@ module Proton::TL
         @protocol.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Phone::TypePhoneCall
       end
     end
@@ -423,7 +423,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -463,7 +463,7 @@ module Proton::TL
         @connection_id.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -499,7 +499,7 @@ module Proton::TL
         @comment.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -525,7 +525,7 @@ module Proton::TL
         @debug.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -551,7 +551,7 @@ module Proton::TL
         @data.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -589,7 +589,7 @@ module Proton::TL
         @schedule_date.tl_serialize(io) unless @schedule_date.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -634,7 +634,7 @@ module Proton::TL
         @params.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -660,7 +660,7 @@ module Proton::TL
         @source.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -686,7 +686,7 @@ module Proton::TL
         @users.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -708,7 +708,7 @@ module Proton::TL
         @call.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -741,7 +741,7 @@ module Proton::TL
         @join_muted.tl_serialize(io) unless @join_muted.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -767,7 +767,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Phone::TypeGroupCall
       end
     end
@@ -805,7 +805,7 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Phone::TypeGroupParticipants
       end
     end
@@ -831,7 +831,7 @@ module Proton::TL
         @sources.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Int32)
       end
     end
@@ -873,7 +873,7 @@ module Proton::TL
         @video_portrait.tl_serialize(io) unless @video_portrait.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -931,7 +931,7 @@ module Proton::TL
         @presentation_paused.tl_serialize(io) unless @presentation_paused.nil?
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -957,7 +957,7 @@ module Proton::TL
         @title.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -979,7 +979,7 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Phone::TypeJoinAsPeers
       end
     end
@@ -1007,7 +1007,7 @@ module Proton::TL
         @call.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Phone::TypeExportedGroupCallInvite
       end
     end
@@ -1033,7 +1033,7 @@ module Proton::TL
         @subscribed.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -1055,7 +1055,7 @@ module Proton::TL
         @call.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -1081,7 +1081,7 @@ module Proton::TL
         @join_as.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Bool
       end
     end
@@ -1107,7 +1107,7 @@ module Proton::TL
         @params.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end
@@ -1129,7 +1129,7 @@ module Proton::TL
         @call.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeUpdates
       end
     end

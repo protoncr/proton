@@ -55,7 +55,7 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeLangPackDifference
       end
     end
@@ -85,7 +85,7 @@ module Proton::TL
         @keys.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeLangPackString)
       end
     end
@@ -115,7 +115,7 @@ module Proton::TL
         @from_version.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeLangPackDifference
       end
     end
@@ -137,7 +137,7 @@ module Proton::TL
         @lang_pack.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Array(Root::TypeLangPackLanguage)
       end
     end
@@ -163,7 +163,7 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type
+      def self.return_type : Deserializable
         Root::TypeLangPackLanguage
       end
     end
