@@ -33,6 +33,6 @@ Spectator.describe Proton::MTProto::GzipPacked do
     gzip = described_class.from_bytes(gzipped)
 
     decompressed = gzip.decompress
-    expect(decompressed.size).to eq(983) # FIXME: grammers has this as 984, but for some reason we don't get that
+    expect(decompressed.size).to eq(984)
   end
 end

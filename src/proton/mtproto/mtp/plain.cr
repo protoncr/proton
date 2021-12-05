@@ -69,7 +69,7 @@ module Proton
         raise TooLongMessageLengthError.new(got: len.to_u32, max: (payload.size - 20).to_u32) if (20 + len) > payload.size
 
         Deserialization.new(
-          rpc_results: [{ MsgId.new(0), payload[20...(20 + len)].as(Bytes | RequestError) }],
+          rpc_results: [{MsgId.new(0), payload[20...(20 + len)].as(Bytes | RequestError)}],
           updates: [] of Bytes
         )
       end

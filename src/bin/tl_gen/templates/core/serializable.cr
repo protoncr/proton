@@ -98,15 +98,15 @@ struct Slice(T)
   include Proton::TL::Serializable
 
   def tl_serialize(io : IO)
-    len = if self.size <= 253
-            io.write_bytes(self.size.to_u8)
-            self.size + 1
+    len = if self.bytesize <= 253
+            io.write_bytes(self.bytesize.to_u8)
+            self.bytesize + 1
           else
             io.write_bytes(254_u8)
-            io.write_bytes((self.size & 0xff).to_u8)
-            io.write_bytes(((self.size >> 8) & 0xff).to_u8)
-            io.write_bytes(((self.size >> 16) & 0xff).to_u8)
-            self.size
+            io.write_bytes((self.bytesize & 0xff).to_u8)
+            io.write_bytes(((self.bytesize >> 8) & 0xff).to_u8)
+            io.write_bytes(((self.bytesize >> 16) & 0xff).to_u8)
+            self.bytesize
           end
 
     padding = (4 - (len % 4)) % 4

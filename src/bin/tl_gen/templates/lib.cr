@@ -12,4 +12,4 @@ require "./types/**"
 require "./custom/**"
 require "./patched/**"
 
-# require "./all_tlobjects"
+require "./tlobject_names"

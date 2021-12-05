@@ -119,6 +119,6 @@ struct Slice(T)
       end
     end
 
-    result
+    Slice(T).new(result.to_unsafe, result.bytesize)
   end
 end

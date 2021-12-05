@@ -11,7 +11,11 @@ struct Slice(T)
     @size = new_size
   end
 
-  def self.concat(*slices)
+  def self.concat(*slices : Slice)
+    self.concat(slices.to_a)
+  end
+
+  def self.concat(slices : Array(Slice))
     size = slices.map(&.bytesize).sum
     buffer = Bytes.new(size)
     index = 0

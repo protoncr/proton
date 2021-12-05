@@ -59,6 +59,8 @@ module Proton
       getter read_buffer : Bytes
       getter write_index : UInt32
 
+      @mutex : Mutex
+
       # :nodoc:
       def initialize(socket, transport, mtp, mtp_buffer, *, requests = nil, request_channel = nil, read_channel = nil, write_channel = nil, next_ping = nil, write_buffer = nil, read_buffer = nil, write_index = nil)
         @socket = socket
@@ -74,6 +76,7 @@ module Proton
         @read_buffer = read_buffer || Bytes.new(MAXIMUM_DATA)
         @write_buffer = write_buffer || Bytes.new(MAXIMUM_DATA)
         @write_index = write_index || 0_u32
+        @mutex = Mutex.new
       end
 
       # Initiate a connection using the given transport, Mtp instance, and socket address. This is meant mostly
@@ -161,8 +164,11 @@ module Proton
       def step_until_receive(rx : Channel(Bytes | InvocationError))
         loop do
           self.step
-          if result = rx.receive?
+          select
+          when result = rx.receive
             return result
+          else
+            next
           end
         end
       rescue ex : Channel::ClosedError
@@ -200,9 +206,9 @@ module Proton
             Bytes.empty
           when count = @read_channel.receive
             self.on_net_read(count)
-          # when timeout @next_ping
-          #   self.on_ping_timeout
-          #   Bytes.empty
+          when timeout PING_DELAY
+            self.on_ping_timeout
+            Bytes.empty
           end
         else
           Log.trace { "reading bytes and sending up to #{write_len} bytes via network" }
@@ -216,9 +222,9 @@ module Proton
           when count = @write_channel.receive
             self.on_net_write(count)
             Bytes.empty
-          # when timeout @next_ping
-          #   self.on_ping_timeout
-          #   Bytes.empty
+          when timeout PING_DELAY
+            self.on_ping_timeout
+            Bytes.empty
           end
         end
       end
@@ -286,7 +292,8 @@ module Proton
         @write_index += n
         Log.trace { "wrote #{n} bytes to the network (#{@write_index}/#{@write_buffer.size})" }
         raise "tried to write more bytes than exist in the buffer" if @write_index > @write_buffer.size
-        if @write_index !- @write_buffer.size
+        if @write_index
+          !-@write_buffer.size
           return
         end
 
@@ -304,7 +311,7 @@ module Proton
       end
 
       def on_ping_timeout
-        ping_id = self.generate_random_id
+        ping_id = Sender.generate_random_id
         Log.debug { "enqueuing keepalive ping #{ping_id}" }
         self.enqueue_body(TL::Root::PingDelayDisconnect.new(
           ping_id,
@@ -334,26 +341,23 @@ module Proton
               if req.msg_id == msg_id
                 raise "got rpc result #{req.msg_id} for unsent request #{msg_id}"
               end
-
             when RequestState::Sent
               if req.msg_id == msg_id
                 found = true
                 result = case ret
-                when Bytes
-                  raise "bad payload size" unless ret.size >= 4
-                  res_id = IO::ByteFormat::LittleEndian.decode(UInt32, ret[0..3])
-                  Log.debug { "got result #{res_id} for request #{msg_id}" }
-                  ret
-
-                when MTProto::BadMessageError
-                  # TODO: add a test to make sure we resend the request
-                  Log.info { "#{ret}; re-sending request #{msg_id}" }
-                  req.state = RequestState::NotSerialized
-                  break
-
-                else
-                  raise ret
-                end
+                         when Bytes
+                           raise "bad payload size" unless ret.size >= 4
+                           res_id = IO::ByteFormat::LittleEndian.decode(UInt32, ret[0..3])
+                           Log.debug { "got result #{res_id} for request #{msg_id}" }
+                           ret
+                         when MTProto::BadMessageError
+                           # TODO: add a test to make sure we resend the request
+                           Log.info { "#{ret}; re-sending request #{msg_id}" }
+                           req.state = RequestState::NotSerialized
+                           break
+                         else
+                           raise ret
+                         end
 
                 req = @requests.delete_at(i)
                 req.result.send(result)
