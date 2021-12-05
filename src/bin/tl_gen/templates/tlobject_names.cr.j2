@@ -1,6 +1,10 @@
 module Proton
   module TL
     TLOBJECT_NAMES = {
+      0xf35c6d01 => "RpcResult",
+      0x73f1f8dc => "MessageContainer",
+      0xe06046b2 => "MessageCopy",
+      0x3072cfa1 => "GzipPacked",
       {% for def in defs|selectattr("category", "equalto", "Types") %}
       {{ def.id | hex(pad_to=8, capitalize=true) }} => "{% if def.namespace|length > 0 %}{{ def.namespace|map("camelcase")|join("::") }}::{% else %}Root::{% endif %}{{ def.name | camelcase }}",
       {% endfor %}

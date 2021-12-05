@@ -19,7 +19,7 @@ module Proton::TL
         when 0xEC82E140
           PhoneCall.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -33,7 +33,7 @@ module Proton::TL
         when 0x9E727AAD
           GroupCall.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -47,7 +47,7 @@ module Proton::TL
         when 0xF47751B6
           GroupParticipants.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -61,7 +61,7 @@ module Proton::TL
         when 0xAFE5623F
           JoinAsPeers.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -75,7 +75,7 @@ module Proton::TL
         when 0x204BD158
           ExportedGroupCallInvite.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -87,7 +87,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -99,7 +99,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

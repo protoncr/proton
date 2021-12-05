@@ -21,7 +21,7 @@ module Proton::TL
         when 0x15051F54
           PhotosSlice.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -35,7 +35,7 @@ module Proton::TL
         when 0x20212CA8
           Photo.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

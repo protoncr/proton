@@ -1,3 +1,4 @@
+require "./tlobject_names"
 require "./utils"
 require "./errors"
 
@@ -11,5 +12,3 @@ require "./core/*"
 require "./types/**"
 require "./custom/**"
 require "./patched/**"
-
-require "./tlobject_names"

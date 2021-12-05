@@ -24,7 +24,7 @@ module Proton::TL
         when 0xF18CDA44
           FileCdnRedirect.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -38,7 +38,7 @@ module Proton::TL
         when 0x21E753BC
           WebFile.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -54,7 +54,7 @@ module Proton::TL
         when 0xA99FCA4F
           CdnFile.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

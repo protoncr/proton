@@ -26,7 +26,7 @@ module Proton::TL
         when 0xF0E3E596
           DialogsNotModified.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -46,7 +46,7 @@ module Proton::TL
         when 0x74535F21
           MessagesNotModified.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -62,7 +62,7 @@ module Proton::TL
         when 0x9CD81144
           ChatsSlice.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -76,7 +76,7 @@ module Proton::TL
         when 0xE5D7D19C
           ChatFull.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -90,7 +90,7 @@ module Proton::TL
         when 0xB45C69D1
           AffectedHistory.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -106,7 +106,7 @@ module Proton::TL
         when 0x2C221EDD
           DhConfig.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -122,7 +122,7 @@ module Proton::TL
         when 0x9493FF32
           SentEncryptedFile.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -138,7 +138,7 @@ module Proton::TL
         when 0x30A6EC7E
           Stickers.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -154,7 +154,7 @@ module Proton::TL
         when 0xCDBBCEBB
           AllStickers.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -168,7 +168,7 @@ module Proton::TL
         when 0x84D19185
           AffectedMessages.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -184,7 +184,7 @@ module Proton::TL
         when 0xD3F924EB
           StickerSetNotModified.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -200,7 +200,7 @@ module Proton::TL
         when 0x84A02A0D
           SavedGifs.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -214,7 +214,7 @@ module Proton::TL
         when 0x947CA848
           BotResults.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -228,7 +228,7 @@ module Proton::TL
         when 0x36585EA4
           BotCallbackAnswer.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -242,7 +242,7 @@ module Proton::TL
         when 0x26B5DDE6
           MessageEditData.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -256,7 +256,7 @@ module Proton::TL
         when 0x3371C354
           PeerDialogs.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -272,7 +272,7 @@ module Proton::TL
         when 0x84C02310
           FeaturedStickers.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -288,7 +288,7 @@ module Proton::TL
         when 0x88D37C56
           RecentStickers.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -302,7 +302,7 @@ module Proton::TL
         when 0x4FCBA9C8
           ArchivedStickers.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -318,7 +318,7 @@ module Proton::TL
         when 0x35E410A8
           StickerSetInstallResultArchive.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -332,7 +332,7 @@ module Proton::TL
         when 0x9A3BFD99
           HighScores.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -348,7 +348,7 @@ module Proton::TL
         when 0x2CB51097
           FavedStickers.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -364,7 +364,7 @@ module Proton::TL
         when 0x8AF09DD2
           FoundStickerSets.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -378,7 +378,7 @@ module Proton::TL
         when 0xE844EBFF
           SearchCounter.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -392,7 +392,7 @@ module Proton::TL
         when 0xA927FEC5
           InactiveChats.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -406,7 +406,7 @@ module Proton::TL
         when 0x0823F649
           VotesList.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -420,7 +420,7 @@ module Proton::TL
         when 0xB6C4F543
           MessageViews.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -434,7 +434,7 @@ module Proton::TL
         when 0xA6341782
           DiscussionMessage.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -448,7 +448,7 @@ module Proton::TL
         when 0x1662AF0B
           HistoryImport.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -462,7 +462,7 @@ module Proton::TL
         when 0x5E0FB7B9
           HistoryImportParsed.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -476,7 +476,7 @@ module Proton::TL
         when 0xEF8D3E6C
           AffectedFoundMessages.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -490,7 +490,7 @@ module Proton::TL
         when 0xBDC62DCC
           ExportedChatInvites.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -506,7 +506,7 @@ module Proton::TL
         when 0x222600EF
           ExportedChatInviteReplaced.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -520,7 +520,7 @@ module Proton::TL
         when 0x81B6B00A
           ChatInviteImporters.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -534,7 +534,7 @@ module Proton::TL
         when 0xB69B72D7
           ChatAdminsWithInvites.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -548,7 +548,7 @@ module Proton::TL
         when 0xA24DE717
           CheckedHistoryImportPeer.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -562,7 +562,7 @@ module Proton::TL
         when 0x65A4C7D5
           SponsoredMessages.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -576,7 +576,7 @@ module Proton::TL
         when 0x147EE23C
           SearchResultsCalendar.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -590,7 +590,7 @@ module Proton::TL
         when 0x53B22BAF
           SearchResultsPositions.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -604,7 +604,7 @@ module Proton::TL
         when 0x6880B94D
           PeerSettings.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -616,7 +616,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -628,7 +628,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -640,7 +640,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -652,7 +652,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -664,7 +664,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -676,7 +676,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -688,7 +688,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -700,7 +700,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -712,7 +712,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -724,7 +724,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -736,7 +736,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

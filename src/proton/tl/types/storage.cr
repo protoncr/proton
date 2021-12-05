@@ -37,7 +37,7 @@ module Proton::TL
         when 0x1081464C
           FileWebp.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

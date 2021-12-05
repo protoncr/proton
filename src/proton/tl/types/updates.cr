@@ -19,7 +19,7 @@ module Proton::TL
         when 0xA56C2A3E
           State.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -39,7 +39,7 @@ module Proton::TL
         when 0x4AFE8F6D
           DifferenceTooLong.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -57,7 +57,7 @@ module Proton::TL
         when 0x2064674E
           ChannelDifference.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

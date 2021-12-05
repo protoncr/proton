@@ -47,7 +47,7 @@ module Proton
       getter socket : TCPSocket
       getter transport : MTProto::BaseTransport
       getter mtp : MTProto::MtpBase
-      getter mtp_buffer : Bytes
+      getter mtp_buffer : IO::Memory
 
       getter requests : Array(Request)
       getter request_channel : Channel(Request)
@@ -55,9 +55,8 @@ module Proton
       getter write_channel : Channel(UInt32)
       getter next_ping : Time
 
-      getter write_buffer : Bytes
-      getter read_buffer : Bytes
-      getter write_index : UInt32
+      getter write_buffer : IO::Memory
+      getter read_buffer : IO::Memory
 
       @mutex : Mutex
 
@@ -73,9 +72,8 @@ module Proton
         @read_channel = read_channel || Channel(UInt32).new
         @write_channel = write_channel || Channel(UInt32).new
         @next_ping = next_ping || Time.local + PING_DELAY
-        @read_buffer = read_buffer || Bytes.new(MAXIMUM_DATA)
-        @write_buffer = write_buffer || Bytes.new(MAXIMUM_DATA)
-        @write_index = write_index || 0_u32
+        @read_buffer = read_buffer || IO::Memory.new(MAXIMUM_DATA)
+        @write_buffer = write_buffer || IO::Memory.new(MAXIMUM_DATA)
         @mutex = Mutex.new
       end
 
@@ -86,7 +84,7 @@ module Proton
         socket = TCPSocket.new(Socket::Family::INET)
         socket.connect(addr)
 
-        new(socket, transport, mtp, Bytes.new(MAXIMUM_DATA))
+        new(socket, transport, mtp, IO::Memory.new(MAXIMUM_DATA))
       end
 
       # Initiate a connection using the given transport, Mtp instance, and socket address; then process
@@ -99,16 +97,16 @@ module Proton
         Log.info { "gen auth key: sending step 1" }
         response = sender.send(request)
         Log.info { "gen auth key: starting step 2" }
-        request, data = MTProto::Authentication.step2(data, response.as(Bytes))
+        request, data = MTProto::Authentication.step2(data, response)
         Log.info { "gen auth key: sending step 2" }
         response = sender.send(request)
         Log.info { "gen auth key: starting step 3" }
-        request, data = MTProto::Authentication.step3(data, response.as(Bytes))
+        request, data = MTProto::Authentication.step3(data, response)
         Log.info { "gen auth key: sending step 3" }
         response = sender.send(request)
         Log.info { "gen auth key: completed generation" }
 
-        auth = MTProto::Authentication.create_key(data, response.as(Bytes))
+        auth = MTProto::Authentication.create_key(data, response)
         Log.info { "authorization key generated successfully" }
 
         builder = MTProto::MtpEncrypted.build
@@ -127,7 +125,6 @@ module Proton
           next_ping: Time.local + PING_DELAY,
           read_buffer: sender.read_buffer,
           write_buffer: sender.write_buffer,
-          write_index: sender.write_index,
         )
       end
 
@@ -146,7 +143,7 @@ module Proton
       end
 
       # Send a raw request to the server. See `#invoke`.
-      def send(body : Bytes)
+      def send(body : Bytes) : Bytes
         rx = self.enqueue_body(body)
         self.step_until_receive(rx)
       end
@@ -154,7 +151,7 @@ module Proton
       def enqueue_body(body : Bytes)
         raise "invalid body length" unless body.size >= 4
         req_id = IO::ByteFormat::LittleEndian.decode(UInt32, body[0..3])
-        Log.debug { "Enqueueing request (#{req_id}) to be serialized" }
+        Log.debug { "enqueueing request #{req_id} (#{TL::Utils.name_for_id(req_id)}) to be serialized" }
 
         rx = Channel(Bytes | InvocationError).new
         @requests << Request.new(body, RequestState::NotSerialized, nil, rx)
@@ -163,12 +160,16 @@ module Proton
 
       def step_until_receive(rx : Channel(Bytes | InvocationError))
         loop do
-          self.step
           select
           when result = rx.receive
-            return result
-          else
-            next
+            case result
+            in Bytes
+              return result
+            in InvocationError
+              raise result
+            end
+          when timeout 50.milliseconds
+            self.step
           end
         end
       rescue ex : Channel::ClosedError
@@ -179,19 +180,22 @@ module Proton
         self.try_fill_write
 
         # TODO: Probably want to properly set the request state on disconnect
-        write_len = @write_buffer.size - @write_index
+        write_len = @write_buffer.size
 
         spawn do
-          count, addr = @socket.receive(@read_buffer)
-          @read_channel.send(count.to_u32)
+          unless @write_buffer.empty?
+            count = @socket.send(@write_buffer.rewind)
+            @write_channel.send(count.to_u32)
+          end
         end
 
         spawn do
-          count = @socket.send(@write_buffer[@write_index..])
-          @write_channel.send(count.to_u32)
+          str, addr = @socket.receive(MAXIMUM_DATA)
+          @read_buffer.write(str.to_slice)
+          @read_channel.send(str.size.to_u32)
         end
 
-        if @write_index.zero?
+        if @write_buffer.empty?
           # TODO this always has to read the header of the packet and then the rest (2 or more calls)
           # it would be better to always perform calls in a circular buffer to have as much data from
           # the network as possible at all times, not just reading what's needed
@@ -233,7 +237,7 @@ module Proton
       def try_fill_write
         # Since the buffer has a fixed size it will never be "empty",
         # but we can check if the current write_index is zero.
-        return unless @write_index.zero?
+        return unless @write_buffer.empty?
 
         requests = @requests.select { |r| r.state == RequestState::NotSerialized }
         return if requests.empty?
@@ -247,10 +251,12 @@ module Proton
           end
         end
 
-        temp_bytes = @mtp.finalize
-        @mtp_buffer = temp_bytes[..]
+        @mtp_buffer.clear
+        @mtp_buffer.write(@mtp.finalize)
+        @mtp_buffer.rewind
+
         @write_buffer.clear
-        @transport.pack(IO::Memory.new(@mtp_buffer), IO::Memory.new(@write_buffer))
+        @transport.pack(@mtp_buffer, @write_buffer)
 
         # NOTE: we have to use the FILTERED requests, not the saved ones.
         # The key to finding this was printing the old and new state (but took ~2h to find).
@@ -261,45 +267,43 @@ module Proton
           .zip(msg_ids)
           .each do |(req, msg_id)|
             req_id = IO::ByteFormat::LittleEndian.decode(UInt32, req.body[0..3])
-            Log.debug { "Serialized request #{req_id} with #{msg_id}" }
+            Log.debug { "serialized request #{req_id} (#{TL::Utils.name_for_id(req_id)}) with #{msg_id}" }
+            req.state = RequestState::Serialized
+            req.msg_id = msg_id
           end
       end
 
       def on_net_read(n : UInt32)
-        if n == 0
-          raise IOError.new("connection reset; read 0 bytes")
-        end
+        raise IOError.new("connection reset; read 0 bytes") if n == 0
 
         Log.trace { "read #{n} bytes from the network" }
         Log.trace { "trying to unpack buffer of #{n} bytes..." }
 
+        # Rewind the read buffer so we can read the data
+        @read_buffer.rewind
+
         # TODO: the buffer might have multiple transport packets, what should happen with the
         # updates successfully read if subsequent packets fail to be deserialized properly?
         updates = [] of TL::Root::TypeUpdate
-        until @read_buffer.empty?
+        until @read_buffer.pos >= @read_buffer.size
           @mtp_buffer.clear
           begin
-            @transport.unpack(IO::Memory.new(@read_buffer), IO::Memory.new(@mtp_buffer))
-            @read_buffer.advance(n)
+            n = @transport.unpack(@read_buffer, @mtp_buffer)
+            @read_buffer.skip(n)
             self.process_mtp_buffer(updates)
           rescue MTProto::MissingBytesError
             break
           end
         end
+
+        @read_buffer.clear
         updates
       end
 
       def on_net_write(n : UInt32)
-        @write_index += n
-        Log.trace { "wrote #{n} bytes to the network (#{@write_index}/#{@write_buffer.size})" }
-        raise "tried to write more bytes than exist in the buffer" if @write_index > @write_buffer.size
-        if @write_index
-          !-@write_buffer.size
-          return
-        end
+        Log.trace { "wrote #{n} bytes to the network" }
 
         @write_buffer.clear
-        @write_index = 0
         @requests.each do |req|
           case req.state
           when RequestState::NotSerialized, RequestState::Sent
@@ -323,20 +327,18 @@ module Proton
 
       def process_mtp_buffer(updates : Array(TL::Root::TypeUpdate))
         Log.debug { "deserializing valid transport packet..." }
-        result = @mtp.deserialize(@mtp_buffer)
-
-        updates = updates.concat(result.updates.compact_map { |update|
+        result = @mtp.deserialize(@mtp_buffer.to_slice)
+        result.updates.each do |update|
           begin
-            TL::Root::TypeUpdate.tl_deserialize(IO::Memory.new(update))
+            updates.push(TL::Root::TypeUpdate.tl_deserialize(IO::Memory.new(update)))
           rescue ex
             Log.warn { "telegram sent updates that failed to be deserialized: #{ex.message}" }
           end
-        })
+        end
 
         result.rpc_results.each do |(msg_id, ret)|
           found = false
-          (0...@requests.size).each do |i|
-            req = @requests[i]
+          @requests.each do |req|
             case req.state
             when RequestState::Serialized
               if req.msg_id == msg_id
@@ -345,11 +347,11 @@ module Proton
             when RequestState::Sent
               if req.msg_id == msg_id
                 found = true
-                result = case ret
+                bytes = case ret
                          when Bytes
                            raise "bad payload size" unless ret.size >= 4
                            res_id = IO::ByteFormat::LittleEndian.decode(UInt32, ret[0..3])
-                           Log.debug { "got result #{res_id} for request #{msg_id}" }
+                           Log.debug { "got result #{res_id} (#{TL::Utils.name_for_id(res_id)}) for request #{msg_id}" }
                            ret
                          when MTProto::BadMessageError
                            # TODO: add a test to make sure we resend the request
@@ -360,8 +362,8 @@ module Proton
                            raise ret
                          end
 
-                req = @requests.delete_at(i)
-                req.result.send(result)
+                spawn req.result.send(bytes)
+                @requests.delete(req)
                 break
               end
             else
@@ -370,7 +372,8 @@ module Proton
           end
 
           unless found
-            Log.info { "got rpc result #{msg_id} but not such request is saved" }
+            Log.info { "got rpc result #{msg_id} but no such request is saved" }
+            raise "stopped"
           end
         end
       end

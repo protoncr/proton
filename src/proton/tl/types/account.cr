@@ -22,7 +22,7 @@ module Proton::TL
         when 0x50A04E45
           PrivacyRules.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -36,7 +36,7 @@ module Proton::TL
         when 0x4BFF8EA0
           Authorizations.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -50,7 +50,7 @@ module Proton::TL
         when 0x185B184F
           Password.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -64,7 +64,7 @@ module Proton::TL
         when 0x9A5C33E5
           PasswordSettings.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -78,7 +78,7 @@ module Proton::TL
         when 0xC23727C9
           PasswordInputSettings.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -92,7 +92,7 @@ module Proton::TL
         when 0xDB64FD34
           TmpPassword.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -106,7 +106,7 @@ module Proton::TL
         when 0xED56C9FC
           WebAuthorizations.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -120,7 +120,7 @@ module Proton::TL
         when 0xAD2E1CD8
           AuthorizationForm.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -134,7 +134,7 @@ module Proton::TL
         when 0x811F854F
           SentEmailCode.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -148,7 +148,7 @@ module Proton::TL
         when 0x4DBA4501
           Takeout.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -164,7 +164,7 @@ module Proton::TL
         when 0xCDC3858C
           WallPapers.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -178,7 +178,7 @@ module Proton::TL
         when 0x63CACF26
           AutoDownloadSettings.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -194,7 +194,7 @@ module Proton::TL
         when 0x9A3D8C6D
           Themes.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -208,7 +208,7 @@ module Proton::TL
         when 0x57E28221
           ContentSettings.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -226,7 +226,7 @@ module Proton::TL
         when 0xE926D63E
           ResetPasswordOk.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -238,7 +238,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -250,7 +250,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -262,7 +262,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -274,7 +274,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -286,7 +286,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -298,7 +298,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -310,7 +310,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -322,7 +322,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -334,7 +334,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -346,7 +346,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

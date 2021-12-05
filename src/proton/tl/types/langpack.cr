@@ -17,7 +17,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -29,7 +29,7 @@ module Proton::TL
 
         case constructor_id
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

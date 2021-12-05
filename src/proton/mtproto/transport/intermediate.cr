@@ -49,7 +49,8 @@ module Proton
           raise MissingBytesError.new
         end
 
-        IO.copy(needle, output).to_u32
+        n = IO.copy(needle, output)
+        UInt32.new(n + 4)
       end
     end
   end

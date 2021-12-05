@@ -19,7 +19,7 @@ module Proton::TL
         when 0x1694761B
           PaymentForm.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -33,7 +33,7 @@ module Proton::TL
         when 0xD1451883
           ValidatedRequestedInfo.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -49,7 +49,7 @@ module Proton::TL
         when 0xD8411139
           PaymentVerificationNeeded.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -63,7 +63,7 @@ module Proton::TL
         when 0x70C4FE03
           PaymentReceipt.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -77,7 +77,7 @@ module Proton::TL
         when 0xFB8FE43C
           SavedInfo.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -91,7 +91,7 @@ module Proton::TL
         when 0x3E24E573
           BankCardData.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

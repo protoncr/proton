@@ -39,5 +39,9 @@ module Proton::TL
         raise TL::UnexpectedConstructorError.new(actual)
       end
     end
+
+    def name_for_id(id)
+      TLOBJECT_NAMES[id]? || "unknown"
+    end
   end
 end

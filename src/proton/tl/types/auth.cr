@@ -24,7 +24,7 @@ module Proton::TL
         when 0x5E002502
           SentCode.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -40,7 +40,7 @@ module Proton::TL
         when 0x44747E9A
           AuthorizationSignUpRequired.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -54,7 +54,7 @@ module Proton::TL
         when 0xB434E2B8
           ExportedAuthorization.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -68,7 +68,7 @@ module Proton::TL
         when 0x137948A5
           PasswordRecovery.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -88,7 +88,7 @@ module Proton::TL
         when 0xD61AD6EE
           CodeTypeMissedCall.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -110,7 +110,7 @@ module Proton::TL
         when 0x82006484
           SentCodeTypeMissedCall.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -128,7 +128,7 @@ module Proton::TL
         when 0x390D5C5E
           LoginTokenSuccess.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end
@@ -142,7 +142,7 @@ module Proton::TL
         when 0xC3A2835F
           LoggedOut.tl_deserialize(io, bare)
         else
-          raise "Unknown constructor id: #{constructor_id}"
+          raise "Unknown constructor id: 0x%08X" % constructor_id
         end
       end
     end

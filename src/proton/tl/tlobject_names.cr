@@ -1,6 +1,10 @@
 module Proton
   module TL
     TLOBJECT_NAMES = {
+      0xf35c6d01 => "RpcResult",
+      0x73f1f8dc => "MessageContainer",
+      0xe06046b2 => "MessageCopy",
+      0x3072cfa1 => "GzipPacked",
       0x7F3B18EA => "Root::InputPeerEmpty",
       0x7DA07EC9 => "Root::InputPeerSelf",
       0x35A95CB9 => "Root::InputPeerChat",
