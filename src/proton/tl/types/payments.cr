@@ -131,11 +131,11 @@ module Proton::TL
         @bot_id = bot_id
         @invoice = invoice
         @provider_id = provider_id
-        @url = TL::Utils.parse_bytes!(url)
+        @url = Utils.parse_bytes!(url)
         @users = users
         @can_save_credentials = can_save_credentials
         @password_missing = password_missing
-        @native_provider = TL::Utils.parse_bytes(native_provider)
+        @native_provider = Utils.parse_bytes(native_provider)
         @native_params = native_params
         @saved_info = saved_info
         @saved_credentials = saved_credentials
@@ -194,7 +194,7 @@ module Proton::TL
         id : Bytes | Nil = nil,
         shipping_options : Array(Root::TypeShippingOption) | Nil = nil
       )
-        @id = TL::Utils.parse_bytes(id)
+        @id = Utils.parse_bytes(id)
         @shipping_options = shipping_options
       end
 
@@ -252,7 +252,7 @@ module Proton::TL
       def initialize(
         url : Bytes | String | IO
       )
-        @url = TL::Utils.parse_bytes!(url)
+        @url = Utils.parse_bytes!(url)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -306,12 +306,12 @@ module Proton::TL
         @date = TL::Utils.parse_int!(date, Int32)
         @bot_id = bot_id
         @provider_id = provider_id
-        @title = TL::Utils.parse_bytes!(title)
-        @description = TL::Utils.parse_bytes!(description)
+        @title = Utils.parse_bytes!(title)
+        @description = Utils.parse_bytes!(description)
         @invoice = invoice
-        @currency = TL::Utils.parse_bytes!(currency)
+        @currency = Utils.parse_bytes!(currency)
         @total_amount = total_amount
-        @credentials_title = TL::Utils.parse_bytes!(credentials_title)
+        @credentials_title = Utils.parse_bytes!(credentials_title)
         @users = users
         @photo = photo
         @info = info
@@ -410,7 +410,7 @@ module Proton::TL
         title : Bytes | String | IO,
         open_urls : Array(Root::TypeBankCardOpenUrl)
       )
-        @title = TL::Utils.parse_bytes!(title)
+        @title = Utils.parse_bytes!(title)
         @open_urls = open_urls
       end
 
@@ -549,8 +549,8 @@ module Proton::TL
         @peer = peer
         @msg_id = TL::Utils.parse_int!(msg_id, Int32)
         @credentials = credentials
-        @requested_info_id = TL::Utils.parse_bytes(requested_info_id)
-        @shipping_option_id = TL::Utils.parse_bytes(shipping_option_id)
+        @requested_info_id = Utils.parse_bytes(requested_info_id)
+        @shipping_option_id = Utils.parse_bytes(shipping_option_id)
         @tip_amount = tip_amount
       end
 
@@ -625,7 +625,7 @@ module Proton::TL
       def initialize(
         number : Bytes | String | IO
       )
-        @number = TL::Utils.parse_bytes!(number)
+        @number = Utils.parse_bytes!(number)
       end
 
       def tl_serialize(io : IO, bare = false)

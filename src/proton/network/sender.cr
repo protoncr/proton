@@ -136,10 +136,11 @@ module Proton
         @mtp.auth_key
       end
 
-      # Send a request to the server
-      def invoke(request : TL::RemoteCallable) : Bytes
+      # Send a request to the server and return its deserialized response.
+      def invoke(request : TL::TLRequest) : Bytes
         rx = self.enqueue_body(request.to_bytes)
-        self.step_until_receive(rx)
+        body = self.step_until_receive(rx)
+        request.class.return_type.from_bytes(body)
       end
 
       # Send a raw request to the server. See `#invoke`.
@@ -190,9 +191,11 @@ module Proton
         end
 
         spawn do
-          str, addr = @socket.receive(MAXIMUM_DATA)
-          @read_buffer.write(str.to_slice)
-          @read_channel.send(str.size.to_u32)
+          loop do
+            str, addr = @socket.receive(MAXIMUM_DATA)
+            @read_buffer.write(str.to_slice)
+            @read_channel.send(str.size.to_u32)
+          end
         end
 
         if @write_buffer.empty?
@@ -274,7 +277,7 @@ module Proton
       end
 
       def on_net_read(n : UInt32)
-        raise IOError.new("connection reset; read 0 bytes") if n == 0
+        return if n == 0
 
         Log.trace { "read #{n} bytes from the network" }
         Log.trace { "trying to unpack buffer of #{n} bytes..." }
@@ -316,7 +319,7 @@ module Proton
       end
 
       def on_ping_timeout
-        ping_id = Sender.generate_random_id
+        ping_id = Utils.generate_random_id
         Log.debug { "enqueuing keepalive ping #{ping_id}" }
         self.enqueue_body(TL::Root::PingDelayDisconnect.new(
           ping_id,
@@ -376,19 +379,6 @@ module Proton
             raise "stopped"
           end
         end
-      end
-
-      # Generate a random ID for each ping
-      def self.generate_random_id
-        last_id = Atomic.new(0_i64)
-
-        if last_id.get == 0
-          since_epoch = Time.utc - Time.unix(0)
-          now = since_epoch.total_nanoseconds.to_i64
-          last_id.compare_and_set(0, now)
-        end
-
-        last_id.add(1)
       end
     end
   end

@@ -45,8 +45,8 @@ module Proton::TL
         lang_pack : Bytes | String | IO,
         lang_code : Bytes | String | IO
       )
-        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_pack = Utils.parse_bytes!(lang_pack)
+        @lang_code = Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -73,8 +73,8 @@ module Proton::TL
         lang_code : Bytes | String | IO,
         keys : Array(Bytes)
       )
-        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_pack = Utils.parse_bytes!(lang_pack)
+        @lang_code = Utils.parse_bytes!(lang_code)
         @keys = keys
       end
 
@@ -103,8 +103,8 @@ module Proton::TL
         lang_code : Bytes | String | IO,
         from_version : Int32
       )
-        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_pack = Utils.parse_bytes!(lang_pack)
+        @lang_code = Utils.parse_bytes!(lang_code)
         @from_version = TL::Utils.parse_int!(from_version, Int32)
       end
 
@@ -129,7 +129,7 @@ module Proton::TL
       def initialize(
         lang_pack : Bytes | String | IO
       )
-        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
+        @lang_pack = Utils.parse_bytes!(lang_pack)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -153,8 +153,8 @@ module Proton::TL
         lang_pack : Bytes | String | IO,
         lang_code : Bytes | String | IO
       )
-        @lang_pack = TL::Utils.parse_bytes!(lang_pack)
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_pack = Utils.parse_bytes!(lang_pack)
+        @lang_code = Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)

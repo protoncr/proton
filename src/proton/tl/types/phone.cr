@@ -153,7 +153,7 @@ module Proton::TL
       )
         @call = call
         @participants = participants
-        @participants_next_offset = TL::Utils.parse_bytes!(participants_next_offset)
+        @participants_next_offset = Utils.parse_bytes!(participants_next_offset)
         @chats = chats
         @users = users
       end
@@ -200,7 +200,7 @@ module Proton::TL
       )
         @count = TL::Utils.parse_int!(count, Int32)
         @participants = participants
-        @next_offset = TL::Utils.parse_bytes!(next_offset)
+        @next_offset = Utils.parse_bytes!(next_offset)
         @chats = chats
         @users = users
         @version = TL::Utils.parse_int!(version, Int32)
@@ -273,7 +273,7 @@ module Proton::TL
       def initialize(
         link : Bytes | String | IO
       )
-        @link = TL::Utils.parse_bytes!(link)
+        @link = Utils.parse_bytes!(link)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -321,7 +321,7 @@ module Proton::TL
       )
         @user_id = user_id
         @random_id = TL::Utils.parse_int!(random_id, Int32)
-        @g_a_hash = TL::Utils.parse_bytes!(g_a_hash)
+        @g_a_hash = Utils.parse_bytes!(g_a_hash)
         @protocol = protocol
         @video = video
       end
@@ -356,7 +356,7 @@ module Proton::TL
         protocol : Root::TypePhoneCallProtocol
       )
         @peer = peer
-        @g_b = TL::Utils.parse_bytes!(g_b)
+        @g_b = Utils.parse_bytes!(g_b)
         @protocol = protocol
       end
 
@@ -388,7 +388,7 @@ module Proton::TL
         protocol : Root::TypePhoneCallProtocol
       )
         @peer = peer
-        @g_a = TL::Utils.parse_bytes!(g_a)
+        @g_a = Utils.parse_bytes!(g_a)
         @key_fingerprint = key_fingerprint
         @protocol = protocol
       end
@@ -485,7 +485,7 @@ module Proton::TL
       )
         @peer = peer
         @rating = TL::Utils.parse_int!(rating, Int32)
-        @comment = TL::Utils.parse_bytes!(comment)
+        @comment = Utils.parse_bytes!(comment)
         @user_initiative = user_initiative
       end
 
@@ -542,7 +542,7 @@ module Proton::TL
         data : Bytes | String | IO
       )
         @peer = peer
-        @data = TL::Utils.parse_bytes!(data)
+        @data = Utils.parse_bytes!(data)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -573,7 +573,7 @@ module Proton::TL
       )
         @peer = peer
         @random_id = TL::Utils.parse_int!(random_id, Int32)
-        @title = TL::Utils.parse_bytes(title)
+        @title = Utils.parse_bytes(title)
         @schedule_date = TL::Utils.parse_int(schedule_date, Int32)
       end
 
@@ -618,7 +618,7 @@ module Proton::TL
         @params = params
         @muted = muted
         @video_stopped = video_stopped
-        @invite_hash = TL::Utils.parse_bytes(invite_hash)
+        @invite_hash = Utils.parse_bytes(invite_hash)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -792,7 +792,7 @@ module Proton::TL
         @call = call
         @ids = ids
         @sources = sources
-        @offset = TL::Utils.parse_bytes!(offset)
+        @offset = Utils.parse_bytes!(offset)
         @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
@@ -856,7 +856,7 @@ module Proton::TL
         @call = call
         @start = start
         @video = video
-        @title = TL::Utils.parse_bytes(title)
+        @title = Utils.parse_bytes(title)
         @video_portrait = video_portrait
       end
 
@@ -948,7 +948,7 @@ module Proton::TL
         title : Bytes | String | IO
       )
         @call = call
-        @title = TL::Utils.parse_bytes!(title)
+        @title = Utils.parse_bytes!(title)
       end
 
       def tl_serialize(io : IO, bare = false)

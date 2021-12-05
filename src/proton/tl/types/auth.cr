@@ -163,7 +163,7 @@ module Proton::TL
         timeout : Int32 | Nil = nil
       )
         @type = type
-        @phone_code_hash = TL::Utils.parse_bytes!(phone_code_hash)
+        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
         @next_type = next_type
         @timeout = TL::Utils.parse_int(timeout, Int32)
       end
@@ -278,7 +278,7 @@ module Proton::TL
         bytes : Bytes | String | IO
       )
         @id = id
-        @bytes = TL::Utils.parse_bytes!(bytes)
+        @bytes = Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -305,7 +305,7 @@ module Proton::TL
       def initialize(
         email_pattern : Bytes | String | IO
       )
-        @email_pattern = TL::Utils.parse_bytes!(email_pattern)
+        @email_pattern = Utils.parse_bytes!(email_pattern)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -461,7 +461,7 @@ module Proton::TL
       def initialize(
         pattern : Bytes | String | IO
       )
-        @pattern = TL::Utils.parse_bytes!(pattern)
+        @pattern = Utils.parse_bytes!(pattern)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -488,7 +488,7 @@ module Proton::TL
         prefix : Bytes | String | IO,
         length : Int32
       )
-        @prefix = TL::Utils.parse_bytes!(prefix)
+        @prefix = Utils.parse_bytes!(prefix)
         @length = TL::Utils.parse_int!(length, Int32)
       end
 
@@ -519,7 +519,7 @@ module Proton::TL
         token : Bytes | String | IO
       )
         @expires = TL::Utils.parse_int!(expires, Int32)
-        @token = TL::Utils.parse_bytes!(token)
+        @token = Utils.parse_bytes!(token)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -549,7 +549,7 @@ module Proton::TL
         token : Bytes | String | IO
       )
         @dc_id = TL::Utils.parse_int!(dc_id, Int32)
-        @token = TL::Utils.parse_bytes!(token)
+        @token = Utils.parse_bytes!(token)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -601,7 +601,7 @@ module Proton::TL
       def initialize(
         future_auth_token : Bytes | Nil = nil
       )
-        @future_auth_token = TL::Utils.parse_bytes(future_auth_token)
+        @future_auth_token = Utils.parse_bytes(future_auth_token)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -636,9 +636,9 @@ module Proton::TL
         api_hash : Bytes | String | IO,
         settings : Root::TypeCodeSettings
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
+        @phone_number = Utils.parse_bytes!(phone_number)
         @api_id = TL::Utils.parse_int!(api_id, Int32)
-        @api_hash = TL::Utils.parse_bytes!(api_hash)
+        @api_hash = Utils.parse_bytes!(api_hash)
         @settings = settings
       end
 
@@ -670,10 +670,10 @@ module Proton::TL
         first_name : Bytes | String | IO,
         last_name : Bytes | String | IO
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
-        @phone_code_hash = TL::Utils.parse_bytes!(phone_code_hash)
-        @first_name = TL::Utils.parse_bytes!(first_name)
-        @last_name = TL::Utils.parse_bytes!(last_name)
+        @phone_number = Utils.parse_bytes!(phone_number)
+        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
+        @first_name = Utils.parse_bytes!(first_name)
+        @last_name = Utils.parse_bytes!(last_name)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -702,9 +702,9 @@ module Proton::TL
         phone_code_hash : Bytes | String | IO,
         phone_code : Bytes | String | IO
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
-        @phone_code_hash = TL::Utils.parse_bytes!(phone_code_hash)
-        @phone_code = TL::Utils.parse_bytes!(phone_code)
+        @phone_number = Utils.parse_bytes!(phone_number)
+        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
+        @phone_code = Utils.parse_bytes!(phone_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -779,7 +779,7 @@ module Proton::TL
         bytes : Bytes | String | IO
       )
         @id = id
-        @bytes = TL::Utils.parse_bytes!(bytes)
+        @bytes = Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -811,7 +811,7 @@ module Proton::TL
         @perm_auth_key_id = perm_auth_key_id
         @nonce = nonce
         @expires_at = TL::Utils.parse_int!(expires_at, Int32)
-        @encrypted_message = TL::Utils.parse_bytes!(encrypted_message)
+        @encrypted_message = Utils.parse_bytes!(encrypted_message)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -844,8 +844,8 @@ module Proton::TL
       )
         @flags = TL::Utils.parse_int!(flags, Int32)
         @api_id = TL::Utils.parse_int!(api_id, Int32)
-        @api_hash = TL::Utils.parse_bytes!(api_hash)
-        @bot_auth_token = TL::Utils.parse_bytes!(bot_auth_token)
+        @api_hash = Utils.parse_bytes!(api_hash)
+        @bot_auth_token = Utils.parse_bytes!(bot_auth_token)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -907,7 +907,7 @@ module Proton::TL
         code : Bytes | String | IO,
         new_settings : Account::TypePasswordInputSettings | Nil = nil
       )
-        @code = TL::Utils.parse_bytes!(code)
+        @code = Utils.parse_bytes!(code)
         @new_settings = new_settings
       end
 
@@ -936,8 +936,8 @@ module Proton::TL
         phone_number : Bytes | String | IO,
         phone_code_hash : Bytes | String | IO
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
-        @phone_code_hash = TL::Utils.parse_bytes!(phone_code_hash)
+        @phone_number = Utils.parse_bytes!(phone_number)
+        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -962,8 +962,8 @@ module Proton::TL
         phone_number : Bytes | String | IO,
         phone_code_hash : Bytes | String | IO
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
-        @phone_code_hash = TL::Utils.parse_bytes!(phone_code_hash)
+        @phone_number = Utils.parse_bytes!(phone_number)
+        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1013,7 +1013,7 @@ module Proton::TL
         except_ids : Array(Int64)
       )
         @api_id = TL::Utils.parse_int!(api_id, Int32)
-        @api_hash = TL::Utils.parse_bytes!(api_hash)
+        @api_hash = Utils.parse_bytes!(api_hash)
         @except_ids = except_ids
       end
 
@@ -1038,7 +1038,7 @@ module Proton::TL
       def initialize(
         token : Bytes | String | IO
       )
-        @token = TL::Utils.parse_bytes!(token)
+        @token = Utils.parse_bytes!(token)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1060,7 +1060,7 @@ module Proton::TL
       def initialize(
         token : Bytes | String | IO
       )
-        @token = TL::Utils.parse_bytes!(token)
+        @token = Utils.parse_bytes!(token)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1082,7 +1082,7 @@ module Proton::TL
       def initialize(
         code : Bytes | String | IO
       )
-        @code = TL::Utils.parse_bytes!(code)
+        @code = Utils.parse_bytes!(code)
       end
 
       def tl_serialize(io : IO, bare = false)

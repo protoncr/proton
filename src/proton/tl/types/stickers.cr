@@ -48,7 +48,7 @@ module Proton::TL
       def initialize(
         short_name : Bytes | String | IO
       )
-        @short_name = TL::Utils.parse_bytes!(short_name)
+        @short_name = Utils.parse_bytes!(short_name)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -88,13 +88,13 @@ module Proton::TL
         software : Bytes | Nil = nil
       )
         @user_id = user_id
-        @title = TL::Utils.parse_bytes!(title)
-        @short_name = TL::Utils.parse_bytes!(short_name)
+        @title = Utils.parse_bytes!(title)
+        @short_name = Utils.parse_bytes!(short_name)
         @stickers = stickers
         @masks = masks
         @animated = animated
         @thumb = thumb
-        @software = TL::Utils.parse_bytes(software)
+        @software = Utils.parse_bytes(software)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -227,7 +227,7 @@ module Proton::TL
       def initialize(
         short_name : Bytes | String | IO
       )
-        @short_name = TL::Utils.parse_bytes!(short_name)
+        @short_name = Utils.parse_bytes!(short_name)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -249,7 +249,7 @@ module Proton::TL
       def initialize(
         title : Bytes | String | IO
       )
-        @title = TL::Utils.parse_bytes!(title)
+        @title = Utils.parse_bytes!(title)
       end
 
       def tl_serialize(io : IO, bare = false)

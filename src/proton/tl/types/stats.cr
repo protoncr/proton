@@ -343,7 +343,7 @@ module Proton::TL
         token : Bytes | String | IO,
         x : Int64 | Nil = nil
       )
-        @token = TL::Utils.parse_bytes!(token)
+        @token = Utils.parse_bytes!(token)
         @x = x
       end
 

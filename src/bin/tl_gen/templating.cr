@@ -8,7 +8,7 @@ ACCEPTABLE_TYPES = {
   "int64"  => ["Int32", "Int64"],
   "int128" => ["BigInt", "Int::Primitive"],
   "int256" => ["BigInt", "Int::Primitive"],
-  "!X"     => ["TLObject"],
+  "!X"     => ["Bytes", "Serializable"],
   "date"   => ["Int64", "Time"],
 }
 

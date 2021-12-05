@@ -449,15 +449,15 @@ module Proton::TL
       )
         @new_algo = new_algo
         @new_secure_algo = new_secure_algo
-        @secure_random = TL::Utils.parse_bytes!(secure_random)
+        @secure_random = Utils.parse_bytes!(secure_random)
         @has_recovery = has_recovery
         @has_secure_values = has_secure_values
         @has_password = has_password
         @current_algo = current_algo
-        @srp_b = TL::Utils.parse_bytes(srp_b)
+        @srp_b = Utils.parse_bytes(srp_b)
         @srp_id = srp_id
-        @hint = TL::Utils.parse_bytes(hint)
-        @email_unconfirmed_pattern = TL::Utils.parse_bytes(email_unconfirmed_pattern)
+        @hint = Utils.parse_bytes(hint)
+        @email_unconfirmed_pattern = Utils.parse_bytes(email_unconfirmed_pattern)
         @pending_reset_date = TL::Utils.parse_int(pending_reset_date, Int32)
       end
 
@@ -516,7 +516,7 @@ module Proton::TL
         email : Bytes | Nil = nil,
         secure_settings : Root::TypeSecureSecretSettings | Nil = nil
       )
-        @email = TL::Utils.parse_bytes(email)
+        @email = Utils.parse_bytes(email)
         @secure_settings = secure_settings
       end
 
@@ -558,9 +558,9 @@ module Proton::TL
         new_secure_settings : Root::TypeSecureSecretSettings | Nil = nil
       )
         @new_algo = new_algo
-        @new_password_hash = TL::Utils.parse_bytes(new_password_hash)
-        @hint = TL::Utils.parse_bytes(hint)
-        @email = TL::Utils.parse_bytes(email)
+        @new_password_hash = Utils.parse_bytes(new_password_hash)
+        @hint = Utils.parse_bytes(hint)
+        @email = Utils.parse_bytes(email)
         @new_secure_settings = new_secure_settings
       end
 
@@ -604,7 +604,7 @@ module Proton::TL
         tmp_password : Bytes | String | IO,
         valid_until : Int32
       )
-        @tmp_password = TL::Utils.parse_bytes!(tmp_password)
+        @tmp_password = Utils.parse_bytes!(tmp_password)
         @valid_until = TL::Utils.parse_int!(valid_until, Int32)
       end
 
@@ -674,7 +674,7 @@ module Proton::TL
         @values = values
         @errors = errors
         @users = users
-        @privacy_policy_url = TL::Utils.parse_bytes(privacy_policy_url)
+        @privacy_policy_url = Utils.parse_bytes(privacy_policy_url)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -713,7 +713,7 @@ module Proton::TL
         email_pattern : Bytes | String | IO,
         length : Int32
       )
-        @email_pattern = TL::Utils.parse_bytes!(email_pattern)
+        @email_pattern = Utils.parse_bytes!(email_pattern)
         @length = TL::Utils.parse_int!(length, Int32)
       end
 
@@ -997,9 +997,9 @@ module Proton::TL
         no_muted : Bool | Nil = nil
       )
         @token_type = TL::Utils.parse_int!(token_type, Int32)
-        @token = TL::Utils.parse_bytes!(token)
+        @token = Utils.parse_bytes!(token)
         @app_sandbox = app_sandbox
-        @secret = TL::Utils.parse_bytes!(secret)
+        @secret = Utils.parse_bytes!(secret)
         @other_uids = other_uids
         @no_muted = no_muted
       end
@@ -1035,7 +1035,7 @@ module Proton::TL
         other_uids : Array(Int64)
       )
         @token_type = TL::Utils.parse_int!(token_type, Int32)
-        @token = TL::Utils.parse_bytes!(token)
+        @token = Utils.parse_bytes!(token)
         @other_uids = other_uids
       end
 
@@ -1125,9 +1125,9 @@ module Proton::TL
         last_name : Bytes | Nil = nil,
         about : Bytes | Nil = nil
       )
-        @first_name = TL::Utils.parse_bytes(first_name)
-        @last_name = TL::Utils.parse_bytes(last_name)
-        @about = TL::Utils.parse_bytes(about)
+        @first_name = Utils.parse_bytes(first_name)
+        @last_name = Utils.parse_bytes(last_name)
+        @about = Utils.parse_bytes(about)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1206,7 +1206,7 @@ module Proton::TL
       )
         @peer = peer
         @reason = reason
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1230,7 +1230,7 @@ module Proton::TL
       def initialize(
         username : Bytes | String | IO
       )
-        @username = TL::Utils.parse_bytes!(username)
+        @username = Utils.parse_bytes!(username)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1252,7 +1252,7 @@ module Proton::TL
       def initialize(
         username : Bytes | String | IO
       )
-        @username = TL::Utils.parse_bytes!(username)
+        @username = Utils.parse_bytes!(username)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1322,7 +1322,7 @@ module Proton::TL
       def initialize(
         reason : Bytes | String | IO
       )
-        @reason = TL::Utils.parse_bytes!(reason)
+        @reason = Utils.parse_bytes!(reason)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1381,7 +1381,7 @@ module Proton::TL
         phone_number : Bytes | String | IO,
         settings : Root::TypeCodeSettings
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
+        @phone_number = Utils.parse_bytes!(phone_number)
         @settings = settings
       end
 
@@ -1409,9 +1409,9 @@ module Proton::TL
         phone_code_hash : Bytes | String | IO,
         phone_code : Bytes | String | IO
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
-        @phone_code_hash = TL::Utils.parse_bytes!(phone_code_hash)
-        @phone_code = TL::Utils.parse_bytes!(phone_code)
+        @phone_number = Utils.parse_bytes!(phone_number)
+        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
+        @phone_code = Utils.parse_bytes!(phone_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1555,7 +1555,7 @@ module Proton::TL
         hash : Bytes | String | IO,
         settings : Root::TypeCodeSettings
       )
-        @hash = TL::Utils.parse_bytes!(hash)
+        @hash = Utils.parse_bytes!(hash)
         @settings = settings
       end
 
@@ -1581,8 +1581,8 @@ module Proton::TL
         phone_code_hash : Bytes | String | IO,
         phone_code : Bytes | String | IO
       )
-        @phone_code_hash = TL::Utils.parse_bytes!(phone_code_hash)
-        @phone_code = TL::Utils.parse_bytes!(phone_code)
+        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
+        @phone_code = Utils.parse_bytes!(phone_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1767,8 +1767,8 @@ module Proton::TL
         public_key : Bytes | String | IO
       )
         @bot_id = bot_id
-        @scope = TL::Utils.parse_bytes!(scope)
-        @public_key = TL::Utils.parse_bytes!(public_key)
+        @scope = Utils.parse_bytes!(scope)
+        @public_key = Utils.parse_bytes!(public_key)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1801,8 +1801,8 @@ module Proton::TL
         credentials : Root::TypeSecureCredentialsEncrypted
       )
         @bot_id = bot_id
-        @scope = TL::Utils.parse_bytes!(scope)
-        @public_key = TL::Utils.parse_bytes!(public_key)
+        @scope = Utils.parse_bytes!(scope)
+        @public_key = Utils.parse_bytes!(public_key)
         @value_hashes = value_hashes
         @credentials = credentials
       end
@@ -1832,7 +1832,7 @@ module Proton::TL
         phone_number : Bytes | String | IO,
         settings : Root::TypeCodeSettings
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
+        @phone_number = Utils.parse_bytes!(phone_number)
         @settings = settings
       end
 
@@ -1860,9 +1860,9 @@ module Proton::TL
         phone_code_hash : Bytes | String | IO,
         phone_code : Bytes | String | IO
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
-        @phone_code_hash = TL::Utils.parse_bytes!(phone_code_hash)
-        @phone_code = TL::Utils.parse_bytes!(phone_code)
+        @phone_number = Utils.parse_bytes!(phone_number)
+        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
+        @phone_code = Utils.parse_bytes!(phone_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1886,7 +1886,7 @@ module Proton::TL
       def initialize(
         email : Bytes | String | IO
       )
-        @email = TL::Utils.parse_bytes!(email)
+        @email = Utils.parse_bytes!(email)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1910,8 +1910,8 @@ module Proton::TL
         email : Bytes | String | IO,
         code : Bytes | String | IO
       )
-        @email = TL::Utils.parse_bytes!(email)
-        @code = TL::Utils.parse_bytes!(code)
+        @email = Utils.parse_bytes!(email)
+        @code = Utils.parse_bytes!(code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -2007,7 +2007,7 @@ module Proton::TL
       def initialize(
         code : Bytes | String | IO
       )
-        @code = TL::Utils.parse_bytes!(code)
+        @code = Utils.parse_bytes!(code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -2146,7 +2146,7 @@ module Proton::TL
         settings : Root::TypeWallPaperSettings
       )
         @file = file
-        @mime_type = TL::Utils.parse_bytes!(mime_type)
+        @mime_type = Utils.parse_bytes!(mime_type)
         @settings = settings
       end
 
@@ -2292,8 +2292,8 @@ module Proton::TL
         thumb : Root::TypeInputFile | Nil = nil
       )
         @file = file
-        @file_name = TL::Utils.parse_bytes!(file_name)
-        @mime_type = TL::Utils.parse_bytes!(mime_type)
+        @file_name = Utils.parse_bytes!(file_name)
+        @mime_type = Utils.parse_bytes!(mime_type)
         @thumb = thumb
       end
 
@@ -2328,8 +2328,8 @@ module Proton::TL
         document : Root::TypeInputDocument | Nil = nil,
         settings : Array(Root::TypeInputThemeSettings) | Nil = nil
       )
-        @slug = TL::Utils.parse_bytes!(slug)
-        @title = TL::Utils.parse_bytes!(title)
+        @slug = Utils.parse_bytes!(slug)
+        @title = Utils.parse_bytes!(title)
         @document = document
         @settings = settings
       end
@@ -2370,10 +2370,10 @@ module Proton::TL
         document : Root::TypeInputDocument | Nil = nil,
         settings : Array(Root::TypeInputThemeSettings) | Nil = nil
       )
-        @format = TL::Utils.parse_bytes!(format)
+        @format = Utils.parse_bytes!(format)
         @theme = theme
-        @slug = TL::Utils.parse_bytes(slug)
-        @title = TL::Utils.parse_bytes(title)
+        @slug = Utils.parse_bytes(slug)
+        @title = Utils.parse_bytes(title)
         @document = document
         @settings = settings
       end
@@ -2442,7 +2442,7 @@ module Proton::TL
       )
         @dark = dark
         @theme = theme
-        @format = TL::Utils.parse_bytes(format)
+        @format = Utils.parse_bytes(format)
         @base_theme = base_theme
       end
 
@@ -2477,7 +2477,7 @@ module Proton::TL
         theme : Root::TypeInputTheme,
         document_id : Int64
       )
-        @format = TL::Utils.parse_bytes!(format)
+        @format = Utils.parse_bytes!(format)
         @theme = theme
         @document_id = document_id
       end
@@ -2505,7 +2505,7 @@ module Proton::TL
         format : Bytes | String | IO,
         hash : Int64
       )
-        @format = TL::Utils.parse_bytes!(format)
+        @format = Utils.parse_bytes!(format)
         @hash = hash
       end
 
@@ -2632,7 +2632,7 @@ module Proton::TL
         @peer = peer
         @photo_id = photo_id
         @reason = reason
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
       end
 
       def tl_serialize(io : IO, bare = false)

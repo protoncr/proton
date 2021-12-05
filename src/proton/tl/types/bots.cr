@@ -33,7 +33,7 @@ module Proton::TL
         custom_method : Bytes | String | IO,
         params : Root::TypeDataJSON
       )
-        @custom_method = TL::Utils.parse_bytes!(custom_method)
+        @custom_method = Utils.parse_bytes!(custom_method)
         @params = params
       end
 
@@ -88,7 +88,7 @@ module Proton::TL
         commands : Array(Root::TypeBotCommand)
       )
         @scope = scope
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_bytes!(lang_code)
         @commands = commands
       end
 
@@ -116,7 +116,7 @@ module Proton::TL
         lang_code : Bytes | String | IO
       )
         @scope = scope
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -142,7 +142,7 @@ module Proton::TL
         lang_code : Bytes | String | IO
       )
         @scope = scope
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)

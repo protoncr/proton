@@ -74,7 +74,7 @@ module Proton::TL
       )
         @type = type
         @mtime = TL::Utils.parse_int!(mtime, Int32)
-        @bytes = TL::Utils.parse_bytes!(bytes)
+        @bytes = Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -112,9 +112,9 @@ module Proton::TL
         file_hashes : Array(Root::TypeFileHash)
       )
         @dc_id = TL::Utils.parse_int!(dc_id, Int32)
-        @file_token = TL::Utils.parse_bytes!(file_token)
-        @encryption_key = TL::Utils.parse_bytes!(encryption_key)
-        @encryption_iv = TL::Utils.parse_bytes!(encryption_iv)
+        @file_token = Utils.parse_bytes!(file_token)
+        @encryption_key = Utils.parse_bytes!(encryption_key)
+        @encryption_iv = Utils.parse_bytes!(encryption_iv)
         @file_hashes = file_hashes
       end
 
@@ -157,10 +157,10 @@ module Proton::TL
         bytes : Bytes | String | IO
       )
         @size = TL::Utils.parse_int!(size, Int32)
-        @mime_type = TL::Utils.parse_bytes!(mime_type)
+        @mime_type = Utils.parse_bytes!(mime_type)
         @file_type = file_type
         @mtime = TL::Utils.parse_int!(mtime, Int32)
-        @bytes = TL::Utils.parse_bytes!(bytes)
+        @bytes = Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -193,7 +193,7 @@ module Proton::TL
       def initialize(
         request_token : Bytes | String | IO
       )
-        @request_token = TL::Utils.parse_bytes!(request_token)
+        @request_token = Utils.parse_bytes!(request_token)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -218,7 +218,7 @@ module Proton::TL
       def initialize(
         bytes : Bytes | String | IO
       )
-        @bytes = TL::Utils.parse_bytes!(bytes)
+        @bytes = Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -249,7 +249,7 @@ module Proton::TL
       )
         @file_id = file_id
         @file_part = TL::Utils.parse_int!(file_part, Int32)
-        @bytes = TL::Utils.parse_bytes!(bytes)
+        @bytes = Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -322,7 +322,7 @@ module Proton::TL
         @file_id = file_id
         @file_part = TL::Utils.parse_int!(file_part, Int32)
         @file_total_parts = TL::Utils.parse_int!(file_total_parts, Int32)
-        @bytes = TL::Utils.parse_bytes!(bytes)
+        @bytes = Utils.parse_bytes!(bytes)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -381,7 +381,7 @@ module Proton::TL
         offset : Int32,
         limit : Int32
       )
-        @file_token = TL::Utils.parse_bytes!(file_token)
+        @file_token = Utils.parse_bytes!(file_token)
         @offset = TL::Utils.parse_int!(offset, Int32)
         @limit = TL::Utils.parse_int!(limit, Int32)
       end
@@ -409,8 +409,8 @@ module Proton::TL
         file_token : Bytes | String | IO,
         request_token : Bytes | String | IO
       )
-        @file_token = TL::Utils.parse_bytes!(file_token)
-        @request_token = TL::Utils.parse_bytes!(request_token)
+        @file_token = Utils.parse_bytes!(file_token)
+        @request_token = Utils.parse_bytes!(request_token)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -435,7 +435,7 @@ module Proton::TL
         file_token : Bytes | String | IO,
         offset : Int32
       )
-        @file_token = TL::Utils.parse_bytes!(file_token)
+        @file_token = Utils.parse_bytes!(file_token)
         @offset = TL::Utils.parse_int!(offset, Int32)
       end
 

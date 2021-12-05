@@ -62,7 +62,7 @@ module Proton
         seq_no = Int32.tl_deserialize(io)
 
         len = Int32.tl_deserialize(io)
-        raise "Invalid length #{len}" if len <= 0 || len < MessageContainer::MAXIMUM_SIZE
+        raise "Invalid length #{len}" if len < 0 || len > MessageContainer::MAXIMUM_SIZE
 
         io.seek(-4, IO::Seek::Current)
         body = Bytes.tl_deserialize(io)

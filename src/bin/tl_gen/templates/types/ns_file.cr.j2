@@ -67,7 +67,9 @@ module {{ module_root }}
         )
           {% for param in params|rejectattr("crystal_type", "equalto", "#") %}
           {% if param.type.type.name == "bytes" or param.type.type.name == "string" %}
-          @{{ param.name }} = TL::Utils.parse_bytes{% if param.optional != 1 %}!{% endif %}({{ param.name }}) 
+          @{{ param.name }} = Utils.parse_bytes{% if param.optional != 1 %}!{% endif %}({{ param.name }})
+          {% elif param.type.type.name == "X" %}
+          @{{ param.name }} = {% if param.optional == 1 %}{{ param.name }}.nil? ? nil : {% endif %} ( {{ param.name }}.is_a?(Bytes) ? {{ param.name }} : {{ param.name }}.to_bytes )
           {% elif param.type.type.name | starts_with("int") %}
           @{{ param.name }} = TL::Utils.parse_int{% if param.optional != 1 %}!{% endif %}({{ param.name }}, {{ param.crystal_type }}) 
           {% else %}

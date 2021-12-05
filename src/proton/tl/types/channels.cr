@@ -575,13 +575,13 @@ module Proton::TL
         geo_point : Root::TypeInputGeoPoint | Nil = nil,
         address : Bytes | Nil = nil
       )
-        @title = TL::Utils.parse_bytes!(title)
-        @about = TL::Utils.parse_bytes!(about)
+        @title = Utils.parse_bytes!(title)
+        @about = Utils.parse_bytes!(about)
         @broadcast = broadcast
         @megagroup = megagroup
         @for_import = for_import
         @geo_point = geo_point
-        @address = TL::Utils.parse_bytes(address)
+        @address = Utils.parse_bytes(address)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -622,7 +622,7 @@ module Proton::TL
         @channel = channel
         @user_id = user_id
         @admin_rights = admin_rights
-        @rank = TL::Utils.parse_bytes!(rank)
+        @rank = Utils.parse_bytes!(rank)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -650,7 +650,7 @@ module Proton::TL
         title : Bytes | String | IO
       )
         @channel = channel
-        @title = TL::Utils.parse_bytes!(title)
+        @title = Utils.parse_bytes!(title)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -702,7 +702,7 @@ module Proton::TL
         username : Bytes | String | IO
       )
         @channel = channel
-        @username = TL::Utils.parse_bytes!(username)
+        @username = Utils.parse_bytes!(username)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -728,7 +728,7 @@ module Proton::TL
         username : Bytes | String | IO
       )
         @channel = channel
-        @username = TL::Utils.parse_bytes!(username)
+        @username = Utils.parse_bytes!(username)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -976,7 +976,7 @@ module Proton::TL
         admins : Array(Root::TypeInputUser) | Nil = nil
       )
         @channel = channel
-        @q = TL::Utils.parse_bytes!(q)
+        @q = Utils.parse_bytes!(q)
         @max_id = max_id
         @min_id = min_id
         @limit = TL::Utils.parse_int!(limit, Int32)
@@ -1214,7 +1214,7 @@ module Proton::TL
       )
         @channel = channel
         @geo_point = geo_point
-        @address = TL::Utils.parse_bytes!(address)
+        @address = Utils.parse_bytes!(address)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1302,7 +1302,7 @@ module Proton::TL
         random_id : Bytes | String | IO
       )
         @channel = channel
-        @random_id = TL::Utils.parse_bytes!(random_id)
+        @random_id = Utils.parse_bytes!(random_id)
       end
 
       def tl_serialize(io : IO, bare = false)

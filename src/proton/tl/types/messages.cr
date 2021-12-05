@@ -1164,7 +1164,7 @@ module Proton::TL
       def initialize(
         random : Bytes | String | IO
       )
-        @random = TL::Utils.parse_bytes!(random)
+        @random = Utils.parse_bytes!(random)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1196,9 +1196,9 @@ module Proton::TL
         random : Bytes | String | IO
       )
         @g = TL::Utils.parse_int!(g, Int32)
-        @p = TL::Utils.parse_bytes!(p)
+        @p = Utils.parse_bytes!(p)
         @version = TL::Utils.parse_int!(version, Int32)
-        @random = TL::Utils.parse_bytes!(random)
+        @random = Utils.parse_bytes!(random)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1512,7 +1512,7 @@ module Proton::TL
         @cache_time = TL::Utils.parse_int!(cache_time, Int32)
         @users = users
         @gallery = gallery
-        @next_offset = TL::Utils.parse_bytes(next_offset)
+        @next_offset = Utils.parse_bytes(next_offset)
         @switch_pm = switch_pm
       end
 
@@ -1569,8 +1569,8 @@ module Proton::TL
         @alert = alert
         @has_url = has_url
         @native_ui = native_ui
-        @message = TL::Utils.parse_bytes(message)
-        @url = TL::Utils.parse_bytes(url)
+        @message = Utils.parse_bytes(message)
+        @url = Utils.parse_bytes(url)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -2076,7 +2076,7 @@ module Proton::TL
         @count = TL::Utils.parse_int!(count, Int32)
         @votes = votes
         @users = users
-        @next_offset = TL::Utils.parse_bytes(next_offset)
+        @next_offset = Utils.parse_bytes(next_offset)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -2238,7 +2238,7 @@ module Proton::TL
       )
         @pm = pm
         @group = group
-        @title = TL::Utils.parse_bytes(title)
+        @title = Utils.parse_bytes(title)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -2476,7 +2476,7 @@ module Proton::TL
       def initialize(
         confirm_text : Bytes | String | IO
       )
-        @confirm_text = TL::Utils.parse_bytes!(confirm_text)
+        @confirm_text = Utils.parse_bytes!(confirm_text)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -2816,7 +2816,7 @@ module Proton::TL
         top_msg_id : Int32 | Nil = nil
       )
         @peer = peer
-        @q = TL::Utils.parse_bytes!(q)
+        @q = Utils.parse_bytes!(q)
         @filter = filter
         @min_date = TL::Utils.parse_int!(min_date, Int32)
         @max_date = TL::Utils.parse_int!(max_date, Int32)
@@ -3043,7 +3043,7 @@ module Proton::TL
         send_as : Root::TypeInputPeer | Nil = nil
       )
         @peer = peer
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
         @random_id = random_id
         @no_webpage = no_webpage
         @silent = silent
@@ -3117,7 +3117,7 @@ module Proton::TL
       )
         @peer = peer
         @media = media
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
         @random_id = random_id
         @silent = silent
         @background = background
@@ -3285,7 +3285,7 @@ module Proton::TL
         @peer = peer
         @id = id
         @reason = reason
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -3357,7 +3357,7 @@ module Proton::TL
         title : Bytes | String | IO
       )
         @chat_id = chat_id
-        @title = TL::Utils.parse_bytes!(title)
+        @title = Utils.parse_bytes!(title)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -3471,7 +3471,7 @@ module Proton::TL
         title : Bytes | String | IO
       )
         @users = users
-        @title = TL::Utils.parse_bytes!(title)
+        @title = Utils.parse_bytes!(title)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -3526,7 +3526,7 @@ module Proton::TL
       )
         @user_id = user_id
         @random_id = TL::Utils.parse_int!(random_id, Int32)
-        @g_a = TL::Utils.parse_bytes!(g_a)
+        @g_a = Utils.parse_bytes!(g_a)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -3555,7 +3555,7 @@ module Proton::TL
         key_fingerprint : Int64
       )
         @peer = peer
-        @g_b = TL::Utils.parse_bytes!(g_b)
+        @g_b = Utils.parse_bytes!(g_b)
         @key_fingerprint = key_fingerprint
       end
 
@@ -3668,7 +3668,7 @@ module Proton::TL
       )
         @peer = peer
         @random_id = random_id
-        @data = TL::Utils.parse_bytes!(data)
+        @data = Utils.parse_bytes!(data)
         @silent = silent
       end
 
@@ -3706,7 +3706,7 @@ module Proton::TL
       )
         @peer = peer
         @random_id = random_id
-        @data = TL::Utils.parse_bytes!(data)
+        @data = Utils.parse_bytes!(data)
         @file = file
         @silent = silent
       end
@@ -3742,7 +3742,7 @@ module Proton::TL
       )
         @peer = peer
         @random_id = random_id
-        @data = TL::Utils.parse_bytes!(data)
+        @data = Utils.parse_bytes!(data)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -3834,7 +3834,7 @@ module Proton::TL
         emoticon : Bytes | String | IO,
         hash : Int64
       )
-        @emoticon = TL::Utils.parse_bytes!(emoticon)
+        @emoticon = Utils.parse_bytes!(emoticon)
         @hash = hash
       end
 
@@ -3882,7 +3882,7 @@ module Proton::TL
         message : Bytes | String | IO,
         entities : Array(Root::TypeMessageEntity) | Nil = nil
       )
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
         @entities = entities
       end
 
@@ -3924,7 +3924,7 @@ module Proton::TL
         @request_needed = request_needed
         @expire_date = TL::Utils.parse_int(expire_date, Int32)
         @usage_limit = TL::Utils.parse_int(usage_limit, Int32)
-        @title = TL::Utils.parse_bytes(title)
+        @title = Utils.parse_bytes(title)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -3956,7 +3956,7 @@ module Proton::TL
       def initialize(
         hash : Bytes | String | IO
       )
-        @hash = TL::Utils.parse_bytes!(hash)
+        @hash = Utils.parse_bytes!(hash)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -3978,7 +3978,7 @@ module Proton::TL
       def initialize(
         hash : Bytes | String | IO
       )
-        @hash = TL::Utils.parse_bytes!(hash)
+        @hash = Utils.parse_bytes!(hash)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -4083,7 +4083,7 @@ module Proton::TL
         @bot = bot
         @peer = peer
         @random_id = random_id
-        @start_param = TL::Utils.parse_bytes!(start_param)
+        @start_param = Utils.parse_bytes!(start_param)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -4206,7 +4206,7 @@ module Proton::TL
         limit : Int32,
         folder_id : Int32 | Nil = nil
       )
-        @q = TL::Utils.parse_bytes!(q)
+        @q = Utils.parse_bytes!(q)
         @filter = filter
         @min_date = TL::Utils.parse_int!(min_date, Int32)
         @max_date = TL::Utils.parse_int!(max_date, Int32)
@@ -4279,9 +4279,9 @@ module Proton::TL
         size : Int32,
         mime_type : Bytes | String | IO
       )
-        @sha256 = TL::Utils.parse_bytes!(sha256)
+        @sha256 = Utils.parse_bytes!(sha256)
         @size = TL::Utils.parse_int!(size, Int32)
-        @mime_type = TL::Utils.parse_bytes!(mime_type)
+        @mime_type = Utils.parse_bytes!(mime_type)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -4363,8 +4363,8 @@ module Proton::TL
       )
         @bot = bot
         @peer = peer
-        @query = TL::Utils.parse_bytes!(query)
-        @offset = TL::Utils.parse_bytes!(offset)
+        @query = Utils.parse_bytes!(query)
+        @offset = Utils.parse_bytes!(offset)
         @geo_point = geo_point
       end
 
@@ -4411,7 +4411,7 @@ module Proton::TL
         @cache_time = TL::Utils.parse_int!(cache_time, Int32)
         @gallery = gallery
         @is_private = is_private
-        @next_offset = TL::Utils.parse_bytes(next_offset)
+        @next_offset = Utils.parse_bytes(next_offset)
         @switch_pm = switch_pm
       end
 
@@ -4467,7 +4467,7 @@ module Proton::TL
         @peer = peer
         @random_id = random_id
         @query_id = query_id
-        @id = TL::Utils.parse_bytes!(id)
+        @id = Utils.parse_bytes!(id)
         @silent = silent
         @background = background
         @clear_draft = clear_draft
@@ -4554,7 +4554,7 @@ module Proton::TL
         @peer = peer
         @id = TL::Utils.parse_int!(id, Int32)
         @no_webpage = no_webpage
-        @message = TL::Utils.parse_bytes(message)
+        @message = Utils.parse_bytes(message)
         @media = media
         @reply_markup = reply_markup
         @entities = entities
@@ -4606,7 +4606,7 @@ module Proton::TL
       )
         @id = id
         @no_webpage = no_webpage
-        @message = TL::Utils.parse_bytes(message)
+        @message = Utils.parse_bytes(message)
         @media = media
         @reply_markup = reply_markup
         @entities = entities
@@ -4653,7 +4653,7 @@ module Proton::TL
         @peer = peer
         @msg_id = TL::Utils.parse_int!(msg_id, Int32)
         @game = game
-        @data = TL::Utils.parse_bytes(data)
+        @data = Utils.parse_bytes(data)
         @password = password
       end
 
@@ -4695,8 +4695,8 @@ module Proton::TL
         @query_id = query_id
         @cache_time = TL::Utils.parse_int!(cache_time, Int32)
         @alert = alert
-        @message = TL::Utils.parse_bytes(message)
-        @url = TL::Utils.parse_bytes(url)
+        @message = Utils.parse_bytes(message)
+        @url = Utils.parse_bytes(url)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -4757,7 +4757,7 @@ module Proton::TL
         entities : Array(Root::TypeMessageEntity) | Nil = nil
       )
         @peer = peer
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
         @no_webpage = no_webpage
         @reply_to_msg_id = TL::Utils.parse_int(reply_to_msg_id, Int32)
         @entities = entities
@@ -5201,7 +5201,7 @@ module Proton::TL
         url : Bytes | String | IO,
         hash : Int32
       )
-        @url = TL::Utils.parse_bytes!(url)
+        @url = Utils.parse_bytes!(url)
         @hash = TL::Utils.parse_int!(hash, Int32)
       end
 
@@ -5312,7 +5312,7 @@ module Proton::TL
         shipping_options : Array(Root::TypeShippingOption) | Nil = nil
       )
         @query_id = query_id
-        @error = TL::Utils.parse_bytes(error)
+        @error = Utils.parse_bytes(error)
         @shipping_options = shipping_options
       end
 
@@ -5347,7 +5347,7 @@ module Proton::TL
       )
         @query_id = query_id
         @success = success
-        @error = TL::Utils.parse_bytes(error)
+        @error = Utils.parse_bytes(error)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -5657,7 +5657,7 @@ module Proton::TL
         hash : Int64,
         exclude_featured : Bool | Nil = nil
       )
-        @q = TL::Utils.parse_bytes!(q)
+        @q = Utils.parse_bytes!(q)
         @hash = hash
         @exclude_featured = exclude_featured
       end
@@ -5873,7 +5873,7 @@ module Proton::TL
         about : Bytes | String | IO
       )
         @peer = peer
-        @about = TL::Utils.parse_bytes!(about)
+        @about = Utils.parse_bytes!(about)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -5922,7 +5922,7 @@ module Proton::TL
       def initialize(
         lang_code : Bytes | String | IO
       )
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -5946,7 +5946,7 @@ module Proton::TL
         lang_code : Bytes | String | IO,
         from_version : Int32
       )
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_bytes!(lang_code)
         @from_version = TL::Utils.parse_int!(from_version, Int32)
       end
 
@@ -5992,7 +5992,7 @@ module Proton::TL
       def initialize(
         lang_code : Bytes | String | IO
       )
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_bytes!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -6049,7 +6049,7 @@ module Proton::TL
         @peer = peer
         @msg_id = TL::Utils.parse_int(msg_id, Int32)
         @button_id = TL::Utils.parse_int(button_id, Int32)
-        @url = TL::Utils.parse_bytes(url)
+        @url = Utils.parse_bytes(url)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -6092,7 +6092,7 @@ module Proton::TL
         @peer = peer
         @msg_id = TL::Utils.parse_int(msg_id, Int32)
         @button_id = TL::Utils.parse_int(button_id, Int32)
-        @url = TL::Utils.parse_bytes(url)
+        @url = Utils.parse_bytes(url)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -6261,8 +6261,8 @@ module Proton::TL
         @peer = peer
         @id = TL::Utils.parse_int!(id, Int32)
         @limit = TL::Utils.parse_int!(limit, Int32)
-        @option = TL::Utils.parse_bytes(option)
-        @offset = TL::Utils.parse_bytes(offset)
+        @option = Utils.parse_bytes(option)
+        @offset = Utils.parse_bytes(offset)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -6613,7 +6613,7 @@ module Proton::TL
       def initialize(
         import_head : Bytes | String | IO
       )
-        @import_head = TL::Utils.parse_bytes!(import_head)
+        @import_head = Utils.parse_bytes!(import_head)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -6673,7 +6673,7 @@ module Proton::TL
       )
         @peer = peer
         @import_id = import_id
-        @file_name = TL::Utils.parse_bytes!(file_name)
+        @file_name = Utils.parse_bytes!(file_name)
         @media = media
       end
 
@@ -6740,7 +6740,7 @@ module Proton::TL
         @limit = TL::Utils.parse_int!(limit, Int32)
         @revoked = revoked
         @offset_date = TL::Utils.parse_int(offset_date, Int32)
-        @offset_link = TL::Utils.parse_bytes(offset_link)
+        @offset_link = Utils.parse_bytes(offset_link)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -6774,7 +6774,7 @@ module Proton::TL
         link : Bytes | String | IO
       )
         @peer = peer
-        @link = TL::Utils.parse_bytes!(link)
+        @link = Utils.parse_bytes!(link)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -6810,12 +6810,12 @@ module Proton::TL
         title : Bytes | Nil = nil
       )
         @peer = peer
-        @link = TL::Utils.parse_bytes!(link)
+        @link = Utils.parse_bytes!(link)
         @revoked = revoked
         @expire_date = TL::Utils.parse_int(expire_date, Int32)
         @usage_limit = TL::Utils.parse_int(usage_limit, Int32)
         @request_needed = request_needed
-        @title = TL::Utils.parse_bytes(title)
+        @title = Utils.parse_bytes(title)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -6878,7 +6878,7 @@ module Proton::TL
         link : Bytes | String | IO
       )
         @peer = peer
-        @link = TL::Utils.parse_bytes!(link)
+        @link = Utils.parse_bytes!(link)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -6940,8 +6940,8 @@ module Proton::TL
         @offset_user = offset_user
         @limit = TL::Utils.parse_int!(limit, Int32)
         @requested = requested
-        @link = TL::Utils.parse_bytes(link)
-        @q = TL::Utils.parse_bytes(q)
+        @link = Utils.parse_bytes(link)
+        @q = Utils.parse_bytes(q)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -7024,7 +7024,7 @@ module Proton::TL
         emoticon : Bytes | String | IO
       )
         @peer = peer
-        @emoticon = TL::Utils.parse_bytes!(emoticon)
+        @emoticon = Utils.parse_bytes!(emoticon)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -7179,7 +7179,7 @@ module Proton::TL
       )
         @peer = peer
         @approved = approved
-        @link = TL::Utils.parse_bytes(link)
+        @link = Utils.parse_bytes(link)
       end
 
       def tl_serialize(io : IO, bare = false)

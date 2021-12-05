@@ -60,26 +60,28 @@ module Proton
           raise MissingBytesError.new
         end
 
-        len = input.read_bytes(UInt8)
+        needle = IO::Memory.new(input.to_slice[..])
+        len = needle.read_bytes(UInt8)
         len = if len < 127
                 header_len = 1
                 len.to_u32
               else
-                if input.size < 4
+                if needle.size < 4
                   raise MissingBytesError.new
                 end
 
                 header_len = 4
-                input.read_bytes(UInt32, IO::ByteFormat::LittleEndian)
+                needle.read_bytes(UInt32, IO::ByteFormat::LittleEndian)
               end
 
         len = len * 4
-        if input.size < header_len + len
+        if needle.size < header_len + len
           raise MissingBytesError.new
         end
 
-        input.seek(header_len, IO::Seek::Set)
-        IO.copy(input, output).to_u32
+        needle.seek(header_len, IO::Seek::Set)
+        n = IO.copy(needle, output).to_u32
+        UInt32.new(header_len + n)
       end
     end
   end

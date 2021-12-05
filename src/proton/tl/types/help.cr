@@ -318,12 +318,12 @@ module Proton::TL
         sticker : Root::TypeDocument | Nil = nil
       )
         @id = TL::Utils.parse_int!(id, Int32)
-        @version = TL::Utils.parse_bytes!(version)
-        @text = TL::Utils.parse_bytes!(text)
+        @version = Utils.parse_bytes!(version)
+        @text = Utils.parse_bytes!(text)
         @entities = entities
         @can_not_skip = can_not_skip
         @document = document
-        @url = TL::Utils.parse_bytes(url)
+        @url = Utils.parse_bytes(url)
         @sticker = sticker
       end
 
@@ -383,7 +383,7 @@ module Proton::TL
       def initialize(
         message : Bytes | String | IO
       )
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -410,7 +410,7 @@ module Proton::TL
         phone_number : Bytes | String | IO,
         user : Root::TypeUser
       )
-        @phone_number = TL::Utils.parse_bytes!(phone_number)
+        @phone_number = Utils.parse_bytes!(phone_number)
         @user = user
       end
 
@@ -447,7 +447,7 @@ module Proton::TL
         min_age_confirm : Int32 | Nil = nil
       )
         @id = id
-        @text = TL::Utils.parse_bytes!(text)
+        @text = Utils.parse_bytes!(text)
         @entities = entities
         @popup = popup
         @min_age_confirm = TL::Utils.parse_int(min_age_confirm, Int32)
@@ -595,7 +595,7 @@ module Proton::TL
         update_app : Bool | Nil = nil,
         entities : Array(Root::TypeMessageEntity) | Nil = nil
       )
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
         @update_app = update_app
         @entities = entities
       end
@@ -674,7 +674,7 @@ module Proton::TL
       def initialize(
         name : Bytes | String | IO
       )
-        @name = TL::Utils.parse_bytes!(name)
+        @name = Utils.parse_bytes!(name)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -719,9 +719,9 @@ module Proton::TL
         author : Bytes | String | IO,
         date : Int32
       )
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
         @entities = entities
-        @author = TL::Utils.parse_bytes!(author)
+        @author = Utils.parse_bytes!(author)
         @date = TL::Utils.parse_int!(date, Int32)
       end
 
@@ -795,8 +795,8 @@ module Proton::TL
         @chats = chats
         @users = users
         @proxy = proxy
-        @psa_type = TL::Utils.parse_bytes(psa_type)
-        @psa_message = TL::Utils.parse_bytes(psa_message)
+        @psa_type = Utils.parse_bytes(psa_type)
+        @psa_message = Utils.parse_bytes(psa_message)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -842,7 +842,7 @@ module Proton::TL
         prefixes : Array(Bytes) | Nil = nil,
         patterns : Array(Bytes) | Nil = nil
       )
-        @country_code = TL::Utils.parse_bytes!(country_code)
+        @country_code = Utils.parse_bytes!(country_code)
         @prefixes = prefixes
         @patterns = patterns
       end
@@ -886,11 +886,11 @@ module Proton::TL
         hidden : Bool | Nil = nil,
         name : Bytes | Nil = nil
       )
-        @iso2 = TL::Utils.parse_bytes!(iso2)
-        @default_name = TL::Utils.parse_bytes!(default_name)
+        @iso2 = Utils.parse_bytes!(iso2)
+        @default_name = Utils.parse_bytes!(default_name)
         @country_codes = country_codes
         @hidden = hidden
-        @name = TL::Utils.parse_bytes(name)
+        @name = Utils.parse_bytes(name)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1032,7 +1032,7 @@ module Proton::TL
       def initialize(
         source : Bytes | String | IO
       )
-        @source = TL::Utils.parse_bytes!(source)
+        @source = Utils.parse_bytes!(source)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1080,7 +1080,7 @@ module Proton::TL
       def initialize(
         prev_app_version : Bytes | String | IO
       )
-        @prev_app_version = TL::Utils.parse_bytes!(prev_app_version)
+        @prev_app_version = Utils.parse_bytes!(prev_app_version)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1105,7 +1105,7 @@ module Proton::TL
         message : Bytes | String | IO
       )
         @pending_updates_count = TL::Utils.parse_int!(pending_updates_count, Int32)
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1141,7 +1141,7 @@ module Proton::TL
       def initialize(
         referer : Bytes | String | IO
       )
-        @referer = TL::Utils.parse_bytes!(referer)
+        @referer = Utils.parse_bytes!(referer)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1198,7 +1198,7 @@ module Proton::TL
       def initialize(
         path : Bytes | String | IO
       )
-        @path = TL::Utils.parse_bytes!(path)
+        @path = Utils.parse_bytes!(path)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1317,7 +1317,7 @@ module Proton::TL
         entities : Array(Root::TypeMessageEntity)
       )
         @user_id = user_id
-        @message = TL::Utils.parse_bytes!(message)
+        @message = Utils.parse_bytes!(message)
         @entities = entities
       end
 
@@ -1380,7 +1380,7 @@ module Proton::TL
         suggestion : Bytes | String | IO
       )
         @peer = peer
-        @suggestion = TL::Utils.parse_bytes!(suggestion)
+        @suggestion = Utils.parse_bytes!(suggestion)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1405,7 +1405,7 @@ module Proton::TL
         lang_code : Bytes | String | IO,
         hash : Int32
       )
-        @lang_code = TL::Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_bytes!(lang_code)
         @hash = TL::Utils.parse_int!(hash, Int32)
       end
 

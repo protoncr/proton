@@ -620,7 +620,7 @@ module Proton::TL
         q : Bytes | String | IO,
         limit : Int32
       )
-        @q = TL::Utils.parse_bytes!(q)
+        @q = Utils.parse_bytes!(q)
         @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
@@ -644,7 +644,7 @@ module Proton::TL
       def initialize(
         username : Bytes | String | IO
       )
-        @username = TL::Utils.parse_bytes!(username)
+        @username = Utils.parse_bytes!(username)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -813,9 +813,9 @@ module Proton::TL
         add_phone_privacy_exception : Bool | Nil = nil
       )
         @id = id
-        @first_name = TL::Utils.parse_bytes!(first_name)
-        @last_name = TL::Utils.parse_bytes!(last_name)
-        @phone = TL::Utils.parse_bytes!(phone)
+        @first_name = Utils.parse_bytes!(first_name)
+        @last_name = Utils.parse_bytes!(last_name)
+        @phone = Utils.parse_bytes!(phone)
         @add_phone_privacy_exception = add_phone_privacy_exception
       end
 
