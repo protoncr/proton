@@ -191,7 +191,7 @@ module Proton
           @write_channel.send(count.to_u32)
         end
 
-        if @write_buffer.empty?
+        if @write_index.zero?
           # TODO this always has to read the header of the packet and then the rest (2 or more calls)
           # it would be better to always perform calls in a circular buffer to have as much data from
           # the network as possible at all times, not just reading what's needed
@@ -231,19 +231,20 @@ module Proton
 
       # Setup the write buffer for the transport, unless a write is already pending.
       def try_fill_write
-        unless @write_buffer.empty?
-          return
-        end
+        # Since the buffer has a fixed size it will never be "empty",
+        # but we can check if the current write_index is zero.
+        return unless @write_index.zero?
 
         requests = @requests.select { |r| r.state == RequestState::NotSerialized }
-        if requests.empty?
-          return
-        end
+        return if requests.empty?
 
         msg_ids = [] of MTProto::MsgId
         requests.each do |r|
-          msg_id = r.msg_id
-          msg_ids << msg_id if msg_id
+          if msg_id = @mtp.push(r.body)
+            msg_ids << msg_id
+          else
+            break
+          end
         end
 
         temp_bytes = @mtp.finalize
