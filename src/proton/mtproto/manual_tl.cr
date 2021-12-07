@@ -64,8 +64,8 @@ module Proton
         len = Int32.tl_deserialize(io)
         raise "Invalid length #{len}" if len < 0 || len > MessageContainer::MAXIMUM_SIZE
 
-        io.seek(-4, IO::Seek::Current)
-        body = Bytes.tl_deserialize(io)
+        body = Bytes.new(len)
+        io.read(body)
 
         new(msg_id, seq_no, body)
       end
@@ -155,7 +155,7 @@ module Proton
         raise "Invalid length #{len}" if len < 0
 
         messages = [] of Message
-        (0..len).each do |_|
+        len.times do
           msg = Message.tl_deserialize(io)
           messages << msg
         end

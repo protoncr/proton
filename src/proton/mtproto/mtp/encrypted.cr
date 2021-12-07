@@ -567,7 +567,7 @@ module Proton
       # [Request for Message Status Information]: https://core.telegram.org/mtproto/service_messages_about_messages#request-for-message-status-information
       def handle_state_req(message : Message)
         # TODO: Implement
-        x = TL::Root::MsgsStateReq.tl_deserialize(IO::Memory.new)
+        x = TL::Root::MsgsStateReq.tl_deserialize(IO::Memory.new(message.body))
         Log.info { "got state request for #{x.msg_ids.size} messages" }
         nil
       end
@@ -610,7 +610,7 @@ module Proton
       # [Informational Message regarding Status of Messages]: https://core.telegram.org/mtproto/service_messages_about_messages#informational-message-regarding-status-of-messages
       def handle_state_info(message : Message)
         # TODO: Implement
-        x = TL::Root::MsgsStateInfo.tl_deserialize(IO::Memory.new)
+        x = TL::Root::MsgsStateInfo.tl_deserialize(IO::Memory.new(message.body))
         nil
       end
 
@@ -633,7 +633,7 @@ module Proton
       # [Voluntary Communication of Status of Messages]: https://core.telegram.org/mtproto/service_messages_about_messages#voluntary-communication-of-status-of-messages
       def handle_msg_all(message : Message)
         # TODO: Implement
-        x = TL::Root::MsgsAllInfo.tl_deserialize(IO::Memory.new)
+        x = TL::Root::MsgsAllInfo.tl_deserialize(IO::Memory.new(message.body))
         nil
       end
 
@@ -663,7 +663,7 @@ module Proton
       def handle_detailed_info(message : Message)
         # TODO: https://github.com/telegramdesktop/tdesktop/blob/8f82880b938e06b7a2a27685ef9301edb12b4648/Telegram/SourceFiles/mtproto/connection.cpp#L1790-L1820
         # TODO: https://github.com/telegramdesktop/tdesktop/blob/8f82880b938e06b7a2a27685ef9301edb12b4648/Telegram/SourceFiles/mtproto/connection.cpp#L1822-L1845
-        x = TL::Root::TypeMsgDetailedInfo.tl_deserialize(IO::Memory.new)
+        x = TL::Root::TypeMsgDetailedInfo.tl_deserialize(IO::Memory.new(message.body))
 
         case x
         when TL::Root::MsgDetailedInfo
@@ -706,7 +706,7 @@ module Proton
       def handle_msg_resend(message : Message)
         # TODO implement
         # `msg_resend_ans_req` seems to never occur (it was even missing from `mtproto.tl`)\
-        x = TL::Root::TypeMsgResendReq.tl_deserialize(IO::Memory.new)
+        x = TL::Root::TypeMsgResendReq.tl_deserialize(IO::Memory.new(message.body))
         nil
       end
 
@@ -733,7 +733,7 @@ module Proton
       #
       # [Request for several future salts]: https://core.telegram.org/mtproto/service_messages#request-for-several-future-salts
       def handle_future_salts(message : Message)
-        x = TL::Root::FutureSalts.tl_deserialize(IO::Memory.new)
+        x = TL::Root::FutureSalts.tl_deserialize(IO::Memory.new(message.body))
 
         @rpc_results.push({MsgId.new(x.req_msg_id), message.body})
 
@@ -781,7 +781,7 @@ module Proton
       # [Ping Messages (PING/PONG)]: https://core.telegram.org/mtproto/service_messages#ping-messages-ping-pong
       # [Deferred Connection Closure + PING]: https://core.telegram.org/mtproto/service_messages#deferred-connection-closure-ping
       def handle_pong(message : Message)
-        x = TL::Root::Pong.tl_deserialize(IO::Memory.new)
+        x = TL::Root::Pong.tl_deserialize(IO::Memory.new(message.body))
         @rpc_results.push({MsgId.new(x.msg_id), message.body})
         nil
       end
@@ -802,7 +802,7 @@ module Proton
       # [Request to Destroy Session]: https://core.telegram.org/mtproto/service_messages#request-to-destroy-session
       def handle_destroy_session(message : Message)
         # TODO: Implement
-        x = TL::Root::TypeDestroySessionRes.tl_deserialize(IO::Memory.new)
+        x = TL::Root::TypeDestroySessionRes.tl_deserialize(IO::Memory.new(message.body))
         nil
       end
 
@@ -839,7 +839,7 @@ module Proton
       #
       # [New Session Creation Notification]: https://core.telegram.org/mtproto/service_messages#new-session-creation-notification
       def handle_new_session_created(message : Message)
-        x = TL::Root::NewSessionCreated.tl_deserialize(IO::Memory.new)
+        x = TL::Root::NewSessionCreated.tl_deserialize(IO::Memory.new(message.body))
 
         @salts.clear
         @salts.push(TL::Root::FutureSalt.new(
@@ -889,7 +889,7 @@ module Proton
       # [Containers]: https://core.telegram.org/mtproto/service_messages#containers
       # [Simple Container]: https://core.telegram.org/mtproto/service_messages#simple-container
       def handle_container(message : Message)
-        x = MessageContainer.tl_deserialize(IO::Memory.new)
+        x = MessageContainer.tl_deserialize(IO::Memory.new(message.body))
 
         x.messages.each do |msg|
           self.process_message(msg)
@@ -939,7 +939,7 @@ module Proton
       #
       # [Packed Object]: https://core.telegram.org/mtproto/service_messages#packed-object
       def handle_gzip_packed(message : Message)
-        x = GzipPacked.tl_deserialize(IO::Memory.new)
+        x = GzipPacked.tl_deserialize(IO::Memory.new(message.body))
 
         msg = message.dup
         msg.body = x.decompress
@@ -1101,20 +1101,22 @@ module Proton
           raise "session id mismatch: #{client_id} != #{@client_id}"
         end
 
-        self.process_message(Message.tl_deserialize(buffer))
+        message = Message.tl_deserialize(buffer)
+        self.process_message(message)
 
         # For simplicity, and to avoid passing too much stuff around (RPC results, updates),
         # the processing result is stored in self. After processing is done, that temporary
         # state is cleaned and returned with `mem::take`.
-        begin
-          return Deserialization.new(
-            rpc_results: @rpc_results,
-            updates: @updates,
-          )
-        ensure
-          @rpc_results.clear
-          @updates.clear
-        end
+        rpc_results = @rpc_results[..]
+        @rpc_results.clear
+
+        updates = @updates[..]
+        @updates.clear
+
+        return Deserialization.new(
+          rpc_results: rpc_results,
+          updates: updates,
+        )
       end
 
       class Builder
@@ -1135,9 +1137,10 @@ module Proton
 
         # Finishes the builder and returns the `MTProto` instance with all
         # the configuration changes applied.
-        def finish(auth_key : Bytes) : MtpEncrypted
+        def finish(auth_key : Bytes | Crypto::AuthKey) : MtpEncrypted
+          auth_key = auth_key.is_a?(Crypto::AuthKey) ? auth_key : Crypto::AuthKey.from_bytes(auth_key)
           MtpEncrypted.new(
-            auth_key: Crypto::AuthKey.from_bytes(auth_key),
+            auth_key: auth_key,
             time_offset: self.time_offset,
             salts: [TL::Root::FutureSalt.new(
               valid_since: 0,
