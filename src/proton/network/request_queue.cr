@@ -5,22 +5,22 @@ module Proton
     class RequestQueue(U, T)
       Log = ::Log.for(self)
 
-      DEFAULT_TIMEOUT = 30.seconds
+      DEFAULT_TIMEOUT = 5.seconds
 
-      @hash : Hash(U, Channel(T))
+      @hash : Hash(U, Channel(T | Exception))
       @mutex : Mutex
 
       def initialize
-        @hash = {} of U => Channel(T)
+        @hash = {} of U => Channel(T | Exception)
         @mutex = Mutex.new
       end
 
       def set(key : U)
-        ch = Channel(T).new(1)
+        ch = Channel(T | Exception).new(1)
         @hash[key] = ch
       end
 
-      def answer(key : U, answer : T)
+      def answer(key : U, answer : T | Exception)
         # @mutex.synchronize do
           if ch = @hash[key]?
             ch.send(answer)
@@ -32,12 +32,7 @@ module Proton
       end
 
       def get(key : U, timeout = DEFAULT_TIMEOUT)
-        select
-        when item = @hash[key].receive
-          item
-        when timeout timeout
-          raise "Timeout while waiting for response; key: #{key}"
-        end
+        @hash[key].receive
       end
     end
   end

@@ -98,7 +98,10 @@ struct Slice(T)
   include Proton::TL::Serializable
 
   def tl_serialize(io : IO)
-    len = if self.bytesize <= 253
+    len = if self.bytesize == 0
+            io.write(Bytes[0, 0, 0, 0])
+            4
+          elsif self.bytesize <= 253
             io.write_bytes(self.bytesize.to_u8)
             self.bytesize + 1
           else

@@ -21,11 +21,11 @@ module Proton
       end
 
       def ungzip_io(input : IO)
-        data = nil
+        output = IO::Memory.new
         Compress::Gzip::Reader.open(input) do |gz|
-          data = gz.gets_to_end.to_slice
+          IO.copy(gz, output)
         end
-        data.not_nil!
+        output.to_slice
       end
     end
   end

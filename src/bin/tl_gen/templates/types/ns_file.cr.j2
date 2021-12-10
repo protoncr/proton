@@ -51,7 +51,7 @@ module {{ module_root }}
     {# Loop over the definitions and create a class for each #}
     {% for def in definitions %}
       {% set params = def.params|sort(attribute="optional") %}
-      class {{ def.name | camelcase }} < {% if def.category == "Types" %} Type{{ def.type.name|camelcase }}{% else %} TLRequest{% endif %}
+      class {{ def.name | camelcase }}{% if def.type.name == "X" %}(T){% endif %} < {% if def.category == "Types" %} Type{{ def.type.name|camelcase }}{% else %} TLRequest{% endif %}
         getter constructor_id : UInt32 = {{ def.id | hex(pad_to=8, capitalize=true) }}_u32
         class_getter constructor_id : UInt32 = {{ def.id | hex(pad_to=8, capitalize=true) }}_u32
 
@@ -66,10 +66,10 @@ module {{ module_root }}
           {% endfor %}
         )
           {% for param in params|rejectattr("crystal_type", "equalto", "#") %}
-          {% if param.type.type.name == "bytes" or param.type.type.name == "string" %}
+          {% if param.type.type.name == "bytes" %}
           @{{ param.name }} = Utils.parse_bytes{% if param.optional != 1 %}!{% endif %}({{ param.name }})
-          {% elif param.type.type.name == "X" %}
-          @{{ param.name }} = {% if param.optional == 1 %}{{ param.name }}.nil? ? nil : {% endif %} ( {{ param.name }}.is_a?(Bytes) ? {{ param.name }} : {{ param.name }}.to_bytes )
+          {% elif param.type.type.name == "string" %}
+          @{{ param.name }} = Utils.parse_string{% if param.optional != 1 %}!{% endif %}({{ param.name }})
           {% elif param.type.type.name | starts_with("int") %}
           @{{ param.name }} = TL::Utils.parse_int{% if param.optional != 1 %}!{% endif %}({{ param.name }}, {{ param.crystal_type }}) 
           {% else %}
@@ -86,7 +86,7 @@ module {{ module_root }}
           (
               {% for param in params %}
                 {% if param.type.flag %}
-            (!{{ param.name }}.nil? ? {{ param.type.flag.index|shl(1)|hex(pad_to=2, capitalize=true) }} : 0) {% if not loop.last %} | {% endif %}
+            (!{{ param.name }}.nil? ? {{ param.type.flag.index|shl(1) }} : 0) {% if not loop.last %} | {% endif %}
                 {% endif %}
               {% endfor %}
           ).tl_serialize(io)
@@ -109,22 +109,21 @@ module {{ module_root }}
           {% endfor %}
         end
 
-        {% if def.category == "Types" %}
         def self.tl_deserialize(io : IO, bare = false)
           Utils.assert_constructor(io, self.constructor_id) unless bare
-          {% set flag = params|selectattr("crystal_type", "equalto", "#") %}
+          {% set flag = def.params|selectattr("crystal_type", "equalto", "#") %}
           {% set flags = flag|length > 0%}
           {% if flags %}
           flags = UInt32.tl_deserialize(io)
           {% endif %}
           new(
-            {% for param in params|rejectattr("crystal_type", "equalto", "#") %}
+            {% for param in def.params|rejectattr("crystal_type", "equalto", "#") %}
               {{ param.name }}:
               {% if param.type.flag and param.type.type.name != "true" -%}
-              flags & {{ param.type.flag.index|shl(1)|hex(pad_to=2, capitalize=true) }} > 0 ? 
+              flags & {{ param.type.flag.index|shl(1) }} > 0 ? 
               {% endif -%}
               {% if param.type.type.name == "true" -%}
-              flags & {{ param.type.flag.index|shl(1)|hex(pad_to=2, capitalize=true) }} > 0 || nil
+              flags & {{ param.type.flag.index|shl(1) }} > 0 || nil
               {% elif param.type.type.name == 'int128' -%}
               {{ param.crystal_type }}.tl_deserialize(io, 128)
               {% elif param.type.type.name == 'int256' -%}
@@ -141,9 +140,14 @@ module {{ module_root }}
             {% endfor %}
           )
         end
-        {% else %}
-        def self.return_type : Deserializable
+
+        {% if def.category == "Functions" %}
+        def self.return_type : TL::Deserializable
+          {% if def.type.name == "X" %}
+          T.return_type
+          {% else %}
           {{ def.type.crystal_type }}
+          {% endif %}
         end
         {% endif %}
       end

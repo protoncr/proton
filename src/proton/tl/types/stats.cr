@@ -322,12 +322,21 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!dark.nil? ? 0x01 : 0)
+          (!dark.nil? ? 1 : 0)
         ).tl_serialize(io)
         @channel.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          dark: flags & 1 > 0 || nil,
+          channel: Root::TypeInputChannel.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Stats::TypeBroadcastStats
       end
     end
@@ -336,27 +345,36 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x621D5FA0_u32
       class_getter constructor_id : UInt32 = 0x621D5FA0_u32
 
-      getter token : Bytes
+      getter token : String
       getter x : Int64 | Nil
 
       def initialize(
         token : Bytes | String | IO,
         x : Int64 | Nil = nil
       )
-        @token = Utils.parse_bytes!(token)
+        @token = Utils.parse_string!(token)
         @x = x
       end
 
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!x.nil? ? 0x01 : 0)
+          (!x.nil? ? 1 : 0)
         ).tl_serialize(io)
         @token.tl_serialize(io)
         @x.tl_serialize(io) unless @x.nil?
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          token: String.tl_deserialize(io),
+          x: flags & 1 > 0 ? Int64.tl_deserialize(io) : nil,
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeStatsGraph
       end
     end
@@ -379,12 +397,21 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!dark.nil? ? 0x01 : 0)
+          (!dark.nil? ? 1 : 0)
         ).tl_serialize(io)
         @channel.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          dark: flags & 1 > 0 || nil,
+          channel: Root::TypeInputChannel.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Stats::TypeMegagroupStats
       end
     end
@@ -426,7 +453,19 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          channel: Root::TypeInputChannel.tl_deserialize(io),
+          msg_id: Int32.tl_deserialize(io),
+          offset_rate: Int32.tl_deserialize(io),
+          offset_peer: Root::TypeInputPeer.tl_deserialize(io),
+          offset_id: Int32.tl_deserialize(io),
+          limit: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Messages::TypeMessages
       end
     end
@@ -452,13 +491,23 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!dark.nil? ? 0x01 : 0)
+          (!dark.nil? ? 1 : 0)
         ).tl_serialize(io)
         @channel.tl_serialize(io)
         @msg_id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          dark: flags & 1 > 0 || nil,
+          channel: Root::TypeInputChannel.tl_deserialize(io),
+          msg_id: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Stats::TypeMessageStats
       end
     end

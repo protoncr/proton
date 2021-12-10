@@ -283,8 +283,8 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!final.nil? ? 0x01 : 0) |
-            (!timeout.nil? ? 0x02 : 0)
+          (!final.nil? ? 1 : 0) |
+            (!timeout.nil? ? 2 : 0)
         ).tl_serialize(io)
         @pts.tl_serialize(io)
         @timeout.tl_serialize(io) unless @timeout.nil?
@@ -294,9 +294,9 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         flags = UInt32.tl_deserialize(io)
         new(
+          final: flags & 1 > 0 || nil,
           pts: Int32.tl_deserialize(io),
-          final: flags & 0x01 > 0 || nil,
-          timeout: flags & 0x02 > 0 ? Int32.tl_deserialize(io) : nil,
+          timeout: flags & 2 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
@@ -331,8 +331,8 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!final.nil? ? 0x01 : 0) |
-            (!timeout.nil? ? 0x02 : 0)
+          (!final.nil? ? 1 : 0) |
+            (!timeout.nil? ? 2 : 0)
         ).tl_serialize(io)
         @timeout.tl_serialize(io) unless @timeout.nil?
         @dialog.tl_serialize(io)
@@ -345,12 +345,12 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         flags = UInt32.tl_deserialize(io)
         new(
+          final: flags & 1 > 0 || nil,
+          timeout: flags & 2 > 0 ? Int32.tl_deserialize(io) : nil,
           dialog: Root::TypeDialog.tl_deserialize(io),
           messages: Array(Root::TypeMessage).tl_deserialize(io),
           chats: Array(Root::TypeChat).tl_deserialize(io),
           users: Array(Root::TypeUser).tl_deserialize(io),
-          final: flags & 0x01 > 0 || nil,
-          timeout: flags & 0x02 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
@@ -388,8 +388,8 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!final.nil? ? 0x01 : 0) |
-            (!timeout.nil? ? 0x02 : 0)
+          (!final.nil? ? 1 : 0) |
+            (!timeout.nil? ? 2 : 0)
         ).tl_serialize(io)
         @pts.tl_serialize(io)
         @timeout.tl_serialize(io) unless @timeout.nil?
@@ -403,13 +403,13 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         flags = UInt32.tl_deserialize(io)
         new(
+          final: flags & 1 > 0 || nil,
           pts: Int32.tl_deserialize(io),
+          timeout: flags & 2 > 0 ? Int32.tl_deserialize(io) : nil,
           new_messages: Array(Root::TypeMessage).tl_deserialize(io),
           other_updates: Array(Root::TypeUpdate).tl_deserialize(io),
           chats: Array(Root::TypeChat).tl_deserialize(io),
           users: Array(Root::TypeUser).tl_deserialize(io),
-          final: flags & 0x01 > 0 || nil,
-          timeout: flags & 0x02 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
@@ -422,7 +422,12 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new()
+      end
+
+      def self.return_type : TL::Deserializable
         Updates::TypeState
       end
     end
@@ -451,7 +456,7 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!pts_total_limit.nil? ? 0x01 : 0)
+          (!pts_total_limit.nil? ? 1 : 0)
         ).tl_serialize(io)
         @pts.tl_serialize(io)
         @pts_total_limit.tl_serialize(io) unless @pts_total_limit.nil?
@@ -459,7 +464,18 @@ module Proton::TL
         @qts.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          pts: Int32.tl_deserialize(io),
+          pts_total_limit: flags & 1 > 0 ? Int32.tl_deserialize(io) : nil,
+          date: Int32.tl_deserialize(io),
+          qts: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Updates::TypeDifference
       end
     end
@@ -491,7 +507,7 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!force.nil? ? 0x01 : 0)
+          (!force.nil? ? 1 : 0)
         ).tl_serialize(io)
         @channel.tl_serialize(io)
         @filter.tl_serialize(io)
@@ -499,7 +515,19 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          force: flags & 1 > 0 || nil,
+          channel: Root::TypeInputChannel.tl_deserialize(io),
+          filter: Root::TypeChannelMessagesFilter.tl_deserialize(io),
+          pts: Int32.tl_deserialize(io),
+          limit: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Updates::TypeChannelDifference
       end
     end

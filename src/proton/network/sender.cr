@@ -1,4 +1,5 @@
 require "socket"
+require "future"
 
 module Proton
   module Network
@@ -54,8 +55,8 @@ module Proton
       getter request_queue : RequestQueue(MTProto::MsgId, Bytes)
       getter next_ping : Time
 
-      @receive_loop : Fiber?
-      @mutex : Mutex
+      @send_loop : Future::Compute(Nil)?
+      @receive_loop : Future::Compute(Nil)?
       @running : Bool
 
       # :nodoc:
@@ -68,9 +69,8 @@ module Proton
         @write_buffer = write_buffer || IO::Memory.new(MAXIMUM_DATA)
 
         @request_queue = request_queue || RequestQueue(MTProto::MsgId, Bytes).new
-        @next_ping = next_ping || Time.local + PING_DELAY
+        @next_ping = next_ping || Time.utc + PING_DELAY
 
-        @mutex = Mutex.new
         @running = false
 
         self.start
@@ -82,6 +82,7 @@ module Proton
         Log.info { "Connecting..." }
         socket = Socket.tcp(Socket::Family::INET, blocking: false)
         socket.connect(addr)
+        Log.info { "Connected to #{addr.to_s}" }
 
         new(socket, transport, mtp, IO::Memory.new(MAXIMUM_DATA))
       end
@@ -105,11 +106,10 @@ module Proton
         response = sender.send!(request)
         Log.info { "gen auth key: completed generation" }
 
-        # Stop the plain sender
-        sender.stop
-
         auth = MTProto::Authentication.create_key(data, response)
         Log.info { "authorization key generated successfully" }
+
+        sender.stop
 
         builder = MTProto::MtpEncrypted.build
         builder.time_offset = auth.time_offset
@@ -118,10 +118,10 @@ module Proton
 
         new(
           socket: sender.socket,
-          transport: transport,
+          transport: sender.transport,
           mtp: mtp,
           mtp_buffer: IO::Memory.new(MAXIMUM_DATA),
-          next_ping: Time.local + PING_DELAY,
+          next_ping: Time.utc + PING_DELAY,
         )
       end
 
@@ -142,65 +142,64 @@ module Proton
 
       def stop
         @running = false
-        @receive_loop = nil
+        @send_loop.try(&.cancel)
+        @receive_loop.try(&.cancel)
+        Log.debug { "send and receive loops stopped for #{@mtp.class}" }
       end
 
       def start
-        @receive_loop = spawn receive_loop
-        nil
+        @running = true
+        @send_loop = future { send_loop }
+        @receive_loop = future { receive_loop }
+        Log.debug { "send and receive loops started for #{@mtp.class}" }
       end
 
       def send(request : TL::TLRequest)
         body = request.to_bytes
-        if msg_id = self.enqueue_body(body)
-          response = @request_queue.get(msg_id)
-          request.class.return_type.from_bytes(response)
+        future do
+          if msg_id = self.serialize_request(body)
+            response = @request_queue.get(msg_id)
+            if response.is_a?(Exception)
+              raise response
+            else
+              request.class.return_type.from_bytes(response)
+            end
+          end
         end
-      end
-
-      def send!(request : TL::TLRequest)
-        send(request).not_nil!
       end
 
       # Send a raw request to the server
-      def send(body : Bytes) : Bytes?
+      def send(body : Bytes)
         body = body.is_a?(TL::TLRequest) ? body.to_bytes : body
-        if msg_id = self.enqueue_body(body)
-          @request_queue.get(msg_id)
+        future do
+          if msg_id = self.serialize_request(body)
+            response = @request_queue.get(msg_id)
+            if response.is_a?(Exception)
+              raise response
+            else
+              response
+            end
+          end
         end
       end
 
-      def send!(body : Bytes) : Bytes
-        send(body).not_nil!
+      def send!(body)
+        send(body).get.not_nil!
       end
 
-      def enqueue_body(body : Bytes)
-        raise "invalid body length" unless body.size >= 4
-
-        # Generate a request ID for this request.
-        const_id = IO::ByteFormat::LittleEndian.decode(UInt32, body[0..3])
-        Log.debug { "enqueueing request 0x#{const_id.to_s(16)} (#{TL::Utils.name_for_id(const_id)}) to be serialized" }
-
-        # Serialize the body using the Mtp and Transport
-        msg_id = self.serialize_request(body)
-
-        unless msg_id.nil?
-          Log.debug { "serialized request 0x#{const_id.to_s(16)} (#{TL::Utils.name_for_id(const_id)}) with msg_id #{msg_id}" }
-
-          # Create an entry in the queue for this request.
-          @request_queue.set(msg_id)
-
-          # Send the serialized request to the server
-          spawn self.internal_send
-          Log.debug { "sent request 0x#{const_id.to_s(16)} (#{TL::Utils.name_for_id(const_id)}) with msg_id #{msg_id}" }
+      def send_loop
+        while @running
+          unless @write_buffer.empty?
+            puts write_buffer.to_slice
+            count = @socket.send(@write_buffer)
+            Log.trace { "sent #{count} bytes" }
+            @write_buffer.clear
+          end
+          sleep 0.01
         end
-
-        # Return the message id
-        msg_id
       end
 
       def receive_loop
-        @running = true
         while @running
           msg, _ = @socket.receive(MAXIMUM_DATA)
           data = msg.to_slice
@@ -208,12 +207,22 @@ module Proton
             @read_buffer.write(data)
             self.on_net_read(data.size)
           end
+          sleep 0.1
         end
-        Log.debug { "receive loop stopped" }
       end
 
       def serialize_request(body : Bytes)
+        raise "invalid body length" unless body.size >= 4
+        const_id = IO::ByteFormat::LittleEndian.decode(UInt32, body[0..3])
+
+        Log.debug { "enqueueing request 0x#{const_id.to_s(16)} (#{TL::Utils.name_for_id(const_id)}) to be serialized" }
         msg_id = @mtp.push(body)
+
+        Log.debug { "serialized request 0x#{const_id.to_s(16)} (#{TL::Utils.name_for_id(const_id)}) with msg_id #{msg_id}" }
+        unless msg_id.nil?
+          @request_queue.set(msg_id)
+          Log.debug { "queued request 0x#{const_id.to_s(16)} (#{TL::Utils.name_for_id(const_id)}) with msg_id #{msg_id}" }
+        end
 
         @mtp_buffer.clear
         @mtp_buffer.write(@mtp.finalize)
@@ -235,14 +244,10 @@ module Proton
         updates = [] of TL::Root::TypeUpdate
         until @read_buffer.pos >= @read_buffer.size
           @mtp_buffer.clear
-          begin
-            n = @transport.unpack(@read_buffer, @mtp_buffer)
-            @read_buffer.skip(n)
-            Log.trace { "unpacked #{n}/#{@read_buffer.size} bytes..." }
-            self.process_mtp_buffer(updates)
-          rescue MTProto::MissingBytesError
-            break
-          end
+          n = @transport.unpack(@read_buffer, @mtp_buffer)
+          @read_buffer.skip(n)
+          Log.trace { "unpacked #{n}/#{@read_buffer.size} bytes..." }
+          self.process_mtp_buffer(updates)
         end
 
         @read_buffer.clear
@@ -261,7 +266,7 @@ module Proton
         end
 
         result.rpc_results.each do |(msg_id, ret)|
-          bytes = case ret
+          answer = case ret
                   when Bytes
                     raise "bad payload size" unless ret.size >= 4
                     const_id = IO::ByteFormat::LittleEndian.decode(UInt32, ret[0..3])
@@ -269,29 +274,24 @@ module Proton
                     ret
                   when MTProto::BadMessageError
                     # TODO: Resend the request
-                    raise ret
+                    Log.error(exception: ret) { "got bad message for msg_id #{msg_id}" }
+                    ret
                   else
                     raise ret
                   end
 
-          @request_queue.answer(msg_id, bytes)
+          @request_queue.answer(msg_id, answer)
         end
-      end
-
-      def internal_send
-        @write_buffer.rewind
-        @socket.send(@write_buffer)
-        @socket.flush
       end
 
       def on_ping_timeout
         ping_id = Utils.generate_random_id
         Log.debug { "enqueuing keepalive ping #{ping_id}" }
-        self.enqueue_body(TL::Root::PingDelayDisconnect.new(
+        self.serialize_request(TL::Root::PingDelayDisconnect.new(
           ping_id,
           disconnect_delay: NO_PING_DISCONNECT
         ).to_bytes)
-        @next_ping = Time.local + PING_DELAY
+        @next_ping = Time.utc + PING_DELAY
       end
     end
   end

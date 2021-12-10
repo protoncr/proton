@@ -33,7 +33,9 @@ module Proton
         end
 
         output.write_bytes(input.size.to_u32, IO::ByteFormat::LittleEndian)
-        IO.copy(input, output).to_u32
+        output.write(input.to_slice)
+
+        input.size.to_u32
       end
 
       def unpack(input : IO::Memory, output : IO::Memory) : UInt32

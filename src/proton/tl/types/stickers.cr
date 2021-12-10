@@ -43,12 +43,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x85FEA03F_u32
       class_getter constructor_id : UInt32 = 0x85FEA03F_u32
 
-      getter short_name : Bytes
+      getter short_name : String
 
       def initialize(
         short_name : Bytes | String | IO
       )
-        @short_name = Utils.parse_bytes!(short_name)
+        @short_name = Utils.parse_string!(short_name)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -59,7 +59,7 @@ module Proton::TL
       def self.tl_deserialize(io : IO, bare = false)
         Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          short_name: Bytes.tl_deserialize(io),
+          short_name: String.tl_deserialize(io),
         )
       end
     end
@@ -69,13 +69,13 @@ module Proton::TL
       class_getter constructor_id : UInt32 = 0x9021AB67_u32
 
       getter user_id : Root::TypeInputUser
-      getter title : Bytes
-      getter short_name : Bytes
+      getter title : String
+      getter short_name : String
       getter stickers : Array(Root::TypeInputStickerSetItem)
       getter masks : Bool | Nil
       getter animated : Bool | Nil
       getter thumb : Root::TypeInputDocument | Nil
-      getter software : Bytes | Nil
+      getter software : String | Nil
 
       def initialize(
         user_id : Root::TypeInputUser,
@@ -85,25 +85,25 @@ module Proton::TL
         masks : Bool | Nil = nil,
         animated : Bool | Nil = nil,
         thumb : Root::TypeInputDocument | Nil = nil,
-        software : Bytes | Nil = nil
+        software : Bytes | String | IO | Nil = nil
       )
         @user_id = user_id
-        @title = Utils.parse_bytes!(title)
-        @short_name = Utils.parse_bytes!(short_name)
+        @title = Utils.parse_string!(title)
+        @short_name = Utils.parse_string!(short_name)
         @stickers = stickers
         @masks = masks
         @animated = animated
         @thumb = thumb
-        @software = Utils.parse_bytes(software)
+        @software = Utils.parse_string(software)
       end
 
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!masks.nil? ? 0x01 : 0) |
-            (!animated.nil? ? 0x02 : 0) |
-            (!thumb.nil? ? 0x04 : 0) |
-            (!software.nil? ? 0x08 : 0)
+          (!masks.nil? ? 1 : 0) |
+            (!animated.nil? ? 2 : 0) |
+            (!thumb.nil? ? 4 : 0) |
+            (!software.nil? ? 8 : 0)
         ).tl_serialize(io)
         @user_id.tl_serialize(io)
         @title.tl_serialize(io)
@@ -113,7 +113,22 @@ module Proton::TL
         @software.tl_serialize(io) unless @software.nil?
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          masks: flags & 1 > 0 || nil,
+          animated: flags & 2 > 0 || nil,
+          user_id: Root::TypeInputUser.tl_deserialize(io),
+          title: String.tl_deserialize(io),
+          short_name: String.tl_deserialize(io),
+          thumb: flags & 4 > 0 ? Root::TypeInputDocument.tl_deserialize(io) : nil,
+          stickers: Array(Root::TypeInputStickerSetItem).tl_deserialize(io),
+          software: flags & 8 > 0 ? String.tl_deserialize(io) : nil,
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -135,7 +150,14 @@ module Proton::TL
         @sticker.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          sticker: Root::TypeInputDocument.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -161,7 +183,15 @@ module Proton::TL
         @position.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          sticker: Root::TypeInputDocument.tl_deserialize(io),
+          position: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -187,7 +217,15 @@ module Proton::TL
         @sticker.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          stickerset: Root::TypeInputStickerSet.tl_deserialize(io),
+          sticker: Root::TypeInputStickerSetItem.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -213,7 +251,15 @@ module Proton::TL
         @thumb.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          stickerset: Root::TypeInputStickerSet.tl_deserialize(io),
+          thumb: Root::TypeInputDocument.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Messages::TypeStickerSet
       end
     end
@@ -222,12 +268,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x284B3639_u32
       class_getter constructor_id : UInt32 = 0x284B3639_u32
 
-      getter short_name : Bytes
+      getter short_name : String
 
       def initialize(
         short_name : Bytes | String | IO
       )
-        @short_name = Utils.parse_bytes!(short_name)
+        @short_name = Utils.parse_string!(short_name)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -235,7 +281,14 @@ module Proton::TL
         @short_name.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          short_name: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -244,12 +297,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x4DAFC503_u32
       class_getter constructor_id : UInt32 = 0x4DAFC503_u32
 
-      getter title : Bytes
+      getter title : String
 
       def initialize(
         title : Bytes | String | IO
       )
-        @title = Utils.parse_bytes!(title)
+        @title = Utils.parse_string!(title)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -257,7 +310,14 @@ module Proton::TL
         @title.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          title: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Stickers::TypeSuggestedShortName
       end
     end

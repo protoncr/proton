@@ -3,6 +3,6 @@ module Proton::TL
   # use to perform Remote Procedure Calls (RPC), and know what the type of
   # the response will be.
   module RemoteCallable
-    abstract def return_type : Deserializable
+    abstract def return_type : TL::Deserializable
   end
 end

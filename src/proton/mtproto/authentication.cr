@@ -31,11 +31,11 @@ module Proton
 
         check_nonce(res_pq.nonce.to_bytes, nonce)
 
-        if res_pq.pq.size != 8
-          raise InvalidPQSizeError.new(size: res_pq.pq.size)
+        if res_pq.pq.bytesize != 8
+          raise InvalidPQSizeError.new(size: res_pq.pq.bytesize)
         end
 
-        pq = IO::ByteFormat::BigEndian.decode(UInt64, res_pq.pq)
+        pq = IO::ByteFormat::BigEndian.decode(UInt64, res_pq.pq.to_slice)
         p, q = Crypto::Factorize.factorize(pq)
 
         new_nonce = random_bytes[...32].clone
@@ -99,7 +99,7 @@ module Proton
 
       def self.step3(data : Step2, response : Bytes)
         random_bytes = Random::Secure.random_bytes(256 + 16)
-        now = Time.local.to_unix.to_i32
+        now = Time.utc.to_unix.to_i32
         do_step3(data, response, random_bytes, now.to_i32)
       end
 
@@ -138,16 +138,16 @@ module Proton
         check_nonce(server_dh_params.nonce.to_bytes, nonce)
         check_server_nonce(server_dh_params.server_nonce.to_bytes, server_nonce)
 
-        if server_dh_params.encrypted_answer.size % 16 != 0
+        if server_dh_params.encrypted_answer.bytesize % 16 != 0
           raise EncryptedResponseNotPaddedError.new(
-            len: server_dh_params.encrypted_answer.size)
+            len: server_dh_params.encrypted_answer.bytesize)
         end
 
         # Complete DH Exchange
         key, iv = Crypto.generate_key_data_from_nonce(server_nonce, new_nonce)
 
         # sha1 hash + plain text + padding
-        plain_text_answer = Crypto.decrypt_ige(server_dh_params.encrypted_answer, key, iv)
+        plain_text_answer = Crypto.decrypt_ige(server_dh_params.encrypted_answer.to_slice, key, iv)
         got_answer_hash = plain_text_answer[...20].clone
 
         # Use an IO explicitly so we know where it ends, and more importantly, where
@@ -171,9 +171,9 @@ module Proton
         check_server_nonce(server_dh_inner.server_nonce.to_bytes, server_nonce)
 
         # Safe to unwrap because the numbers are valid
-        dh_prime = BigInt.new(server_dh_inner.dh_prime, IO::ByteFormat::BigEndian)
+        dh_prime = BigInt.new(server_dh_inner.dh_prime.to_slice, IO::ByteFormat::BigEndian)
         g = BigInt.new(server_dh_inner.g)
-        g_a = BigInt.new(server_dh_inner.g_a, IO::ByteFormat::BigEndian)
+        g_a = BigInt.new(server_dh_inner.g_a.to_slice, IO::ByteFormat::BigEndian)
 
         time_offset = server_dh_inner.server_time - now
 
@@ -214,7 +214,7 @@ module Proton
 
           # Make sure we pad it ourselves, or else `encrypt_ige` will,
           # introducing randomness.
-          pad_len = (16 - (buffer.size % 16)) % 16
+          pad_len = (16 - (buffer.bytesize % 16)) % 16
 
           Bytes.concat(buffer, random_bytes[...pad_len])
         end
@@ -257,7 +257,7 @@ module Proton
 
         auth_key = begin
           gab_bytes = gab.to_slice(IO::ByteFormat::BigEndian)
-          skip = 256 - gab_bytes.size
+          skip = 256 - gab_bytes.bytesize
           Crypto::AuthKey.from_bytes(gab_bytes[skip...])
         end
 

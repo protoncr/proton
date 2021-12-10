@@ -76,7 +76,14 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Array(Root::TypeInputUser).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Root::TypeUser)
       end
     end
@@ -98,7 +105,14 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Root::TypeInputUser.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Users::TypeUserFull
       end
     end
@@ -124,7 +138,15 @@ module Proton::TL
         @errors.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Root::TypeInputUser.tl_deserialize(io),
+          errors: Array(Root::TypeSecureValueError).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end

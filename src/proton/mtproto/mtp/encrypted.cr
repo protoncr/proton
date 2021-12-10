@@ -1,6 +1,8 @@
 module Proton
   module MTProto
     class MtpEncrypted < MtpBase
+      Log = ::Log.for(self)
+
       # How many future salts to fetch or have stored at a given time.
       #
       # Not an `usize` because the API expects a signed `i32`. Should be more than two because the
@@ -110,7 +112,7 @@ module Proton
 
       # Correct our time offset based on a known valid message ID.
       def correct_time_offset(msg_id : Int64)
-        now = Time.local.to_unix.to_i
+        now = Time.utc.to_unix.to_i
         correct = (msg_id >> 32).to_i32
         @time_offset = correct - now
       end
@@ -118,7 +120,7 @@ module Proton
       # Generates a new unique message ID based on the current
       # time (in ms) since epoch, applying a known time offset.
       def get_new_msg_id
-        now = Time.local.to_unix
+        now = Time.utc.to_unix
 
         seconds = (now.seconds + @time_offset.seconds)
         total_seconds = seconds.total_seconds.to_u64
@@ -147,9 +149,10 @@ module Proton
 
       def serialize_msg(body : Bytes, content_related : Bool) : MsgId
         msg_id = self.get_new_msg_id
+        seq_no = self.get_seq_no(content_related)
 
         @buffer.write_bytes(msg_id, IO::ByteFormat::LittleEndian)
-        @buffer.write_bytes(self.get_seq_no(content_related), IO::ByteFormat::LittleEndian)
+        @buffer.write_bytes(seq_no, IO::ByteFormat::LittleEndian)
         @buffer.write_bytes(body.size.to_i32, IO::ByteFormat::LittleEndian)
         @buffer.write(body)
 
@@ -193,7 +196,10 @@ module Proton
       end
 
       def process_message(message : Message)
+        Log.info { "processing message 0x#{message.constructor_id.to_s(16)} (#{TL::Utils.name_for_id(message.constructor_id)}) with msg_id #{message.msg_id}" }
+
         if message.requires_ack?
+          Log.debug { "message #{message.msg_id} requires ack" }
           @pending_ack << message.msg_id
         end
 
@@ -353,7 +359,10 @@ module Proton
         when TL::Root::RpcError.constructor_id
           # RPC Error
           err = TL::Root::RpcError.tl_deserialize(IO::Memory.new(result))
-          @rpc_results.push({msg_id, RpcError.from_tl(err)})
+          rpcerr = RpcError.from_tl(err)
+          rpcerr.caused_by = message.constructor_id
+
+          @rpc_results.push({msg_id, rpcerr})
         when TL::Root::RpcAnswerUnknown.constructor_id
           # Cancellation of an RPC Query
           # The `msg_id` corresponds to the `rpc_drop_answer` request.
@@ -373,9 +382,16 @@ module Proton
           # would probably outweight the benefits) so we don't check
           # that the decompressed payload is an error or answer drop.
 
-          body = GzipPacked.tl_deserialize(IO::Memory.new(result))
-          gzip = body.decompress
-          self.store_own_updates(gzip)
+          body = begin
+            gz = GzipPacked.tl_deserialize(IO::Memory.new(result))
+            x = gz.decompress
+            self.store_own_updates(x)
+            x
+          rescue ex
+            RequestError.from(ex)
+          end
+
+          @rpc_results.push({msg_id, body})
         else
           self.store_own_updates(result.to_slice)
           @rpc_results.push({msg_id, result})
@@ -523,7 +539,7 @@ module Proton
                     if self.push(TL::Root::GetFutureSalts.new(num: NUM_FUTURE_SALTS).to_bytes)
                       Log.info { "got bad salt; asking for more salts" }
                     else
-                      Log.info { "got bad salt, but can't ask for future salts because the buffer is full" }
+                      Log.error { "got bad salt, but can't ask for future salts because the buffer is full" }
                     end
 
                     return
@@ -531,7 +547,7 @@ module Proton
                     raise "unreachable"
                   end
 
-        @rpc_results.push({MsgId.new(x.bad_msg_id), BadMessageError.new(x.error_code)})
+        @rpc_results.push({MsgId.new(bad_msg.bad_msg_id), BadMessageError.new(x.error_code)})
         case x.error_code
         when 16
           # Sent msg_id was too low (our time_offset is wrong)
@@ -665,10 +681,13 @@ module Proton
         # TODO: https://github.com/telegramdesktop/tdesktop/blob/8f82880b938e06b7a2a27685ef9301edb12b4648/Telegram/SourceFiles/mtproto/connection.cpp#L1822-L1845
         x = TL::Root::TypeMsgDetailedInfo.tl_deserialize(IO::Memory.new(message.body))
 
+
         case x
         when TL::Root::MsgDetailedInfo
+          Log.debug { "msg detailed info, sent msgId #{x.msg_id}, answerId #{x.answer_msg_id}, status #{x.status}, bytes #{x.bytes}"}
           @pending_ack.push(x.answer_msg_id)
         when TL::Root::MsgNewDetailedInfo
+          Log.debug { "msg new detailed info, answerId #{x.answer_msg_id}, status #{x.status}, bytes #{x.bytes}"}
           @pending_ack.push(x.answer_msg_id)
         end
 

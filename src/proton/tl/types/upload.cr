@@ -144,7 +144,7 @@ module Proton::TL
       class_getter constructor_id : UInt32 = 0x21E753BC_u32
 
       getter size : Int32
-      getter mime_type : Bytes
+      getter mime_type : String
       getter file_type : Storage::TypeFileType
       getter mtime : Int32
       getter bytes : Bytes
@@ -157,7 +157,7 @@ module Proton::TL
         bytes : Bytes | String | IO
       )
         @size = TL::Utils.parse_int!(size, Int32)
-        @mime_type = Utils.parse_bytes!(mime_type)
+        @mime_type = Utils.parse_string!(mime_type)
         @file_type = file_type
         @mtime = TL::Utils.parse_int!(mtime, Int32)
         @bytes = Utils.parse_bytes!(bytes)
@@ -176,7 +176,7 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
           size: Int32.tl_deserialize(io),
-          mime_type: Bytes.tl_deserialize(io),
+          mime_type: String.tl_deserialize(io),
           file_type: Storage::TypeFileType.tl_deserialize(io),
           mtime: Int32.tl_deserialize(io),
           bytes: Bytes.tl_deserialize(io),
@@ -259,7 +259,16 @@ module Proton::TL
         @bytes.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          file_id: Int64.tl_deserialize(io),
+          file_part: Int32.tl_deserialize(io),
+          bytes: Bytes.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -291,15 +300,27 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!precise.nil? ? 0x01 : 0) |
-            (!cdn_supported.nil? ? 0x02 : 0)
+          (!precise.nil? ? 1 : 0) |
+            (!cdn_supported.nil? ? 2 : 0)
         ).tl_serialize(io)
         @location.tl_serialize(io)
         @offset.tl_serialize(io)
         @limit.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          precise: flags & 1 > 0 || nil,
+          cdn_supported: flags & 2 > 0 || nil,
+          location: Root::TypeInputFileLocation.tl_deserialize(io),
+          offset: Int32.tl_deserialize(io),
+          limit: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Upload::TypeFile
       end
     end
@@ -333,7 +354,17 @@ module Proton::TL
         @bytes.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          file_id: Int64.tl_deserialize(io),
+          file_part: Int32.tl_deserialize(io),
+          file_total_parts: Int32.tl_deserialize(io),
+          bytes: Bytes.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -363,7 +394,16 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          location: Root::TypeInputWebFileLocation.tl_deserialize(io),
+          offset: Int32.tl_deserialize(io),
+          limit: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Upload::TypeWebFile
       end
     end
@@ -393,7 +433,16 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          file_token: Bytes.tl_deserialize(io),
+          offset: Int32.tl_deserialize(io),
+          limit: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Upload::TypeCdnFile
       end
     end
@@ -419,7 +468,15 @@ module Proton::TL
         @request_token.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          file_token: Bytes.tl_deserialize(io),
+          request_token: Bytes.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Root::TypeFileHash)
       end
     end
@@ -445,7 +502,15 @@ module Proton::TL
         @offset.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          file_token: Bytes.tl_deserialize(io),
+          offset: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Root::TypeFileHash)
       end
     end
@@ -471,7 +536,15 @@ module Proton::TL
         @offset.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          location: Root::TypeInputFileLocation.tl_deserialize(io),
+          offset: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Root::TypeFileHash)
       end
     end

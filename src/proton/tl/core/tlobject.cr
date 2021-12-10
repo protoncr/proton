@@ -15,8 +15,7 @@ module Proton::TL
     end
   end
 
-  abstract class TLRequest
-    include TL::Serializable
+  abstract class TLRequest < TLObject
     extend TL::RemoteCallable
   end
 end

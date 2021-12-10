@@ -152,7 +152,7 @@ module Proton::TL
       class_getter constructor_id : UInt32 = 0x5E002502_u32
 
       getter type : Auth::TypeSentCodeType
-      getter phone_code_hash : Bytes
+      getter phone_code_hash : String
       getter next_type : Auth::TypeCodeType | Nil
       getter timeout : Int32 | Nil
 
@@ -163,7 +163,7 @@ module Proton::TL
         timeout : Int32 | Nil = nil
       )
         @type = type
-        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
+        @phone_code_hash = Utils.parse_string!(phone_code_hash)
         @next_type = next_type
         @timeout = TL::Utils.parse_int(timeout, Int32)
       end
@@ -171,8 +171,8 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!next_type.nil? ? 0x02 : 0) |
-            (!timeout.nil? ? 0x04 : 0)
+          (!next_type.nil? ? 2 : 0) |
+            (!timeout.nil? ? 4 : 0)
         ).tl_serialize(io)
         @type.tl_serialize(io)
         @phone_code_hash.tl_serialize(io)
@@ -185,9 +185,9 @@ module Proton::TL
         flags = UInt32.tl_deserialize(io)
         new(
           type: Auth::TypeSentCodeType.tl_deserialize(io),
-          phone_code_hash: Bytes.tl_deserialize(io),
-          next_type: flags & 0x02 > 0 ? Auth::TypeCodeType.tl_deserialize(io) : nil,
-          timeout: flags & 0x04 > 0 ? Int32.tl_deserialize(io) : nil,
+          phone_code_hash: String.tl_deserialize(io),
+          next_type: flags & 2 > 0 ? Auth::TypeCodeType.tl_deserialize(io) : nil,
+          timeout: flags & 4 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
@@ -216,9 +216,9 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!setup_password_required.nil? ? 0x02 : 0) |
-            (!otherwise_relogin_days.nil? ? 0x02 : 0) |
-            (!tmp_sessions.nil? ? 0x01 : 0)
+          (!setup_password_required.nil? ? 2 : 0) |
+            (!otherwise_relogin_days.nil? ? 2 : 0) |
+            (!tmp_sessions.nil? ? 1 : 0)
         ).tl_serialize(io)
         @otherwise_relogin_days.tl_serialize(io) unless @otherwise_relogin_days.nil?
         @tmp_sessions.tl_serialize(io) unless @tmp_sessions.nil?
@@ -229,10 +229,10 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         flags = UInt32.tl_deserialize(io)
         new(
+          setup_password_required: flags & 2 > 0 || nil,
+          otherwise_relogin_days: flags & 2 > 0 ? Int32.tl_deserialize(io) : nil,
+          tmp_sessions: flags & 1 > 0 ? Int32.tl_deserialize(io) : nil,
           user: Root::TypeUser.tl_deserialize(io),
-          setup_password_required: flags & 0x02 > 0 || nil,
-          otherwise_relogin_days: flags & 0x02 > 0 ? Int32.tl_deserialize(io) : nil,
-          tmp_sessions: flags & 0x01 > 0 ? Int32.tl_deserialize(io) : nil,
         )
       end
     end
@@ -252,7 +252,7 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!terms_of_service.nil? ? 0x01 : 0)
+          (!terms_of_service.nil? ? 1 : 0)
         ).tl_serialize(io)
         @terms_of_service.tl_serialize(io) unless @terms_of_service.nil?
       end
@@ -261,7 +261,7 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         flags = UInt32.tl_deserialize(io)
         new(
-          terms_of_service: flags & 0x01 > 0 ? Help::TypeTermsOfService.tl_deserialize(io) : nil,
+          terms_of_service: flags & 1 > 0 ? Help::TypeTermsOfService.tl_deserialize(io) : nil,
         )
       end
     end
@@ -300,12 +300,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x137948A5_u32
       class_getter constructor_id : UInt32 = 0x137948A5_u32
 
-      getter email_pattern : Bytes
+      getter email_pattern : String
 
       def initialize(
         email_pattern : Bytes | String | IO
       )
-        @email_pattern = Utils.parse_bytes!(email_pattern)
+        @email_pattern = Utils.parse_string!(email_pattern)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -316,7 +316,7 @@ module Proton::TL
       def self.tl_deserialize(io : IO, bare = false)
         Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          email_pattern: Bytes.tl_deserialize(io),
+          email_pattern: String.tl_deserialize(io),
         )
       end
     end
@@ -456,12 +456,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xAB03C6D9_u32
       class_getter constructor_id : UInt32 = 0xAB03C6D9_u32
 
-      getter pattern : Bytes
+      getter pattern : String
 
       def initialize(
         pattern : Bytes | String | IO
       )
-        @pattern = Utils.parse_bytes!(pattern)
+        @pattern = Utils.parse_string!(pattern)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -472,7 +472,7 @@ module Proton::TL
       def self.tl_deserialize(io : IO, bare = false)
         Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          pattern: Bytes.tl_deserialize(io),
+          pattern: String.tl_deserialize(io),
         )
       end
     end
@@ -481,14 +481,14 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x82006484_u32
       class_getter constructor_id : UInt32 = 0x82006484_u32
 
-      getter prefix : Bytes
+      getter prefix : String
       getter length : Int32
 
       def initialize(
         prefix : Bytes | String | IO,
         length : Int32
       )
-        @prefix = Utils.parse_bytes!(prefix)
+        @prefix = Utils.parse_string!(prefix)
         @length = TL::Utils.parse_int!(length, Int32)
       end
 
@@ -501,7 +501,7 @@ module Proton::TL
       def self.tl_deserialize(io : IO, bare = false)
         Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          prefix: Bytes.tl_deserialize(io),
+          prefix: String.tl_deserialize(io),
           length: Int32.tl_deserialize(io),
         )
       end
@@ -599,7 +599,7 @@ module Proton::TL
       getter future_auth_token : Bytes | Nil
 
       def initialize(
-        future_auth_token : Bytes | Nil = nil
+        future_auth_token : Bytes | String | IO | Nil = nil
       )
         @future_auth_token = Utils.parse_bytes(future_auth_token)
       end
@@ -607,7 +607,7 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!future_auth_token.nil? ? 0x01 : 0)
+          (!future_auth_token.nil? ? 1 : 0)
         ).tl_serialize(io)
         @future_auth_token.tl_serialize(io) unless @future_auth_token.nil?
       end
@@ -616,7 +616,7 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         flags = UInt32.tl_deserialize(io)
         new(
-          future_auth_token: flags & 0x01 > 0 ? Bytes.tl_deserialize(io) : nil,
+          future_auth_token: flags & 1 > 0 ? Bytes.tl_deserialize(io) : nil,
         )
       end
     end
@@ -625,9 +625,9 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xA677244F_u32
       class_getter constructor_id : UInt32 = 0xA677244F_u32
 
-      getter phone_number : Bytes
+      getter phone_number : String
       getter api_id : Int32
-      getter api_hash : Bytes
+      getter api_hash : String
       getter settings : Root::TypeCodeSettings
 
       def initialize(
@@ -636,9 +636,9 @@ module Proton::TL
         api_hash : Bytes | String | IO,
         settings : Root::TypeCodeSettings
       )
-        @phone_number = Utils.parse_bytes!(phone_number)
+        @phone_number = Utils.parse_string!(phone_number)
         @api_id = TL::Utils.parse_int!(api_id, Int32)
-        @api_hash = Utils.parse_bytes!(api_hash)
+        @api_hash = Utils.parse_string!(api_hash)
         @settings = settings
       end
 
@@ -650,7 +650,17 @@ module Proton::TL
         @settings.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          phone_number: String.tl_deserialize(io),
+          api_id: Int32.tl_deserialize(io),
+          api_hash: String.tl_deserialize(io),
+          settings: Root::TypeCodeSettings.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeSentCode
       end
     end
@@ -659,10 +669,10 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x80EEE427_u32
       class_getter constructor_id : UInt32 = 0x80EEE427_u32
 
-      getter phone_number : Bytes
-      getter phone_code_hash : Bytes
-      getter first_name : Bytes
-      getter last_name : Bytes
+      getter phone_number : String
+      getter phone_code_hash : String
+      getter first_name : String
+      getter last_name : String
 
       def initialize(
         phone_number : Bytes | String | IO,
@@ -670,10 +680,10 @@ module Proton::TL
         first_name : Bytes | String | IO,
         last_name : Bytes | String | IO
       )
-        @phone_number = Utils.parse_bytes!(phone_number)
-        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
-        @first_name = Utils.parse_bytes!(first_name)
-        @last_name = Utils.parse_bytes!(last_name)
+        @phone_number = Utils.parse_string!(phone_number)
+        @phone_code_hash = Utils.parse_string!(phone_code_hash)
+        @first_name = Utils.parse_string!(first_name)
+        @last_name = Utils.parse_string!(last_name)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -684,7 +694,17 @@ module Proton::TL
         @last_name.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          phone_number: String.tl_deserialize(io),
+          phone_code_hash: String.tl_deserialize(io),
+          first_name: String.tl_deserialize(io),
+          last_name: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -693,18 +713,18 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xBCD51581_u32
       class_getter constructor_id : UInt32 = 0xBCD51581_u32
 
-      getter phone_number : Bytes
-      getter phone_code_hash : Bytes
-      getter phone_code : Bytes
+      getter phone_number : String
+      getter phone_code_hash : String
+      getter phone_code : String
 
       def initialize(
         phone_number : Bytes | String | IO,
         phone_code_hash : Bytes | String | IO,
         phone_code : Bytes | String | IO
       )
-        @phone_number = Utils.parse_bytes!(phone_number)
-        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
-        @phone_code = Utils.parse_bytes!(phone_code)
+        @phone_number = Utils.parse_string!(phone_number)
+        @phone_code_hash = Utils.parse_string!(phone_code_hash)
+        @phone_code = Utils.parse_string!(phone_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -714,7 +734,16 @@ module Proton::TL
         @phone_code.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          phone_number: String.tl_deserialize(io),
+          phone_code_hash: String.tl_deserialize(io),
+          phone_code: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -727,7 +756,12 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new()
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeLoggedOut
       end
     end
@@ -740,7 +774,12 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new()
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -762,7 +801,14 @@ module Proton::TL
         @dc_id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          dc_id: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeExportedAuthorization
       end
     end
@@ -788,7 +834,15 @@ module Proton::TL
         @bytes.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Int64.tl_deserialize(io),
+          bytes: Bytes.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -822,7 +876,17 @@ module Proton::TL
         @encrypted_message.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          perm_auth_key_id: Int64.tl_deserialize(io),
+          nonce: Int64.tl_deserialize(io),
+          expires_at: Int32.tl_deserialize(io),
+          encrypted_message: Bytes.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -833,8 +897,8 @@ module Proton::TL
 
       getter flags : Int32
       getter api_id : Int32
-      getter api_hash : Bytes
-      getter bot_auth_token : Bytes
+      getter api_hash : String
+      getter bot_auth_token : String
 
       def initialize(
         flags : Int32,
@@ -844,8 +908,8 @@ module Proton::TL
       )
         @flags = TL::Utils.parse_int!(flags, Int32)
         @api_id = TL::Utils.parse_int!(api_id, Int32)
-        @api_hash = Utils.parse_bytes!(api_hash)
-        @bot_auth_token = Utils.parse_bytes!(bot_auth_token)
+        @api_hash = Utils.parse_string!(api_hash)
+        @bot_auth_token = Utils.parse_string!(bot_auth_token)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -856,7 +920,17 @@ module Proton::TL
         @bot_auth_token.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          flags: Int32.tl_deserialize(io),
+          api_id: Int32.tl_deserialize(io),
+          api_hash: String.tl_deserialize(io),
+          bot_auth_token: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -878,7 +952,14 @@ module Proton::TL
         @password.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          password: Root::TypeInputCheckPasswordSRP.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -891,7 +972,12 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new()
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypePasswordRecovery
       end
     end
@@ -900,27 +986,36 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x37096C70_u32
       class_getter constructor_id : UInt32 = 0x37096C70_u32
 
-      getter code : Bytes
+      getter code : String
       getter new_settings : Account::TypePasswordInputSettings | Nil
 
       def initialize(
         code : Bytes | String | IO,
         new_settings : Account::TypePasswordInputSettings | Nil = nil
       )
-        @code = Utils.parse_bytes!(code)
+        @code = Utils.parse_string!(code)
         @new_settings = new_settings
       end
 
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!new_settings.nil? ? 0x01 : 0)
+          (!new_settings.nil? ? 1 : 0)
         ).tl_serialize(io)
         @code.tl_serialize(io)
         @new_settings.tl_serialize(io) unless @new_settings.nil?
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          code: String.tl_deserialize(io),
+          new_settings: flags & 1 > 0 ? Account::TypePasswordInputSettings.tl_deserialize(io) : nil,
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeAuthorization
       end
     end
@@ -929,15 +1024,15 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x3EF1A9BF_u32
       class_getter constructor_id : UInt32 = 0x3EF1A9BF_u32
 
-      getter phone_number : Bytes
-      getter phone_code_hash : Bytes
+      getter phone_number : String
+      getter phone_code_hash : String
 
       def initialize(
         phone_number : Bytes | String | IO,
         phone_code_hash : Bytes | String | IO
       )
-        @phone_number = Utils.parse_bytes!(phone_number)
-        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
+        @phone_number = Utils.parse_string!(phone_number)
+        @phone_code_hash = Utils.parse_string!(phone_code_hash)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -946,7 +1041,15 @@ module Proton::TL
         @phone_code_hash.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          phone_number: String.tl_deserialize(io),
+          phone_code_hash: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeSentCode
       end
     end
@@ -955,15 +1058,15 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x1F040578_u32
       class_getter constructor_id : UInt32 = 0x1F040578_u32
 
-      getter phone_number : Bytes
-      getter phone_code_hash : Bytes
+      getter phone_number : String
+      getter phone_code_hash : String
 
       def initialize(
         phone_number : Bytes | String | IO,
         phone_code_hash : Bytes | String | IO
       )
-        @phone_number = Utils.parse_bytes!(phone_number)
-        @phone_code_hash = Utils.parse_bytes!(phone_code_hash)
+        @phone_number = Utils.parse_string!(phone_number)
+        @phone_code_hash = Utils.parse_string!(phone_code_hash)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -972,7 +1075,15 @@ module Proton::TL
         @phone_code_hash.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          phone_number: String.tl_deserialize(io),
+          phone_code_hash: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -994,7 +1105,14 @@ module Proton::TL
         @except_auth_keys.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          except_auth_keys: Array(Int64).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -1004,7 +1122,7 @@ module Proton::TL
       class_getter constructor_id : UInt32 = 0xB7E085FE_u32
 
       getter api_id : Int32
-      getter api_hash : Bytes
+      getter api_hash : String
       getter except_ids : Array(Int64)
 
       def initialize(
@@ -1013,7 +1131,7 @@ module Proton::TL
         except_ids : Array(Int64)
       )
         @api_id = TL::Utils.parse_int!(api_id, Int32)
-        @api_hash = Utils.parse_bytes!(api_hash)
+        @api_hash = Utils.parse_string!(api_hash)
         @except_ids = except_ids
       end
 
@@ -1024,7 +1142,16 @@ module Proton::TL
         @except_ids.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          api_id: Int32.tl_deserialize(io),
+          api_hash: String.tl_deserialize(io),
+          except_ids: Array(Int64).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeLoginToken
       end
     end
@@ -1046,7 +1173,14 @@ module Proton::TL
         @token.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          token: Bytes.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Auth::TypeLoginToken
       end
     end
@@ -1068,7 +1202,14 @@ module Proton::TL
         @token.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          token: Bytes.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeAuthorization
       end
     end
@@ -1077,12 +1218,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x0D36BF79_u32
       class_getter constructor_id : UInt32 = 0x0D36BF79_u32
 
-      getter code : Bytes
+      getter code : String
 
       def initialize(
         code : Bytes | String | IO
       )
-        @code = Utils.parse_bytes!(code)
+        @code = Utils.parse_string!(code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -1090,7 +1231,14 @@ module Proton::TL
         @code.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          code: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end

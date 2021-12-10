@@ -31,6 +31,9 @@ dependencies:
     # path: ../tl_parser
     github: protoncr/tl_parser
     branch: master
+  future:
+    github: crystal-community/future.cr
+    branch: master
 
 development_dependencies:
   spectator:

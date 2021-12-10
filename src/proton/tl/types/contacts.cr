@@ -433,7 +433,14 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          hash: Int64.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Int32)
       end
     end
@@ -446,7 +453,12 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new()
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Root::TypeContactStatus)
       end
     end
@@ -468,7 +480,14 @@ module Proton::TL
         @hash.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          hash: Int64.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Contacts::TypeContacts
       end
     end
@@ -490,7 +509,14 @@ module Proton::TL
         @contacts.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          contacts: Array(Root::TypeInputContact).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Contacts::TypeImportedContacts
       end
     end
@@ -512,7 +538,14 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Array(Root::TypeInputUser).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeUpdates
       end
     end
@@ -521,10 +554,10 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x1013FD9E_u32
       class_getter constructor_id : UInt32 = 0x1013FD9E_u32
 
-      getter phones : Array(Bytes)
+      getter phones : Array(String)
 
       def initialize(
-        phones : Array(Bytes)
+        phones : Array(String)
       )
         @phones = phones
       end
@@ -534,7 +567,14 @@ module Proton::TL
         @phones.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          phones: Array(String).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -556,7 +596,14 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Root::TypeInputPeer.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -578,7 +625,14 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Root::TypeInputPeer.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -604,7 +658,15 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          offset: Int32.tl_deserialize(io),
+          limit: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Contacts::TypeBlocked
       end
     end
@@ -613,14 +675,14 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x11F812D8_u32
       class_getter constructor_id : UInt32 = 0x11F812D8_u32
 
-      getter q : Bytes
+      getter q : String
       getter limit : Int32
 
       def initialize(
         q : Bytes | String | IO,
         limit : Int32
       )
-        @q = Utils.parse_bytes!(q)
+        @q = Utils.parse_string!(q)
         @limit = TL::Utils.parse_int!(limit, Int32)
       end
 
@@ -630,7 +692,15 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          q: String.tl_deserialize(io),
+          limit: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Contacts::TypeFound
       end
     end
@@ -639,12 +709,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xF93CCBA3_u32
       class_getter constructor_id : UInt32 = 0xF93CCBA3_u32
 
-      getter username : Bytes
+      getter username : String
 
       def initialize(
         username : Bytes | String | IO
       )
-        @username = Utils.parse_bytes!(username)
+        @username = Utils.parse_string!(username)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -652,7 +722,14 @@ module Proton::TL
         @username.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          username: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Contacts::TypeResolvedPeer
       end
     end
@@ -702,21 +779,39 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!correspondents.nil? ? 0x01 : 0) |
-            (!bots_pm.nil? ? 0x02 : 0) |
-            (!bots_inline.nil? ? 0x04 : 0) |
-            (!phone_calls.nil? ? 0x08 : 0) |
-            (!forward_users.nil? ? 0x10 : 0) |
-            (!forward_chats.nil? ? 0x20 : 0) |
-            (!groups.nil? ? 0x400 : 0) |
-            (!channels.nil? ? 0x8000 : 0)
+          (!correspondents.nil? ? 1 : 0) |
+            (!bots_pm.nil? ? 2 : 0) |
+            (!bots_inline.nil? ? 4 : 0) |
+            (!phone_calls.nil? ? 8 : 0) |
+            (!forward_users.nil? ? 16 : 0) |
+            (!forward_chats.nil? ? 32 : 0) |
+            (!groups.nil? ? 1024 : 0) |
+            (!channels.nil? ? 32768 : 0)
         ).tl_serialize(io)
         @offset.tl_serialize(io)
         @limit.tl_serialize(io)
         @hash.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          correspondents: flags & 1 > 0 || nil,
+          bots_pm: flags & 2 > 0 || nil,
+          bots_inline: flags & 4 > 0 || nil,
+          phone_calls: flags & 8 > 0 || nil,
+          forward_users: flags & 16 > 0 || nil,
+          forward_chats: flags & 32 > 0 || nil,
+          groups: flags & 1024 > 0 || nil,
+          channels: flags & 32768 > 0 || nil,
+          offset: Int32.tl_deserialize(io),
+          limit: Int32.tl_deserialize(io),
+          hash: Int64.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Contacts::TypeTopPeers
       end
     end
@@ -742,7 +837,15 @@ module Proton::TL
         @peer.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          category: Root::TypeTopPeerCategory.tl_deserialize(io),
+          peer: Root::TypeInputPeer.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -755,7 +858,12 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new()
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -768,7 +876,12 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new()
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Root::TypeSavedContact)
       end
     end
@@ -790,7 +903,14 @@ module Proton::TL
         @enabled.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          enabled: Bool.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -800,9 +920,9 @@ module Proton::TL
       class_getter constructor_id : UInt32 = 0xE8F463D0_u32
 
       getter id : Root::TypeInputUser
-      getter first_name : Bytes
-      getter last_name : Bytes
-      getter phone : Bytes
+      getter first_name : String
+      getter last_name : String
+      getter phone : String
       getter add_phone_privacy_exception : Bool | Nil
 
       def initialize(
@@ -813,16 +933,16 @@ module Proton::TL
         add_phone_privacy_exception : Bool | Nil = nil
       )
         @id = id
-        @first_name = Utils.parse_bytes!(first_name)
-        @last_name = Utils.parse_bytes!(last_name)
-        @phone = Utils.parse_bytes!(phone)
+        @first_name = Utils.parse_string!(first_name)
+        @last_name = Utils.parse_string!(last_name)
+        @phone = Utils.parse_string!(phone)
         @add_phone_privacy_exception = add_phone_privacy_exception
       end
 
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!add_phone_privacy_exception.nil? ? 0x01 : 0)
+          (!add_phone_privacy_exception.nil? ? 1 : 0)
         ).tl_serialize(io)
         @id.tl_serialize(io)
         @first_name.tl_serialize(io)
@@ -830,7 +950,19 @@ module Proton::TL
         @phone.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          add_phone_privacy_exception: flags & 1 > 0 || nil,
+          id: Root::TypeInputUser.tl_deserialize(io),
+          first_name: String.tl_deserialize(io),
+          last_name: String.tl_deserialize(io),
+          phone: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeUpdates
       end
     end
@@ -852,7 +984,14 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Root::TypeInputUser.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeUpdates
       end
     end
@@ -878,14 +1017,24 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!background.nil? ? 0x02 : 0) |
-            (!self_expires.nil? ? 0x01 : 0)
+          (!background.nil? ? 2 : 0) |
+            (!self_expires.nil? ? 1 : 0)
         ).tl_serialize(io)
         @geo_point.tl_serialize(io)
         @self_expires.tl_serialize(io) unless @self_expires.nil?
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          background: flags & 2 > 0 || nil,
+          geo_point: Root::TypeInputGeoPoint.tl_deserialize(io),
+          self_expires: flags & 1 > 0 ? Int32.tl_deserialize(io) : nil,
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeUpdates
       end
     end
@@ -914,14 +1063,25 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!delete_message.nil? ? 0x01 : 0) |
-            (!delete_history.nil? ? 0x02 : 0) |
-            (!report_spam.nil? ? 0x04 : 0)
+          (!delete_message.nil? ? 1 : 0) |
+            (!delete_history.nil? ? 2 : 0) |
+            (!report_spam.nil? ? 4 : 0)
         ).tl_serialize(io)
         @msg_id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          delete_message: flags & 1 > 0 || nil,
+          delete_history: flags & 2 > 0 || nil,
+          report_spam: flags & 4 > 0 || nil,
+          msg_id: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeUpdates
       end
     end

@@ -156,7 +156,7 @@ module Proton
       end
 
       def self.from_tl(error : TL::Root::RpcError)
-        message = String.new(error.error_message)
+        message = error.error_message
         if value = message.split(/\D/).reject(&.empty?).first?
           to_remove = "_#{value}"
           new(error.error_code, message.sub(to_remove, ""), value.to_u32, nil)

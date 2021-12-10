@@ -215,7 +215,7 @@ module Proton
       end
 
       def decompress
-        io = IO::Memory.new(@packed_data)
+        io = IO::Memory.new(@packed_data[..])
         Utils.ungzip_io(io)
       end
 

@@ -38,15 +38,15 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xF2F2330A_u32
       class_getter constructor_id : UInt32 = 0xF2F2330A_u32
 
-      getter lang_pack : Bytes
-      getter lang_code : Bytes
+      getter lang_pack : String
+      getter lang_code : String
 
       def initialize(
         lang_pack : Bytes | String | IO,
         lang_code : Bytes | String | IO
       )
-        @lang_pack = Utils.parse_bytes!(lang_pack)
-        @lang_code = Utils.parse_bytes!(lang_code)
+        @lang_pack = Utils.parse_string!(lang_pack)
+        @lang_code = Utils.parse_string!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -55,7 +55,15 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          lang_pack: String.tl_deserialize(io),
+          lang_code: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeLangPackDifference
       end
     end
@@ -64,17 +72,17 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xEFEA3803_u32
       class_getter constructor_id : UInt32 = 0xEFEA3803_u32
 
-      getter lang_pack : Bytes
-      getter lang_code : Bytes
-      getter keys : Array(Bytes)
+      getter lang_pack : String
+      getter lang_code : String
+      getter keys : Array(String)
 
       def initialize(
         lang_pack : Bytes | String | IO,
         lang_code : Bytes | String | IO,
-        keys : Array(Bytes)
+        keys : Array(String)
       )
-        @lang_pack = Utils.parse_bytes!(lang_pack)
-        @lang_code = Utils.parse_bytes!(lang_code)
+        @lang_pack = Utils.parse_string!(lang_pack)
+        @lang_code = Utils.parse_string!(lang_code)
         @keys = keys
       end
 
@@ -85,7 +93,16 @@ module Proton::TL
         @keys.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          lang_pack: String.tl_deserialize(io),
+          lang_code: String.tl_deserialize(io),
+          keys: Array(String).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Root::TypeLangPackString)
       end
     end
@@ -94,8 +111,8 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xCD984AA5_u32
       class_getter constructor_id : UInt32 = 0xCD984AA5_u32
 
-      getter lang_pack : Bytes
-      getter lang_code : Bytes
+      getter lang_pack : String
+      getter lang_code : String
       getter from_version : Int32
 
       def initialize(
@@ -103,8 +120,8 @@ module Proton::TL
         lang_code : Bytes | String | IO,
         from_version : Int32
       )
-        @lang_pack = Utils.parse_bytes!(lang_pack)
-        @lang_code = Utils.parse_bytes!(lang_code)
+        @lang_pack = Utils.parse_string!(lang_pack)
+        @lang_code = Utils.parse_string!(lang_code)
         @from_version = TL::Utils.parse_int!(from_version, Int32)
       end
 
@@ -115,7 +132,16 @@ module Proton::TL
         @from_version.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          lang_pack: String.tl_deserialize(io),
+          lang_code: String.tl_deserialize(io),
+          from_version: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeLangPackDifference
       end
     end
@@ -124,12 +150,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x42C6978F_u32
       class_getter constructor_id : UInt32 = 0x42C6978F_u32
 
-      getter lang_pack : Bytes
+      getter lang_pack : String
 
       def initialize(
         lang_pack : Bytes | String | IO
       )
-        @lang_pack = Utils.parse_bytes!(lang_pack)
+        @lang_pack = Utils.parse_string!(lang_pack)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -137,7 +163,14 @@ module Proton::TL
         @lang_pack.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          lang_pack: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Root::TypeLangPackLanguage)
       end
     end
@@ -146,15 +179,15 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x6A596502_u32
       class_getter constructor_id : UInt32 = 0x6A596502_u32
 
-      getter lang_pack : Bytes
-      getter lang_code : Bytes
+      getter lang_pack : String
+      getter lang_code : String
 
       def initialize(
         lang_pack : Bytes | String | IO,
         lang_code : Bytes | String | IO
       )
-        @lang_pack = Utils.parse_bytes!(lang_pack)
-        @lang_code = Utils.parse_bytes!(lang_code)
+        @lang_pack = Utils.parse_string!(lang_pack)
+        @lang_code = Utils.parse_string!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -163,7 +196,15 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          lang_pack: String.tl_deserialize(io),
+          lang_code: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeLangPackLanguage
       end
     end

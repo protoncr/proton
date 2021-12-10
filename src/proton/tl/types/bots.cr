@@ -26,14 +26,14 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xAA2769ED_u32
       class_getter constructor_id : UInt32 = 0xAA2769ED_u32
 
-      getter custom_method : Bytes
+      getter custom_method : String
       getter params : Root::TypeDataJSON
 
       def initialize(
         custom_method : Bytes | String | IO,
         params : Root::TypeDataJSON
       )
-        @custom_method = Utils.parse_bytes!(custom_method)
+        @custom_method = Utils.parse_string!(custom_method)
         @params = params
       end
 
@@ -43,7 +43,15 @@ module Proton::TL
         @params.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          custom_method: String.tl_deserialize(io),
+          params: Root::TypeDataJSON.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Root::TypeDataJSON
       end
     end
@@ -69,7 +77,15 @@ module Proton::TL
         @data.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          query_id: Int64.tl_deserialize(io),
+          data: Root::TypeDataJSON.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -79,7 +95,7 @@ module Proton::TL
       class_getter constructor_id : UInt32 = 0x0517165A_u32
 
       getter scope : Root::TypeBotCommandScope
-      getter lang_code : Bytes
+      getter lang_code : String
       getter commands : Array(Root::TypeBotCommand)
 
       def initialize(
@@ -88,7 +104,7 @@ module Proton::TL
         commands : Array(Root::TypeBotCommand)
       )
         @scope = scope
-        @lang_code = Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_string!(lang_code)
         @commands = commands
       end
 
@@ -99,7 +115,16 @@ module Proton::TL
         @commands.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          scope: Root::TypeBotCommandScope.tl_deserialize(io),
+          lang_code: String.tl_deserialize(io),
+          commands: Array(Root::TypeBotCommand).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -109,14 +134,14 @@ module Proton::TL
       class_getter constructor_id : UInt32 = 0x3D8DE0F9_u32
 
       getter scope : Root::TypeBotCommandScope
-      getter lang_code : Bytes
+      getter lang_code : String
 
       def initialize(
         scope : Root::TypeBotCommandScope,
         lang_code : Bytes | String | IO
       )
         @scope = scope
-        @lang_code = Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_string!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -125,7 +150,15 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          scope: Root::TypeBotCommandScope.tl_deserialize(io),
+          lang_code: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -135,14 +168,14 @@ module Proton::TL
       class_getter constructor_id : UInt32 = 0xE34C0DD6_u32
 
       getter scope : Root::TypeBotCommandScope
-      getter lang_code : Bytes
+      getter lang_code : String
 
       def initialize(
         scope : Root::TypeBotCommandScope,
         lang_code : Bytes | String | IO
       )
         @scope = scope
-        @lang_code = Utils.parse_bytes!(lang_code)
+        @lang_code = Utils.parse_string!(lang_code)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -151,7 +184,15 @@ module Proton::TL
         @lang_code.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          scope: Root::TypeBotCommandScope.tl_deserialize(io),
+          lang_code: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Root::TypeBotCommand)
       end
     end

@@ -7,9 +7,7 @@ module Proton::TL
     extend self
 
     def parse_bytes(input : Bytes | IO | String | Nil)
-      if input.nil?
-        return nil
-      end
+      return unless input
 
       case input
       when Bytes
@@ -23,6 +21,23 @@ module Proton::TL
 
     def parse_bytes!(input : Bytes | IO | String | Nil)
       parse_bytes(input).not_nil!
+    end
+
+    def parse_string(input : Bytes | IO | String | Nil)
+      return unless input
+
+      case input
+      when Bytes
+        String.new(input)
+      when IO
+        input.gets_to_end
+      when String
+        input
+      end
+    end
+
+    def parse_string!(input : Bytes | IO | String | Nil)
+      parse_string(input).not_nil!
     end
 
     def parse_int(input : Number?, as type : U.class) forall U

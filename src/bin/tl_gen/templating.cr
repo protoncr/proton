@@ -8,7 +8,7 @@ ACCEPTABLE_TYPES = {
   "int64"  => ["Int32", "Int64"],
   "int128" => ["BigInt", "Int::Primitive"],
   "int256" => ["BigInt", "Int::Primitive"],
-  "!X"     => ["Bytes", "Serializable"],
+  "X"      => ["T"],
   "date"   => ["Int64", "Time"],
 }
 
@@ -39,10 +39,14 @@ def type_to_crystal(type : String)
     "BigInt"
   when "double"
     "Float64"
-  when "string", "bytes", "!X"
+  when "string"
+    "String"
+  when "bytes"
     "Bytes"
   when "Bool", "true"
     "Bool"
+  when "!X"
+    "T"
   when /^[Vv]ector<(.*)>/
     inner = type_to_crystal($1)
     "Array(#{inner})"
@@ -147,7 +151,8 @@ class TLParser::Parameter
   end
 
   def acceptable_types
-    ACCEPTABLE_TYPES[type.to_s]? || [crystal_type]
+    name = type.is_a?(TLParser::NormalParam) ? type.as(TLParser::NormalParam).type.name : ""
+    ACCEPTABLE_TYPES[name]? || [crystal_type]
   end
 
   def crinja_attribute(attr : Crinja::Value) : Crinja::Value

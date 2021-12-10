@@ -44,15 +44,15 @@ module Proton
         len = input.size // 4
         if len < 127
           output.write_bytes(len.to_u8, IO::ByteFormat::LittleEndian)
-          written = IO.copy(input, output)
+          output.write(input.to_slice)
         else
           output.write_bytes(0x7f_u8, IO::ByteFormat::LittleEndian)
           output.write_bytes(len.to_u32, IO::ByteFormat::LittleEndian)
           output.seek(-1, IO::Seek::Current) # We only want 3 of the 4 u32 bytes
-          written = IO.copy(input, output)
+          output.write(input.to_slice)
         end
 
-        written.to_u32
+        input.size.to_u32
       end
 
       def unpack(input : IO::Memory, output : IO::Memory) : UInt32

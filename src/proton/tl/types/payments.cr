@@ -104,11 +104,11 @@ module Proton::TL
       getter bot_id : Int64
       getter invoice : Root::TypeInvoice
       getter provider_id : Int64
-      getter url : Bytes
+      getter url : String
       getter users : Array(Root::TypeUser)
       getter can_save_credentials : Bool | Nil
       getter password_missing : Bool | Nil
-      getter native_provider : Bytes | Nil
+      getter native_provider : String | Nil
       getter native_params : Root::TypeDataJSON | Nil
       getter saved_info : Root::TypePaymentRequestedInfo | Nil
       getter saved_credentials : Root::TypePaymentSavedCredentials | Nil
@@ -122,7 +122,7 @@ module Proton::TL
         users : Array(Root::TypeUser),
         can_save_credentials : Bool | Nil = nil,
         password_missing : Bool | Nil = nil,
-        native_provider : Bytes | Nil = nil,
+        native_provider : Bytes | String | IO | Nil = nil,
         native_params : Root::TypeDataJSON | Nil = nil,
         saved_info : Root::TypePaymentRequestedInfo | Nil = nil,
         saved_credentials : Root::TypePaymentSavedCredentials | Nil = nil
@@ -131,11 +131,11 @@ module Proton::TL
         @bot_id = bot_id
         @invoice = invoice
         @provider_id = provider_id
-        @url = Utils.parse_bytes!(url)
+        @url = Utils.parse_string!(url)
         @users = users
         @can_save_credentials = can_save_credentials
         @password_missing = password_missing
-        @native_provider = Utils.parse_bytes(native_provider)
+        @native_provider = Utils.parse_string(native_provider)
         @native_params = native_params
         @saved_info = saved_info
         @saved_credentials = saved_credentials
@@ -144,12 +144,12 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!can_save_credentials.nil? ? 0x04 : 0) |
-            (!password_missing.nil? ? 0x08 : 0) |
-            (!native_provider.nil? ? 0x10 : 0) |
-            (!native_params.nil? ? 0x10 : 0) |
-            (!saved_info.nil? ? 0x01 : 0) |
-            (!saved_credentials.nil? ? 0x02 : 0)
+          (!can_save_credentials.nil? ? 4 : 0) |
+            (!password_missing.nil? ? 8 : 0) |
+            (!native_provider.nil? ? 16 : 0) |
+            (!native_params.nil? ? 16 : 0) |
+            (!saved_info.nil? ? 1 : 0) |
+            (!saved_credentials.nil? ? 2 : 0)
         ).tl_serialize(io)
         @form_id.tl_serialize(io)
         @bot_id.tl_serialize(io)
@@ -167,18 +167,18 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         flags = UInt32.tl_deserialize(io)
         new(
+          can_save_credentials: flags & 4 > 0 || nil,
+          password_missing: flags & 8 > 0 || nil,
           form_id: Int64.tl_deserialize(io),
           bot_id: Int64.tl_deserialize(io),
           invoice: Root::TypeInvoice.tl_deserialize(io),
           provider_id: Int64.tl_deserialize(io),
-          url: Bytes.tl_deserialize(io),
+          url: String.tl_deserialize(io),
+          native_provider: flags & 16 > 0 ? String.tl_deserialize(io) : nil,
+          native_params: flags & 16 > 0 ? Root::TypeDataJSON.tl_deserialize(io) : nil,
+          saved_info: flags & 1 > 0 ? Root::TypePaymentRequestedInfo.tl_deserialize(io) : nil,
+          saved_credentials: flags & 2 > 0 ? Root::TypePaymentSavedCredentials.tl_deserialize(io) : nil,
           users: Array(Root::TypeUser).tl_deserialize(io),
-          can_save_credentials: flags & 0x04 > 0 || nil,
-          password_missing: flags & 0x08 > 0 || nil,
-          native_provider: flags & 0x10 > 0 ? Bytes.tl_deserialize(io) : nil,
-          native_params: flags & 0x10 > 0 ? Root::TypeDataJSON.tl_deserialize(io) : nil,
-          saved_info: flags & 0x01 > 0 ? Root::TypePaymentRequestedInfo.tl_deserialize(io) : nil,
-          saved_credentials: flags & 0x02 > 0 ? Root::TypePaymentSavedCredentials.tl_deserialize(io) : nil,
         )
       end
     end
@@ -187,22 +187,22 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xD1451883_u32
       class_getter constructor_id : UInt32 = 0xD1451883_u32
 
-      getter id : Bytes | Nil
+      getter id : String | Nil
       getter shipping_options : Array(Root::TypeShippingOption) | Nil
 
       def initialize(
-        id : Bytes | Nil = nil,
+        id : Bytes | String | IO | Nil = nil,
         shipping_options : Array(Root::TypeShippingOption) | Nil = nil
       )
-        @id = Utils.parse_bytes(id)
+        @id = Utils.parse_string(id)
         @shipping_options = shipping_options
       end
 
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!id.nil? ? 0x01 : 0) |
-            (!shipping_options.nil? ? 0x02 : 0)
+          (!id.nil? ? 1 : 0) |
+            (!shipping_options.nil? ? 2 : 0)
         ).tl_serialize(io)
         @id.tl_serialize(io) unless @id.nil?
         @shipping_options.tl_serialize(io) unless @shipping_options.nil?
@@ -212,8 +212,8 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         flags = UInt32.tl_deserialize(io)
         new(
-          id: flags & 0x01 > 0 ? Bytes.tl_deserialize(io) : nil,
-          shipping_options: flags & 0x02 > 0 ? Array(Root::TypeShippingOption).tl_deserialize(io) : nil,
+          id: flags & 1 > 0 ? String.tl_deserialize(io) : nil,
+          shipping_options: flags & 2 > 0 ? Array(Root::TypeShippingOption).tl_deserialize(io) : nil,
         )
       end
     end
@@ -247,12 +247,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0xD8411139_u32
       class_getter constructor_id : UInt32 = 0xD8411139_u32
 
-      getter url : Bytes
+      getter url : String
 
       def initialize(
         url : Bytes | String | IO
       )
-        @url = Utils.parse_bytes!(url)
+        @url = Utils.parse_string!(url)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -263,7 +263,7 @@ module Proton::TL
       def self.tl_deserialize(io : IO, bare = false)
         Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          url: Bytes.tl_deserialize(io),
+          url: String.tl_deserialize(io),
         )
       end
     end
@@ -275,12 +275,12 @@ module Proton::TL
       getter date : Int32
       getter bot_id : Int64
       getter provider_id : Int64
-      getter title : Bytes
-      getter description : Bytes
+      getter title : String
+      getter description : String
       getter invoice : Root::TypeInvoice
-      getter currency : Bytes
+      getter currency : String
       getter total_amount : Int64
-      getter credentials_title : Bytes
+      getter credentials_title : String
       getter users : Array(Root::TypeUser)
       getter photo : Root::TypeWebDocument | Nil
       getter info : Root::TypePaymentRequestedInfo | Nil
@@ -306,12 +306,12 @@ module Proton::TL
         @date = TL::Utils.parse_int!(date, Int32)
         @bot_id = bot_id
         @provider_id = provider_id
-        @title = Utils.parse_bytes!(title)
-        @description = Utils.parse_bytes!(description)
+        @title = Utils.parse_string!(title)
+        @description = Utils.parse_string!(description)
         @invoice = invoice
-        @currency = Utils.parse_bytes!(currency)
+        @currency = Utils.parse_string!(currency)
         @total_amount = total_amount
-        @credentials_title = Utils.parse_bytes!(credentials_title)
+        @credentials_title = Utils.parse_string!(credentials_title)
         @users = users
         @photo = photo
         @info = info
@@ -322,10 +322,10 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!photo.nil? ? 0x04 : 0) |
-            (!info.nil? ? 0x01 : 0) |
-            (!shipping.nil? ? 0x02 : 0) |
-            (!tip_amount.nil? ? 0x08 : 0)
+          (!photo.nil? ? 4 : 0) |
+            (!info.nil? ? 1 : 0) |
+            (!shipping.nil? ? 2 : 0) |
+            (!tip_amount.nil? ? 8 : 0)
         ).tl_serialize(io)
         @date.tl_serialize(io)
         @bot_id.tl_serialize(io)
@@ -350,17 +350,17 @@ module Proton::TL
           date: Int32.tl_deserialize(io),
           bot_id: Int64.tl_deserialize(io),
           provider_id: Int64.tl_deserialize(io),
-          title: Bytes.tl_deserialize(io),
-          description: Bytes.tl_deserialize(io),
+          title: String.tl_deserialize(io),
+          description: String.tl_deserialize(io),
+          photo: flags & 4 > 0 ? Root::TypeWebDocument.tl_deserialize(io) : nil,
           invoice: Root::TypeInvoice.tl_deserialize(io),
-          currency: Bytes.tl_deserialize(io),
+          info: flags & 1 > 0 ? Root::TypePaymentRequestedInfo.tl_deserialize(io) : nil,
+          shipping: flags & 2 > 0 ? Root::TypeShippingOption.tl_deserialize(io) : nil,
+          tip_amount: flags & 8 > 0 ? Int64.tl_deserialize(io) : nil,
+          currency: String.tl_deserialize(io),
           total_amount: Int64.tl_deserialize(io),
-          credentials_title: Bytes.tl_deserialize(io),
+          credentials_title: String.tl_deserialize(io),
           users: Array(Root::TypeUser).tl_deserialize(io),
-          photo: flags & 0x04 > 0 ? Root::TypeWebDocument.tl_deserialize(io) : nil,
-          info: flags & 0x01 > 0 ? Root::TypePaymentRequestedInfo.tl_deserialize(io) : nil,
-          shipping: flags & 0x02 > 0 ? Root::TypeShippingOption.tl_deserialize(io) : nil,
-          tip_amount: flags & 0x08 > 0 ? Int64.tl_deserialize(io) : nil,
         )
       end
     end
@@ -383,8 +383,8 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!has_saved_credentials.nil? ? 0x02 : 0) |
-            (!saved_info.nil? ? 0x01 : 0)
+          (!has_saved_credentials.nil? ? 2 : 0) |
+            (!saved_info.nil? ? 1 : 0)
         ).tl_serialize(io)
         @saved_info.tl_serialize(io) unless @saved_info.nil?
       end
@@ -393,8 +393,8 @@ module Proton::TL
         Utils.assert_constructor(io, self.constructor_id) unless bare
         flags = UInt32.tl_deserialize(io)
         new(
-          has_saved_credentials: flags & 0x02 > 0 || nil,
-          saved_info: flags & 0x01 > 0 ? Root::TypePaymentRequestedInfo.tl_deserialize(io) : nil,
+          has_saved_credentials: flags & 2 > 0 || nil,
+          saved_info: flags & 1 > 0 ? Root::TypePaymentRequestedInfo.tl_deserialize(io) : nil,
         )
       end
     end
@@ -403,14 +403,14 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x3E24E573_u32
       class_getter constructor_id : UInt32 = 0x3E24E573_u32
 
-      getter title : Bytes
+      getter title : String
       getter open_urls : Array(Root::TypeBankCardOpenUrl)
 
       def initialize(
         title : Bytes | String | IO,
         open_urls : Array(Root::TypeBankCardOpenUrl)
       )
-        @title = Utils.parse_bytes!(title)
+        @title = Utils.parse_string!(title)
         @open_urls = open_urls
       end
 
@@ -423,7 +423,7 @@ module Proton::TL
       def self.tl_deserialize(io : IO, bare = false)
         Utils.assert_constructor(io, self.constructor_id) unless bare
         new(
-          title: Bytes.tl_deserialize(io),
+          title: String.tl_deserialize(io),
           open_urls: Array(Root::TypeBankCardOpenUrl).tl_deserialize(io),
         )
       end
@@ -450,14 +450,24 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!theme_params.nil? ? 0x01 : 0)
+          (!theme_params.nil? ? 1 : 0)
         ).tl_serialize(io)
         @peer.tl_serialize(io)
         @msg_id.tl_serialize(io)
         @theme_params.tl_serialize(io) unless @theme_params.nil?
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          peer: Root::TypeInputPeer.tl_deserialize(io),
+          msg_id: Int32.tl_deserialize(io),
+          theme_params: flags & 1 > 0 ? Root::TypeDataJSON.tl_deserialize(io) : nil,
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Payments::TypePaymentForm
       end
     end
@@ -483,7 +493,15 @@ module Proton::TL
         @msg_id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          peer: Root::TypeInputPeer.tl_deserialize(io),
+          msg_id: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Payments::TypePaymentReceipt
       end
     end
@@ -512,14 +530,25 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!save.nil? ? 0x01 : 0)
+          (!save.nil? ? 1 : 0)
         ).tl_serialize(io)
         @peer.tl_serialize(io)
         @msg_id.tl_serialize(io)
         @info.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          save: flags & 1 > 0 || nil,
+          peer: Root::TypeInputPeer.tl_deserialize(io),
+          msg_id: Int32.tl_deserialize(io),
+          info: Root::TypePaymentRequestedInfo.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Payments::TypeValidatedRequestedInfo
       end
     end
@@ -532,8 +561,8 @@ module Proton::TL
       getter peer : Root::TypeInputPeer
       getter msg_id : Int32
       getter credentials : Root::TypeInputPaymentCredentials
-      getter requested_info_id : Bytes | Nil
-      getter shipping_option_id : Bytes | Nil
+      getter requested_info_id : String | Nil
+      getter shipping_option_id : String | Nil
       getter tip_amount : Int64 | Nil
 
       def initialize(
@@ -541,25 +570,25 @@ module Proton::TL
         peer : Root::TypeInputPeer,
         msg_id : Int32,
         credentials : Root::TypeInputPaymentCredentials,
-        requested_info_id : Bytes | Nil = nil,
-        shipping_option_id : Bytes | Nil = nil,
+        requested_info_id : Bytes | String | IO | Nil = nil,
+        shipping_option_id : Bytes | String | IO | Nil = nil,
         tip_amount : Int64 | Nil = nil
       )
         @form_id = form_id
         @peer = peer
         @msg_id = TL::Utils.parse_int!(msg_id, Int32)
         @credentials = credentials
-        @requested_info_id = Utils.parse_bytes(requested_info_id)
-        @shipping_option_id = Utils.parse_bytes(shipping_option_id)
+        @requested_info_id = Utils.parse_string(requested_info_id)
+        @shipping_option_id = Utils.parse_string(shipping_option_id)
         @tip_amount = tip_amount
       end
 
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!requested_info_id.nil? ? 0x01 : 0) |
-            (!shipping_option_id.nil? ? 0x02 : 0) |
-            (!tip_amount.nil? ? 0x04 : 0)
+          (!requested_info_id.nil? ? 1 : 0) |
+            (!shipping_option_id.nil? ? 2 : 0) |
+            (!tip_amount.nil? ? 4 : 0)
         ).tl_serialize(io)
         @form_id.tl_serialize(io)
         @peer.tl_serialize(io)
@@ -570,7 +599,21 @@ module Proton::TL
         @tip_amount.tl_serialize(io) unless @tip_amount.nil?
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          form_id: Int64.tl_deserialize(io),
+          peer: Root::TypeInputPeer.tl_deserialize(io),
+          msg_id: Int32.tl_deserialize(io),
+          requested_info_id: flags & 1 > 0 ? String.tl_deserialize(io) : nil,
+          shipping_option_id: flags & 2 > 0 ? String.tl_deserialize(io) : nil,
+          credentials: Root::TypeInputPaymentCredentials.tl_deserialize(io),
+          tip_amount: flags & 4 > 0 ? Int64.tl_deserialize(io) : nil,
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Payments::TypePaymentResult
       end
     end
@@ -583,7 +626,12 @@ module Proton::TL
         constructor_id.tl_serialize(io) unless bare
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new()
+      end
+
+      def self.return_type : TL::Deserializable
         Payments::TypeSavedInfo
       end
     end
@@ -606,12 +654,21 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!credentials.nil? ? 0x01 : 0) |
-            (!info.nil? ? 0x02 : 0)
+          (!credentials.nil? ? 1 : 0) |
+            (!info.nil? ? 2 : 0)
         ).tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          credentials: flags & 1 > 0 || nil,
+          info: flags & 2 > 0 || nil,
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Bool
       end
     end
@@ -620,12 +677,12 @@ module Proton::TL
       getter constructor_id : UInt32 = 0x2E79D779_u32
       class_getter constructor_id : UInt32 = 0x2E79D779_u32
 
-      getter number : Bytes
+      getter number : String
 
       def initialize(
         number : Bytes | String | IO
       )
-        @number = Utils.parse_bytes!(number)
+        @number = Utils.parse_string!(number)
       end
 
       def tl_serialize(io : IO, bare = false)
@@ -633,7 +690,14 @@ module Proton::TL
         @number.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          number: String.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Payments::TypeBankCardData
       end
     end

@@ -152,7 +152,14 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Root::TypeInputPhoto.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Photos::TypePhoto
       end
     end
@@ -178,16 +185,26 @@ module Proton::TL
       def tl_serialize(io : IO, bare = false)
         constructor_id.tl_serialize(io) unless bare
         (
-          (!file.nil? ? 0x01 : 0) |
-            (!video.nil? ? 0x02 : 0) |
-            (!video_start_ts.nil? ? 0x04 : 0)
+          (!file.nil? ? 1 : 0) |
+            (!video.nil? ? 2 : 0) |
+            (!video_start_ts.nil? ? 4 : 0)
         ).tl_serialize(io)
         @file.tl_serialize(io) unless @file.nil?
         @video.tl_serialize(io) unless @video.nil?
         @video_start_ts.tl_serialize(io) unless @video_start_ts.nil?
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        flags = UInt32.tl_deserialize(io)
+        new(
+          file: flags & 1 > 0 ? Root::TypeInputFile.tl_deserialize(io) : nil,
+          video: flags & 2 > 0 ? Root::TypeInputFile.tl_deserialize(io) : nil,
+          video_start_ts: flags & 4 > 0 ? Float64.tl_deserialize(io) : nil,
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Photos::TypePhoto
       end
     end
@@ -209,7 +226,14 @@ module Proton::TL
         @id.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          id: Array(Root::TypeInputPhoto).tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Array(Int64)
       end
     end
@@ -243,7 +267,17 @@ module Proton::TL
         @limit.tl_serialize(io)
       end
 
-      def self.return_type : Deserializable
+      def self.tl_deserialize(io : IO, bare = false)
+        Utils.assert_constructor(io, self.constructor_id) unless bare
+        new(
+          user_id: Root::TypeInputUser.tl_deserialize(io),
+          offset: Int32.tl_deserialize(io),
+          max_id: Int64.tl_deserialize(io),
+          limit: Int32.tl_deserialize(io),
+        )
+      end
+
+      def self.return_type : TL::Deserializable
         Photos::TypePhotos
       end
     end
